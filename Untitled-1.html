@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPlug GQ – Gqeberha Gig Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header with Logo -->
+    <header>
+        <div class="container">
+            <!-- Replace "images/iplug-logo.png" with your actual logo file -->
+            <a href="#" class="logo">
+                <img src="images/iplug-logo.png" alt="iPlug GQ Logo" height="40">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#events">This Week</a></li>
+                    <li><a href="#submit">Submit Event</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Gqeberha's #1 Gig Guide</h1>
+            <p>Your weekly source for nightclub events, house music parties, and urban lifestyle happenings in Gqeberha (Port Elizabeth) and surrounding areas.</p>
+            <a href="#events" class="btn">View This Week's Events</a>
+        </div>
+        <div class="hero-overlay"></div>
+        <!-- Background image - replace with Gqeberha nightlife photo -->
+        <div class="hero-bg" style="background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events" id="events">
+        <div class="container">
+            <h2><i class="fas fa-calendar-alt"></i> This Week's Gigs</h2>
+            <p class="section-subtitle">Updated every Monday. Follow us for real-time updates.</p>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Events</button>
+                <button class="filter-btn" data-filter="nightclub">Night Club</button>
+                <button class="filter-btn" data-filter="house">House Music</button>
+                <button class="filter-btn" data-filter="urban">Urban Lifestyle</button>
+            </div>
+
+            <!-- Events Container -->
+            <div class="events-container" id="events-container">
+                <!-- Events loaded from events.json -->
+            </div>
+
+            <div class="update-note">
+                <p><i class="fas fa-info-circle"></i> <strong>Weekly Update:</strong> New events are added every Monday. To list your event, <a href="#submit">submit your flyer</a>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submit Event Section -->
+    <section class="submit" id="submit">
+        <div class="container">
+            <h2><i class="fas fa-upload"></i> Submit Your Event</h2>
+            <p>Promoters, venues, and artists: Send us your flyer to be featured in the weekly guide.</p>
+            
+            <!-- Email Form -->
+            <form id="event-form" action="mailto:youremail@example.com" method="post" enctype="text/plain">
+                <div class="form-group">
+                    <label for="event-name">Event Name *</label>
+                    <input type="text" id="event-name" name="event-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Date *</label>
+                    <input type="date" id="event-date" name="event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="venue">Venue *</label>
+                    <input type="text" id="venue" name="venue" required>
+                </div>
+                <div class="form-group">
+                    <label for="flyer-url">Flyer Image URL *</label>
+                    <input type="url" id="flyer-url" name="flyer-url" placeholder="https://example.com/flyer.jpg" required>
+                    <small class="form-help">Upload your flyer to <a href="https://imgbb.com/" target="_blank">ImgBB</a> and paste the direct link here</small>
+                </div>
+                <div class="form-group">
+                    <label for="description">Event Description *</label>
+                    <textarea id="description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select...</option>
+                        <option value="nightclub">Night Club</option>
+                        <option value="house">House Music</option>
+                        <option value="urban">Urban Lifestyle</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Your Email *</label>
+                    <input type="email" id="contact-email" name="contact-email" required>
+                </div>
+                <button type="submit" class="btn">Submit Event</button>
+            </form>
+            
+            <p class="form-note">Alternatively, you can WhatsApp event details to <strong>+27 41 XXX XXXX</strong> (coming soon).</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3><img src="images/iplug-logo.png" alt="iPlug GQ" height="30"></h3>
+                    <p>The definitive gig guide for Gqeberha (Port Elizabeth) and surrounding areas. Updated weekly with the latest nightlife, house music, and urban lifestyle events.</p>
+                    <div class="social-links">
+                        <!-- Add your social media links later -->
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#events">This Week's Gigs</a></li>
+                        <li><a href="#submit">Submit Event</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> info@ipluggq.co.za</li>
+                        <li><i class="fas fa-phone"></i> +27 41 XXX XXXX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Gqeberha, Eastern Cape, South Africa</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year">2025</span> iPlug GQ. All rights reserved. | Designed for Gqeberha's vibrant nightlife.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
