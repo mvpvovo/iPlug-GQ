@@ -8,7 +8,7 @@
 :root {
     --primary: #ff0080;       /* Hot pink */
     --secondary: #8a2be2;     /* Blue violet */
-    --accent: #00d4ff;        /* Cyan */
+    --accent: #00ff00;        /* Lime */
     --dark: #0a0a0a;          /* Almost black */
     --light: #f8f9fa;         /* Off white */
     --gray: #222;
@@ -643,3 +643,4 @@ footer {
         margin-top: 110px;
     }
 }
+
