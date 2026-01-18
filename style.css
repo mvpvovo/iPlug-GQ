@@ -59,14 +59,14 @@ ul {
     box-shadow: 0 10px 20px rgba(255, 0, 128, 0.3);
 }
 
-/* Header */
+/* Header - Updated for larger logo */
 header {
     background: rgba(10, 10, 10, 0.95);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
-    padding: 15px 0;
+    padding: 10px 0; /* Reduced padding to accommodate larger logo */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
 }
@@ -77,9 +77,15 @@ header .container {
     align-items: center;
 }
 
+/* Larger logo size */
 .logo img {
-    height: 40px;
+    height: 80px; /* Increased from 40px to 80px */
     width: auto;
+    transition: transform 0.3s;
+}
+
+.logo img:hover {
+    transform: scale(1.05); /* Hover effect for logo */
 }
 
 nav ul {
@@ -122,7 +128,7 @@ nav a:hover::after {
     cursor: pointer;
 }
 
-/* Hero */
+/* Hero - Adjusted for larger header */
 .hero {
     height: 90vh;
     position: relative;
@@ -130,7 +136,7 @@ nav a:hover::after {
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-top: 70px;
+    margin-top: 100px; /* Increased from 70px to accommodate larger header */
     overflow: hidden;
 }
 
@@ -249,10 +255,17 @@ h2 i {
     border-color: var(--primary);
 }
 
+/* Event image - now clickable */
 .event-img {
     height: 200px;
     width: 100%;
     object-fit: cover;
+    cursor: pointer; /* Shows it's clickable */
+    transition: transform 0.3s;
+}
+
+.event-img:hover {
+    transform: scale(1.02); /* Slight zoom on hover */
 }
 
 .event-info {
@@ -388,6 +401,86 @@ h2 i {
     text-align: center;
 }
 
+/* Lightbox Modal (New Addition) */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 85%;
+    max-height: 85%;
+    margin: auto;
+    text-align: center;
+}
+
+.lightbox-content img {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--primary);
+}
+
+.close-lightbox {
+    position: absolute;
+    top: -40px;
+    right: -10px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+    background: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.close-lightbox:hover {
+    color: var(--accent);
+    background: var(--secondary);
+}
+
+#lightbox-caption {
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#lightbox-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: var(--accent);
+}
+
+#lightbox-details {
+    color: #ccc;
+    font-size: 1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* Footer */
 footer {
     background: #050505;
@@ -479,7 +572,7 @@ footer {
         display: none;
         flex-direction: column;
         position: absolute;
-        top: 70px;
+        top: 90px; /* Increased to accommodate larger header */
         left: 0;
         width: 100%;
         background: rgba(10, 10, 10, 0.98);
@@ -492,6 +585,9 @@ footer {
     }
     .menu-toggle {
         display: block;
+    }
+    .hero {
+        margin-top: 120px; /* Adjusted for mobile */
     }
     .hero h1 {
         font-size: 2.5rem;
@@ -512,6 +608,24 @@ footer {
     .contact-info li {
         justify-content: center;
     }
+    /* Lightbox mobile adjustments */
+    .lightbox-content {
+        max-width: 95%;
+    }
+    .lightbox-content img {
+        max-height: 60vh;
+    }
+    .close-lightbox {
+        top: -50px;
+        right: 5px;
+    }
+    #lightbox-title {
+        font-size: 1.4rem;
+    }
+    /* Logo mobile adjustment */
+    .logo img {
+        height: 65px; /* Slightly smaller on mobile */
+    }
 }
 
 @media (max-width: 480px) {
@@ -524,5 +638,8 @@ footer {
     .filter-btn {
         padding: 8px 16px;
         font-size: 0.9rem;
+    }
+    .hero {
+        margin-top: 110px;
     }
 }
