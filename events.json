@@ -1,52 +1,93 @@
 [
     {
         "id": 1,
-        "title": "House Revival Saturday",
-        "date": "2025-01-24",
-        "venue": "The Wave Nightclub, Beachfront",
-        "flyer": "https://dl.dropboxusercontent.com/scl/fi/kmue3o7lzb8vqui09e6v5/House-Revival-Saturday.jpg?rlkey=63t7659z888dzo6ngl39ozy2e&st=7r13y4js&dl=1",
-        "description": "A night of classic and progressive house with DJs Lux & Kato. Dress code: Smart Casual. Doors open at 9 PM.",
-        "category": "house",
-        "categoryLabel": "House Music"
-    },
-    {
-        "id": 2,
-        "title": "Urban Fashion & Music Fest",
-        "date": "2025-01-25",
-        "venue": "The Boardwalk Convention Centre",
-        "flyer": "https://dl.dropboxusercontent.com/scl/fi/kmue3o7lzb8vqui09e6v5/Urban-Fashion-Music-Fest.jpg?rlkey=63t7659z888dzo6ngl39ozy2e&st=d76hrsz5&dl=1",
-        "description": "Live performances, fashion shows, and pop-up stalls showcasing local designers. All-day event from 2 PM to midnight.",
-        "category": "urban",
-        "categoryLabel": "Urban Lifestyle"
-    },
-    {
-        "id": 3,
-        "title": "Neon Glow Party",
-        "date": "2025-01-26",
-        "venue": "Club Eclipse, Central Gqeberha",
-        "flyer": "https://dl.dropboxusercontent.com/scl/fi/kmue3o7lzb8vqui09e6v5/Neon-Glow-Party.jpg?rlkey=63t7659z888dzo6ngl39ozy2e&st=vbysmlz5&dl=1",
-        "description": "Dress in neon! Top DJs playing electronic and commercial hits. Free glow sticks for first 100 guests. Strictly 18+.",
+        "title": "Friday Cocktails",
+        "date": "2026-01-26",
+        "venue": "Black Impala Restaurant, PE harbour",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMPALA%20FRIDAYS.jpg",
+        "description": "Good music by DJs Ayaz & Bigboyqooqoo. Carry pack allowed at R50 corkage. Bottle of spirits allowed at R250 corkage.",
         "category": "nightclub",
         "categoryLabel": "Night Club"
     },
     {
+        "id": 2,
+        "title": "Sunday Session",
+        "date": "2026-01-18",
+        "venue": "Ekupholeni Cocktail Lounge",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/EKUPHOLENI%202.JPG",
+        "description": "Music by Romeo, Smi Da Dj, Mbe supported by resident DJs. Dress to impress. Free parking. 10H00 till late.",
+        "category": "kasivibes",
+        "categoryLabel": "Kasi Vibe"
+    },
+    {
+        "id": 3,
+        "title": "Xmas Eve",
+        "date": "2025-12-24",
+        "venue": "Endaweni Tshisanyama, Deal Party Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/ENDAWENI.JPG",
+        "description": "Music served by Real Yano, Mbasa, Warra MVP.",
+        "category": "Urban",
+        "categoryLabel": "Urban Lifestyle"
+    },
+    {
         "id": 4,
-        "title": "Sunday Soul Sessions",
-        "date": "2025-01-27",
-        "venue": "The Blue Roof Café, Summerstrand",
-        "flyer": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
-        "description": "Chill Sunday vibes with deep house and soulful beats. Outdoor seating available. Perfect sunset views.",
-        "category": "house",
-        "categoryLabel": "House Music"
+        "title": "Saturday Bottles And Buckets",
+        "date": "2026-01-17",
+        "venue": "Tiger's Milk Kitchen/Bar, Moffett On Main",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/TIGERS%20MILK.jpg",
+        "description": "Music by DJs Mleistar And Rootraction. Free Entry. 18H00 Till Late.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
     },
     {
         "id": 5,
-        "title": "Hip Hop Throwback Night",
-        "date": "2025-01-28",
-        "venue": "Basement Lounge, Richmond Hill",
-        "flyer": "https://images.unsplash.com/photo-1570696054905-6a31c6b8c5f5?auto=format&fit=crop&w=800&q=80",
-        "description": "90s and 2000s hip hop classics all night long. Hosted by MC Blaze. Casual dress code.",
+        "title": "NYE Celebrations",
+        "date": "2025-12-31",
+        "venue": "Eskwerini NU2, Motherwell",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/NU2.JPG",
+        "description": "90s and 2000s hip hop classics all night long. 15H00 Till Late. Empty Coolers Only. Free Entrance.",
+        "category": "Kasivibe",
+        "categoryLabel": "Kasi Vibe"
+    },
+    {
+        "id": 5,
+        "title": "Sunday Back Outside Live",
+        "date": "2026-01-18",
+        "venue": "Eskwerini, Wells Estate",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/ESKWENI%20WELLS.jpg",
+        "description": "Live perfomances by Yanga Happysoul & Jerome Backed by Afrogroove SA and DJ Rego. 15H00 Till Late. Free Entrance.",
+        "category": "Kasivibe",
+        "categoryLabel": "Kasi Vibe"
+    },
+    {
+        "id": 5,
+        "title": "Pretty Girls Love Sundays",
+        "date": "2026-01-18",
+        "venue": "IZA Sip Eat Vibe, Humewood Beachfront",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IZA.jpg",
+        "description": "Featuring Mbasa on the decks. 15:00 Till Late. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
-    }
-]
+     },
+     {
+        "id": 5,
+        "title": "Finally Friday",
+        "date": "2026-01-23",
+        "venue": "Banana Beach Bar.Kitchen, Humewood Beachfront",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/BANANA%20BEACH.jpg",
+        "description": "Live DJs. Tequila shots R25 all night. 18H00 Till Late. Casual dress code.",
+        "category": "Nightclub",
+        "categoryLabel": "Night Club"
+     },
+     {
+        "id": 5,
+        "title": "Sunday Brunch Sinf Along",
+        "date": "2026-01-18",
+        "venue": "Cofi, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/COFI.jpg",
+        "description": "Sounds by Abuti Jerome, Olex and Axe. Brunch 7 Colour Feast R185 pp.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "   
