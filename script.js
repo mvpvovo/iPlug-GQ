@@ -50,6 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form submission handling
     setupForm();
+    
+    // Initialize lightbox
+    setupLightbox();
+    
+    // Add smooth scrolling for anchor links
+    setupSmoothScrolling();
 });
 
 // Load events from JSON file
@@ -197,19 +203,91 @@ function setupForm() {
     });
 }
 
-// Add smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href === '#' || href === '#!') return;
-        
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-            window.scrollTo({
-                top: target.offsetTop - 70,
-                behavior: 'smooth'
-            });
+// Lightbox functionality for event images
+function setupLightbox() {
+    const modal = document.getElementById('lightbox-modal');
+    const modalImg = document.getElementById('lightbox-image');
+    const modalTitle = document.getElementById('lightbox-title');
+    const modalDetails = document.getElementById('lightbox-details');
+    const closeBtn = document.querySelector('.close-lightbox');
+    
+    if (!modal) return;
+    
+    // Close modal when clicking X
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    });
+    
+    // Close modal when clicking outside image
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     });
-});
+    
+    // Close with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Add click event to event images (using event delegation)
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('event-img')) {
+            const eventCard = e.target.closest('.event-card');
+            if (!eventCard) return;
+            
+            // Get event details from the card
+            const title = eventCard.querySelector('.event-title')?.textContent || 'Event Flyer';
+            const date = eventCard.querySelector('.event-date')?.textContent || '';
+            const venue = eventCard.querySelector('.event-venue')?.textContent || '';
+            const imgSrc = e.target.src;
+            
+            // Clean up venue text (remove the map marker icon if present)
+            const cleanVenue = venue.replace('📍', '').replace(/^\s*/, '');
+            
+            // Set modal content
+            modalImg.src = imgSrc;
+            modalImg.alt = `${title} flyer`;
+            modalTitle.textContent = title;
+            modalDetails.innerHTML = `
+                <p><strong><i class="far fa-calendar"></i> ${date}</strong></p>
+                <p><strong><i class="fas fa-map-marker-alt"></i> ${cleanVenue}</strong></p>
+            `;
+            
+            // Show modal
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            
+            // Add a slight delay for smoother animation
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+    });
+}
+
+// Smooth scrolling for anchor links
+function setupSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#!') return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                // Calculate header height for offset
+                const headerHeight = document.querySelector('header').offsetHeight;
+                window.scrollTo({
+                    top: target.offsetTop - headerHeight - 10,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
