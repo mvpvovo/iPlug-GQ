@@ -50,7 +50,7 @@
         "categoryLabel": "Kasi Vibe"
     },
     {
-        "id": 5,
+        "id": 6,
         "title": "Sunday Back Outside Live",
         "date": "2026-01-18",
         "venue": "Eskwerini, Wells Estate",
@@ -60,7 +60,7 @@
         "categoryLabel": "Kasi Vibe"
     },
     {
-        "id": 5,
+        "id": 7,
         "title": "Pretty Girls Love Sundays",
         "date": "2026-01-18",
         "venue": "IZA Sip Eat Vibe, Humewood Beachfront",
@@ -70,7 +70,7 @@
         "categoryLabel": "Urban Lifestyle"
      },
      {
-        "id": 5,
+        "id": 8,
         "title": "Finally Friday",
         "date": "2026-01-23",
         "venue": "Banana Beach Bar.Kitchen, Humewood Beachfront",
@@ -80,7 +80,7 @@
         "categoryLabel": "Night Club"
      },
      {
-        "id": 5,
+        "id": 9,
         "title": "Sunday Brunch Sinf Along",
         "date": "2026-01-18",
         "venue": "Cofi, Gqeberha",
@@ -90,4 +90,5 @@
         "categoryLabel": "Urban Lifestyle"
      },
      {
-        "   
+           
+
