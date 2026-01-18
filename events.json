@@ -16,7 +16,7 @@
         "venue": "Ekupholeni Cocktail Lounge",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/EKUPHOLENI%202.JPG",
         "description": "Music by Romeo, Smi Da Dj, Mbe supported by resident DJs. Dress to impress. Free parking. 10H00 till late.",
-        "category": "kasivibes",
+        "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
     },
     {
@@ -26,7 +26,7 @@
         "venue": "Endaweni Tshisanyama, Deal Party Gqeberha",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/ENDAWENI.JPG",
         "description": "Music served by Real Yano, Mbasa, Warra MVP.",
-        "category": "Urban",
+        "category": "urban",
         "categoryLabel": "Urban Lifestyle"
     },
     {
@@ -46,7 +46,7 @@
         "venue": "Eskwerini NU2, Motherwell",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/NU2.JPG",
         "description": "90s and 2000s hip hop classics all night long. 15H00 Till Late. Empty Coolers Only. Free Entrance.",
-        "category": "Kasivibe",
+        "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
     },
     {
@@ -56,7 +56,7 @@
         "venue": "Eskwerini, Wells Estate",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/ESKWENI%20WELLS.jpg",
         "description": "Live perfomances by Yanga Happysoul & Jerome Backed by Afrogroove SA and DJ Rego. 15H00 Till Late. Free Entrance.",
-        "category": "Kasivibe",
+        "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
     },
     {
@@ -68,18 +68,18 @@
         "description": "Featuring Mbasa on the decks. 15:00 Till Late. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
-     },
-     {
+    },
+    {
         "id": 8,
         "title": "Finally Friday",
         "date": "2026-01-23",
         "venue": "Banana Beach Bar.Kitchen, Humewood Beachfront",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/BANANA%20BEACH.jpg",
         "description": "Live DJs. Tequila shots R25 all night. 18H00 Till Late. Casual dress code.",
-        "category": "Nightclub",
+        "category": "nightclub",
         "categoryLabel": "Night Club"
-     },
-     {
+    },
+    {
         "id": 9,
         "title": "Sunday Brunch Sinf Along",
         "date": "2026-01-18",
@@ -88,8 +88,9 @@
         "description": "Sounds by Abuti Jerome, Olex and Axe. Brunch 7 Colour Feast R185 pp.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
-     },
+    }
 ]
            
+
 
 
