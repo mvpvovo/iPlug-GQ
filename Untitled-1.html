@@ -14,9 +14,9 @@
     <!-- Header with Logo -->
     <header>
         <div class="container">
-            <!-- Replace "images/iplug-logo.png" with your actual logo file -->
+            <!-- Logo - height controlled by CSS now -->
             <a href="#" class="logo">
-                <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="" height="80">
+                <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="iPlug GQ Logo">
             </a>
             <nav>
                 <ul>
@@ -49,12 +49,12 @@
             <h2><i class="fas fa-calendar-alt"></i> This Week's Gigs</h2>
             <p class="section-subtitle">Updated every Wednesday. Follow us for real-time updates.</p>
 
-            <!-- Filter Buttons -->
+            <!-- Filter Buttons - Updated to match your events.json categories -->
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">All Events</button>
                 <button class="filter-btn" data-filter="nightclub">Night Club</button>
-                <button class="filter-btn" data-filter="house">Shows & Festivals</button>
-                <button class="filter-btn" data-filter="urban">Kasi Vibe</button>
+                <button class="filter-btn" data-filter="kasivibe">Kasi Vibe</button>
+                <button class="filter-btn" data-filter="urban">Urban Lifestyle</button>
             </div>
 
             <!-- Events Container -->
@@ -102,29 +102,41 @@
                     <select id="category" name="category" required>
                         <option value="">Select...</option>
                         <option value="nightclub">Night Club</option>
-                        <option value="house">Shows & Festivals</option>
-                        <option value="urban">Kasi Vibe</option>
+                        <option value="kasivibe">Kasi Vibe</option>
+                        <option value="urban">Urban Lifestyle</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="contact-email">iPlugGQ@hotmail.com *</label>
-                    <input type="email" id="contact-email" name="contact-email" required>
+                    <label for="contact-email">Your Email *</label>
+                    <input type="email" id="contact-email" name="contact-email" placeholder="iPlugGQ@hotmail.com" required>
                 </div>
                 <button type="submit" class="btn">Submit Event</button>
             </form>
             
-            <p class="form-note">Alternatively, you can WhatsApp event details to <strong>+27 81 529 4035</p>
+            <p class="form-note">Alternatively, you can WhatsApp event details to <strong>+27 81 529 4035</strong></p>
         </div>
     </section>
+
+    <!-- Lightbox Modal (New Addition) -->
+    <div id="lightbox-modal" class="lightbox-modal">
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <img id="lightbox-image" src="" alt="Event Flyer">
+            <div id="lightbox-caption">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-details"></p>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h3><img src="images/iplug-logo.png" alt="iPlug GQ" height="30"></h3>
-                    <p>The definitive gig guide for Gqeberha (Port Elizabeth) and surrounding areas. Updated weekly with the latest nightlife, day groove, shows, festival,  and urban lifestyle events.</p>
+                    <h3><img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="iPlug GQ Logo" height="40"></h3>
+                    <p>The definitive gig guide for Gqeberha (Port Elizabeth) and surrounding areas. Updated weekly with the latest nightlife, day groove, shows, festival, and urban lifestyle events.</p>
                     <div class="social-links">
                         <!-- Add your social media links later -->
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -160,8 +172,8 @@
     <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
-
 </html>
+
 
 
 
