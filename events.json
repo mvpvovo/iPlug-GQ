@@ -1,33 +1,33 @@
 [
     {
         "id": 1,
-        "title": "Friday Cocktails",
-        "date": "2026-01-23",
-        "venue": "Black Impala Restaurant, PE harbour",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMPALA%20FRIDAYS.jpg",
-        "description": "Good music by DJs Ayaz & Bigboyqooqoo. Carry pack allowed at R50 corkage. Bottle of spirits allowed at R250 corkage.",
-        "category": "nightclub",
-        "categoryLabel": "Night Club"
+        "title": "Skwankwankwa Session 011",
+        "date": "2026-02-28",
+        "venue": "The Gallery on Produce, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9865.JPG",
+        "description": "Phase 1,2 and 3 tickes sold out. Unlimited Hubbly available at R1300. Skwankwaknwa Changed My Life .",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
     },
     {
         "id": 2,
-        "title": "Sunday Session",
-        "date": "2026-01-18",
-        "venue": "Ekupholeni Cocktail Lounge",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/EKUPHOLENI%202.JPG",
-        "description": "Music by Romeo, Smi Da Dj, Mbe supported by resident DJs. Dress to impress. Free parking. 10H00 till late.",
-        "category": "kasivibe",
-        "categoryLabel": "Kasi Vibe"
+        "title": "Punch Lines Only Hip Hop & Comedy",
+        "date": "2026-02-28",
+        "venue": "The One Room, 52 Westbourne Road",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9964.JPG",
+        "description": "Featuring Stogie T and Tats Nkonzo. Tickets from R150 at Quicket. We are also looking for opening acts. Openmic. Cypher.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
     },
     {
         "id": 3,
-        "title": "Xmas Eve",
-        "date": "2025-12-24",
-        "venue": "Endaweni Tshisanyama, Deal Party Gqeberha",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/ENDAWENI.JPG",
-        "description": "Music served by Real Yano, Mbasa, Warra MVP.",
-        "category": "urban",
-        "categoryLabel": "Urban Lifestyle"
+        "title": "Docta Musiq's Birthday Celebration",
+        "date": "2026-02-15",
+        "venue": "Ekupholeni Cocktail Lounge, Zwide Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9960.JPG",
+        "description": "Valentines Bliss Outdoor event with Snedrum, Jooma, Mbe, MC Michael Matebe, Theme Shorts & Shirts with Shades. Ticket R50. At the gate R70. Coolbox R150.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
     },
     {
         "id": 4,
@@ -90,6 +90,7 @@
         "categoryLabel": "Urban Lifestyle"
     }
 ]
+
 
 
 
