@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iPlug GQ – Gqeberha Gig Guide</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#ff0080">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="iPlug GQ">
+    <meta name="description" content="Gqeberha's #1 Gig Guide for nightlife, kasi vibes, and urban events">
+    <link rel="apple-touch-icon" href="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
+    
+    <!-- Styles & Fonts -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +25,6 @@
     <!-- Header with Logo -->
     <header>
         <div class="container">
-            <!-- Logo - height controlled by CSS now -->
             <a href="#" class="logo">
                 <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="iPlug GQ Logo">
             </a>
@@ -23,7 +33,7 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#events">This Week</a></li>
                     <li><a href="#submit">Submit Event</a></li>
-                    <li><a href="#about">About</a></li>
+                    <li><a href="#saved" id="saved-link">My Events</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -31,15 +41,26 @@
         </div>
     </header>
 
+    <!-- Install App Banner -->
+    <div id="install-banner" class="install-banner">
+        <div class="install-content">
+            <p><i class="fas fa-mobile-alt"></i> Install iPlug GQ app for better experience</p>
+            <button id="install-btn" class="install-btn">Install</button>
+            <button id="dismiss-install" class="dismiss-btn">&times;</button>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Gqeberha's #1 Gig Guide</h1>
             <p>Your weekly source for nightclub events, kasi mjaivo, and urban lifestyle happenings in Gqeberha (Port Elizabeth) and surrounding areas.</p>
-            <a href="#events" class="btn">View This Week's Events</a>
+            <div class="hero-buttons">
+                <a href="#events" class="btn">View This Week's Events</a>
+                <button id="app-install" class="btn-secondary">📱 Install App</button>
+            </div>
         </div>
         <div class="hero-overlay"></div>
-        <!-- Background image - replace with Gqeberha nightlife photo -->
         <div class="hero-bg" style="background-image: url('https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg');"></div>
     </section>
 
@@ -47,9 +68,9 @@
     <section class="events" id="events">
         <div class="container">
             <h2><i class="fas fa-calendar-alt"></i> This Week's Gigs</h2>
-            <p class="section-subtitle">Updated every Wednesday. Follow us for real-time updates.</p>
+            <p class="section-subtitle">Updated every Wednesday. Save events and set reminders!</p>
 
-            <!-- Filter Buttons - Updated to match your events.json categories -->
+            <!-- Filter Buttons -->
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">All Events</button>
                 <button class="filter-btn" data-filter="nightclub">Night Club</button>
@@ -68,13 +89,55 @@
         </div>
     </section>
 
+    <!-- Saved Events Section (PWA Feature) -->
+    <section class="saved-events" id="saved" style="display: none;">
+        <div class="container">
+            <h2><i class="fas fa-heart"></i> My Saved Events</h2>
+            <p class="section-subtitle">Events you've saved and reminders you've set</p>
+            
+            <div class="saved-container">
+                <div class="saved-section">
+                    <h3><i class="fas fa-bookmark"></i> Saved Events (<span id="saved-count">0</span>)</h3>
+                    <div id="saved-events-list" class="saved-list">
+                        <!-- Saved events will appear here -->
+                    </div>
+                </div>
+                
+                <div class="saved-section">
+                    <h3><i class="fas fa-bell"></i> Reminders (<span id="reminders-count">0</span>)</h3>
+                    <div id="reminders-list" class="reminders-list">
+                        <!-- Reminders will appear here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="app-features">
+                <div class="feature-card">
+                    <i class="fas fa-download"></i>
+                    <h4>Install App</h4>
+                    <p>Get app-like experience with home screen icon</p>
+                    <button id="feature-install" class="btn-small">Install Now</button>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bell"></i>
+                    <h4>Notifications</h4>
+                    <p>Get reminders before your saved events</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-wifi-slash"></i>
+                    <h4>Offline Access</h4>
+                    <p>View events without internet connection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Submit Event Section -->
     <section class="submit" id="submit">
         <div class="container">
             <h2><i class="fas fa-upload"></i> Submit Your Event</h2>
             <p>Promoters, venues, and artists: Send us your flyer to be featured in the weekly guide.</p>
             
-            <!-- Email Form -->
             <form id="event-form" action="mailto:iPlugGQ@hotmail.com" method="post" enctype="text/plain">
                 <div class="form-group">
                     <label for="event-name">Event Name *</label>
@@ -91,7 +154,7 @@
                 <div class="form-group">
                     <label for="flyer-url">Flyer Image URL *</label>
                     <input type="url" id="flyer-url" name="flyer-url" placeholder="https://example.com/flyer.jpg" required>
-                    <small class="form-help">Upload your flyer to <a href="https://imagekit.io//" target="_blank">imagekit</a> and paste the direct link here</small>
+                    <small class="form-help">Upload your flyer to <a href="https://imagekit.io/" target="_blank">imagekit</a> and paste the direct link here</small>
                 </div>
                 <div class="form-group">
                     <label for="description">Event Description *</label>
@@ -109,7 +172,7 @@
                 </div>
                 <div class="form-group">
                     <label for="contact-email">Your Email *</label>
-                    <input type="email" id="contact-email" name="contact-email" placeholder="iPlugGQ@hotmail.com" required>
+                    <input type="email" id="contact-email" name="contact-email" required>
                 </div>
                 <button type="submit" class="btn">Submit Event</button>
             </form>
@@ -118,7 +181,7 @@
         </div>
     </section>
 
-    <!-- Lightbox Modal (New Addition) -->
+    <!-- Lightbox Modal -->
     <div id="lightbox-modal" class="lightbox-modal">
         <div class="lightbox-content">
             <span class="close-lightbox">&times;</span>
@@ -126,6 +189,9 @@
             <div id="lightbox-caption">
                 <h3 id="lightbox-title"></h3>
                 <p id="lightbox-details"></p>
+                <div class="lightbox-actions" id="lightbox-actions">
+                    <!-- Save/Reminder buttons will appear here -->
+                </div>
             </div>
         </div>
     </div>
@@ -136,9 +202,9 @@
             <div class="footer-content">
                 <div class="footer-col">
                     <h3><img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="iPlug GQ Logo" height="40"></h3>
-                    <p>The definitive gig guide for Gqeberha (Port Elizabeth) and surrounding areas. Updated weekly with the latest nightlife, day groove, shows, festival, and urban lifestyle events.</p>
+                    <p>The definitive gig guide for Gqeberha (Port Elizabeth). Updated weekly with the latest nightlife, day groove, shows, and urban lifestyle events.</p>
                     <div class="social-links">
-                        <!-- Updated social media links with correct URLs -->
+                        <!-- Updated social media links -->
                         <a href="https://www.instagram.com/ipluggq?igsh=MTZ3eThoc2dxZGszNg%3D%3D&utm_source=qr" 
                            aria-label="Instagram" 
                            target="_blank" 
@@ -170,8 +236,17 @@
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#events">This Week's Gigs</a></li>
+                        <li><a href="#saved">My Saved Events</a></li>
                         <li><a href="#submit">Submit Event</a></li>
-                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>App Features</h4>
+                    <ul>
+                        <li><i class="fas fa-heart"></i> Save Events</li>
+                        <li><i class="fas fa-bell"></i> Set Reminders</li>
+                        <li><i class="fas fa-download"></i> Offline Access</li>
+                        <li><i class="fas fa-mobile-alt"></i> App-like Experience</li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -179,18 +254,36 @@
                     <ul class="contact-info">
                         <li><i class="fas fa-envelope"></i> iPlugGQ@hotmail.com</li>
                         <li><i class="fas fa-phone"></i> +27 81 529 4035</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Gqeberha, Eastern Cape, South Africa</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Gqeberha, Eastern Cape</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <span id="current-year">2025</span> iPlug GQ. All rights reserved. | Designed by VURVAY.</p>
+                <p>&copy; <span id="current-year">2025</span> iPlug GQ. All rights reserved. | Install as app for best experience</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <script src="pwa.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    }
+    </script>
 </body>
 </html>
+    
+
 
