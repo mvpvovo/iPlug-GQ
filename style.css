@@ -1172,7 +1172,173 @@ nav a.active::after {
         width: 80%;
         max-width: 250px;
     }
+/* Reminder Modal */
+.reminder-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    animation: fadeIn 0.3s ease;
 }
+
+.reminder-modal {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    border: 2px solid var(--primary);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.reminder-modal h3 {
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reminder-modal p {
+    color: #ccc;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.reminder-options {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.reminder-option {
+    background: var(--secondary);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reminder-option:hover {
+    background: var(--primary);
+    transform: translateY(-2px);
+}
+
+.reminder-cancel {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.reminder-cancel:hover {
+    background: #555;
+}
+
+/* PWA Notification */
+.pwa-notification {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    background: #1a1a1a;
+    border-left: 4px solid var(--primary);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    z-index: 10000;
+    max-width: 350px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pwa-notification.show {
+    transform: translateX(0);
+}
+
+.pwa-notification.success {
+    border-left-color: #4CAF50;
+}
+
+.pwa-notification.info {
+    border-left-color: #2196F3;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.notification-content i {
+    font-size: 1.2rem;
+}
+
+.pwa-notification.success .notification-content i {
+    color: #4CAF50;
+}
+
+.pwa-notification.info .notification-content i {
+    color: #2196F3;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 15px;
+    line-height: 1;
+}
+
+.notification-close:hover {
+    color: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .reminder-modal {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .reminder-option {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .pwa-notification {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+    }
+}
+
 
 
 
