@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize lightbox
     setupLightbox();
     
+    // Setup event button handlers
+    setupEventHandlers();
+    
     // Check initial hash
     checkHash();
 });
@@ -130,7 +133,9 @@ function showSavedEvents() {
     document.querySelector('#saved-link').classList.add('active');
     
     // Load saved events
-    loadSavedEvents();
+    if (window.iplugPWA) {
+        window.iplugPWA.loadSavedEvents();
+    }
 }
 
 // Load events from JSON file
@@ -158,7 +163,7 @@ function loadEvents() {
         });
 }
 
-// Display events in the container WITH SAVE/REMINDER BUTTONS
+// Display events in the container
 function displayEvents(events) {
     const container = document.getElementById('events-container');
     if (!container) return;
@@ -174,7 +179,8 @@ function displayEvents(events) {
     }
 
     container.innerHTML = events.map(event => {
-        const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+        // Check if event is saved
+        const isSaved = window.iplugPWA ? window.iplugPWA.isEventSaved(event.id) : false;
         
         return `
             <div class="event-card" data-category="${event.category}" data-id="${event.id}">
@@ -185,10 +191,10 @@ function displayEvents(events) {
                     <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>
                     <p class="event-description">${event.description}</p>
                     <div class="event-actions">
-                        <button class="save-btn ${isSaved ? 'saved' : ''}" onclick="toggleSaveEvent(${event.id}, ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                        <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
                             <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save'}
                         </button>
-                        <button class="reminder-btn" onclick="showReminderOptions(${event.id}, ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                        <button class="reminder-btn" data-event-id="${event.id}">
                             <i class="far fa-bell"></i> Remind
                         </button>
                         <span class="event-category">${event.categoryLabel}</span>
@@ -284,9 +290,45 @@ function setupForm() {
         
         // Actually submit via email (opens default email client)
         setTimeout(() => {
-            // This will open the user's default email client
             form.submit();
         }, 500);
+    });
+}
+
+// Setup event button handlers
+function setupEventHandlers() {
+    // Use event delegation for save/reminder buttons
+    document.addEventListener('click', function(e) {
+        // Save button click
+        if (e.target.closest('.save-btn')) {
+            const saveBtn = e.target.closest('.save-btn');
+            const eventId = saveBtn.getAttribute('data-event-id');
+            const event = window.allEvents?.find(e => e.id == eventId);
+            
+            if (event && window.iplugPWA) {
+                const saved = window.iplugPWA.saveEvent(event);
+                
+                // Update button appearance
+                if (saved) {
+                    saveBtn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                    saveBtn.classList.add('saved');
+                } else {
+                    saveBtn.innerHTML = '<i class="far fa-heart"></i> Save';
+                    saveBtn.classList.remove('saved');
+                }
+            }
+        }
+        
+        // Reminder button click
+        if (e.target.closest('.reminder-btn')) {
+            const reminderBtn = e.target.closest('.reminder-btn');
+            const eventId = reminderBtn.getAttribute('data-event-id');
+            const event = window.allEvents?.find(e => e.id == eventId);
+            
+            if (event && window.iplugPWA) {
+                window.iplugPWA.showReminderModal(event);
+            }
+        }
     });
 }
 
@@ -304,7 +346,7 @@ function setupLightbox() {
     // Close modal when clicking X
     closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Re-enable scrolling
+        document.body.style.overflow = 'auto';
     });
     
     // Close modal when clicking outside image
@@ -337,7 +379,8 @@ function setupLightbox() {
             const imgSrc = e.target.src;
             
             // Get full event data
-            const event = window.allEvents?.find(e => e.id == eventId) || { id: eventId, title, date, venue };
+            const event = window.allEvents?.find(e => e.id == eventId);
+            if (!event) return;
             
             // Set modal content
             modalImg.src = imgSrc;
@@ -349,96 +392,59 @@ function setupLightbox() {
             `;
             
             // Set up modal actions
-            const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+            const isSaved = window.iplugPWA ? window.iplugPWA.isEventSaved(event.id) : false;
             modalActions.innerHTML = `
-                <button class="btn-save" onclick="toggleSaveEvent(${event.id}, ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                <button class="btn-save" data-event-id="${event.id}">
                     <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save Event'}
                 </button>
-                <button class="btn-reminder" onclick="showReminderOptions(${event.id}, ${JSON.stringify(event).replace(/'/g, "\\'")})">
+                <button class="btn-reminder" data-event-id="${event.id}">
                     <i class="far fa-bell"></i> Set Reminder
                 </button>
             `;
             
             // Show modal
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+        }
+    });
+    
+    // Lightbox button handlers
+    modalActions.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-save')) {
+            const btn = e.target.closest('.btn-save');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents?.find(e => e.id == eventId);
             
-            // Add a slight delay for smoother animation
-            setTimeout(() => {
-                modal.style.opacity = '1';
-            }, 10);
+            if (event && window.iplugPWA) {
+                const saved = window.iplugPWA.saveEvent(event);
+                
+                // Update button appearance
+                if (saved) {
+                    btn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+                } else {
+                    btn.innerHTML = '<i class="far fa-heart"></i> Save Event';
+                }
+            }
+        }
+        
+        if (e.target.closest('.btn-reminder')) {
+            const btn = e.target.closest('.btn-reminder');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents?.find(e => e.id == eventId);
+            
+            if (event && window.iplugPWA) {
+                window.iplugPWA.showReminderModal(event);
+            }
         }
     });
 }
 
-// Global functions for button clicks
-function toggleSaveEvent(eventId, eventData) {
-    const saved = window.iplugPWA?.saveEvent(eventData);
-    
-    // Update button in event card
-    const eventCard = document.querySelector(`.event-card[data-id="${eventId}"]`);
-    if (eventCard) {
-        const saveBtn = eventCard.querySelector('.save-btn');
-        if (saveBtn) {
-            saveBtn.innerHTML = saved ? 
-                '<i class="fas fa-heart"></i> Saved' : 
-                '<i class="far fa-heart"></i> Save';
-            saveBtn.classList.toggle('saved', saved);
-        }
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(event) {
+    const hash = window.location.hash;
+    if (hash === '#saved') {
+        showSavedEvents();
+    } else {
+        showMainEvents();
     }
-    
-    // Update button in lightbox if open
-    const modalActions = document.getElementById('lightbox-actions');
-    if (modalActions) {
-        const lightboxSaveBtn = modalActions.querySelector('.btn-save');
-        if (lightboxSaveBtn) {
-            lightboxSaveBtn.innerHTML = saved ? 
-                '<i class="fas fa-heart"></i> Saved' : 
-                '<i class="far fa-heart"></i> Save Event';
-        }
-    }
-}
-
-function showReminderOptions(eventId, eventData) {
-    const reminderHtml = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 3000;">
-            <div style="background: #1a1a1a; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; border: 2px solid var(--primary);">
-                <h3 style="color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-bell"></i> Set Reminder for "${eventData.title}"
-                </h3>
-                <div style="display: grid; gap: 10px; margin-bottom: 25px;">
-                    <button onclick="setReminder(${eventId}, ${JSON.stringify(eventData).replace(/'/g, "\\'")}, '1day'); this.parentElement.parentElement.parentElement.remove();" 
-                            style="background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left;">
-                        <i class="far fa-clock"></i> 1 Day Before
-                    </button>
-                    <button onclick="setReminder(${eventId}, ${JSON.stringify(eventData).replace(/'/g, "\\'")}, '3hours'); this.parentElement.parentElement.parentElement.remove();" 
-                            style="background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left;">
-                        <i class="far fa-clock"></i> 3 Hours Before
-                    </button>
-                    <button onclick="setReminder(${eventId}, ${JSON.stringify(eventData).replace(/'/g, "\\'")}, '1hour'); this.parentElement.parentElement.parentElement.remove();" 
-                            style="background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left;">
-                        <i class="far fa-clock"></i> 1 Hour Before
-                    </button>
-                    <button onclick="setReminder(${eventId}, ${JSON.stringify(eventData).replace(/'/g, "\\'")}, '30min'); this.parentElement.parentElement.parentElement.remove();" 
-                            style="background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left;">
-                        <i class="far fa-clock"></i> 30 Minutes Before
-                    </button>
-                </div>
-                <button onclick="this.parentElement.parentElement.remove();" 
-                        style="background: #444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%;">
-                    Cancel
-                </button>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', reminderHtml);
-}
-
-function setReminder(eventId, eventData, reminderType) {
-    window.iplugPWA?.setReminder(eventData, reminderType);
-}
-
-function loadSavedEvents() {
-    window.iplugPWA?.showSavedEvents();
-}
+});
