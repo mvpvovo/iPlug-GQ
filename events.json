@@ -31,21 +31,21 @@
     },
     {
         "id": 4,
-        "title": "Saturday Bottles And Buckets",
-        "date": "2026-01-17",
-        "venue": "Tiger's Milk Kitchen/Bar, Moffett On Main",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/TIGERS%20MILK.jpg",
-        "description": "Music by DJs Mleistar And Rootraction. Free Entry. 18H00 Till Late.",
+        "title": "Live Session Valentines Edition",
+        "date": "2026-02-15",
+        "venue": "Endaweni Tshisanyama, Deal Party",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0.jpeg",
+        "description": "Music by Lefa Mosea and band. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
     },
     {
         "id": 5,
-        "title": "NYE Celebrations",
-        "date": "2025-12-31",
-        "venue": "Eskwerini NU2, Motherwell",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/NU2.JPG",
-        "description": "90s and 2000s hip hop classics all night long. 15H00 Till Late. Empty Coolers Only. Free Entrance.",
+        "title": "Valentines Ball Event",
+        "date": "2026-02-14",
+        "venue": "Mila's Braai, Missionvale",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0(1).jpeg",
+        "description": "MC TikieDaBoss on the decks Freedom, Mabstone,Snero, Lady Dee, Mthist De DJ and China. 15H00 Till Late. Coolerbox are allowed. R20 Entrance Fee.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
     },
@@ -90,6 +90,7 @@
         "categoryLabel": "Urban Lifestyle"
     }
 ]
+
 
 
 
