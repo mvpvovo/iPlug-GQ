@@ -1,4 +1,4 @@
-[
+ [
     {
         "id": 1,
         "title": "Skwankwankwa Session 011",
@@ -91,7 +91,7 @@
     },
     {
         "id": 10,
-        "title": "Friday Cocktails, Digital VS Analog",
+        "title": "Friday Cocktails, Digital vs Analog",
         "date": "2026-02-13",
         "venue": "Black Impala Restaurant, PE Harbour",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-11-16-59-52.jpg",
@@ -99,8 +99,9 @@
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
     },
-]
+    ]
         
+
 
 
 
