@@ -78,7 +78,7 @@
         "description": "Featuring DJs Axe and Loopbar surpported by resident DJs . Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
-},
+    },
     {
         "id": 9,
         "title": "Robot Party",
@@ -88,9 +88,10 @@
         "description": "Featuring DJs Mleistar and Bisa surpported by resident DJs . If wearing Red it measn you Taken, Yellow you're Open Minded and Green you are Single. Free Entry.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-},
+    }
 ]
         
+
 
 
 
