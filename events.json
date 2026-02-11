@@ -4,8 +4,8 @@
         "title": "Skwankwankwa Session 011",
         "date": "2026-02-28",
         "venue": "The Gallery on Produce, Gqeberha",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9865.JPG",
-        "description": "Phase 1,2 and 3 tickes sold out. Unlimited Hubbly available at R1300. Skwankwaknwa Changed My Life .",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skwa%20cooler.jpg",
+        "description": "CoolerBox Tickets are now available on FIXR, Phase 1,2 and 3 tickes sold out. Unlimited Hubbly available at R1300. Skwankwaknwa Changed My Life .",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
     },
@@ -78,8 +78,20 @@
         "description": "Featuring DJs Axe and Loopbar surpported by resident DJs . Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
-    }
+},
+    {
+        "id": 9,
+        "title": "Robot Party",
+        "date": "2026-02-14",
+        "venue": "Endaweni Lounge, Uitenhage",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/UTH.jpg",
+        "description": "Featuring DJs Mleistar and Bisa surpported by resident DJs . If wearing Red it measn you Taken, Yellow you're Open Minded and Green you are Single. Free Entry.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+},
 ]
+        
+
 
 
 
