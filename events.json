@@ -85,7 +85,7 @@
         "date": "2026-02-14",
         "venue": "Endaweni Lounge, Uitenhage",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/UTH.jpg",
-        "description": "Featuring DJs Mleistar and Bisa surpported by resident DJs . If you wearing Red it means you're Taken, Yellow you're Open Minded and Green you are Single. Free Entry.",
+        "description": "Featuring DJs Mleistar, B2B and Bisa surpported by resident DJs . If you wearing Red it means you're Taken, Yellow you're Open Minded and Green you are Single. Free Entry.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
     },
@@ -98,9 +98,60 @@
         "description": "Featuring DJs Ayaz and Scorpion Hosted by Bigboyqooqoo . Carry pack allowed at R50 Corkage fee, Bottle of spirits allowed at R250 corkage fee. Table Reservations at 0828008911. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 11,
+        "title": "Valentines Soul 2",
+        "date": "2026-02-13",
+        "venue": "Roof Garden Bar, PE Central",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0070.jpg",
+        "description": "Featuring The Groove Master DJ Jazzy D. Get Tickets on 0792587494, Early bird R100 limited number. 8PM - 1AM.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 12,
+        "title": "Valentines Party",
+        "date": "2026-02-14",
+        "venue": "KwaMagxaki Butchery, 2 Mdoda RD",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0062.JPG",
+        "description": "Music by DJs Phindu, Vaido and Korea. Free Entry and Free Parking. 12PM till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+     },
+     {
+        "id": 13,
+        "title": "Sip n Chill Sundays",
+        "date": "2026-02-15",
+        "venue": "Roof Garden Bar, PE Central",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0069.jpg",
+        "description": "Music by DJs Apo, Bena B, Reece Brooks, EL Chucko and Lyle May. Free Before 4PM. R100+ Thereafter.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 14,
+        "title": "Gqom Room",
+        "date": "2026-02-27",
+        "venue": "The Gallery on Produce, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0068.jpg",
+        "description": "Featuring acts Celso Fabbri, Leendrocamp, B2B, Luniq, Malicon, Saltonic, Mali Brothers, Olex, Siraman. Phase1 R50, Phase2 R70, At the door R100. R100+ Tickets available at Quicket.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 15,
+        "title": "Month Of Love Women's Affair",
+        "date": "2026-02-28",
+        "venue": "Bheka's Place, Addo",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/29d5bc4c-c83a-4992-99d0-071456d71760.JPG",
+        "description": "Featuring Ms Lu, MC: Pumeza and Spirit The DJ. Phase1 R50, Phase2 R70, Free Entry. 10AM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
     }
 ]
         
+
 
 
 
