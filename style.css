@@ -1337,7 +1337,152 @@ nav a.active::after {
         right: 20px;
         max-width: none;
     }
+    /* ===== VALENTINE'S DAY THEME ===== */
+.valentine-theme {
+    --valentine-pink: #ff69b4;
+    --valentine-red: #ff1493;
+    --valentine-light: #ffe4e1;
+    --valentine-gold: #ffd700;
 }
+
+.valentine-theme .hero h1 {
+    background: linear-gradient(90deg, #ff1493, #ff69b4, #ffb6c1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 20px rgba(255, 20, 147, 0.5);
+}
+
+.valentine-theme .btn {
+    background: linear-gradient(90deg, #ff1493, #ff69b4);
+    box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+}
+
+.valentine-theme .btn:hover {
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.6);
+}
+
+.valentine-theme .hero::before {
+    content: "❤️";
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 3rem;
+    opacity: 0.1;
+    animation: floatHeart 3s infinite;
+}
+
+.valentine-theme .hero::after {
+    content: "❤️";
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 3rem;
+    opacity: 0.1;
+    animation: floatHeart 3s infinite 1s;
+}
+
+@keyframes floatHeart {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Add floating hearts in the background */
+.valentine-theme .events::before {
+    content: "❤️🧡💛💚💙💜";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    font-size: 2rem;
+    opacity: 0.05;
+    white-space: nowrap;
+    animation: slideHearts 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes slideHearts {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+/* Make filter buttons Valentine-themed */
+.valentine-theme .filter-btn.active,
+.valentine-theme .filter-btn:hover {
+    background: linear-gradient(90deg, #ff1493, #ff69b4);
+}
+
+/* Event cards get a pink border on hover */
+.valentine-theme .event-card:hover {
+    border-color: #ff69b4;
+    box-shadow: 0 15px 30px rgba(255, 105, 180, 0.3);
+}
+
+/* Valentine banner at the top of events section */
+.valentine-theme .events .section-subtitle::after {
+    content: " 💘 Valentine's Week Special! 💘";
+    display: block;
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #ff1493;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 15px;
+    border-radius: 30px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Add hearts to submit button */
+.valentine-theme .submit .btn {
+    background: linear-gradient(90deg, #ff1493, #ff69b4);
+    position: relative;
+    overflow: hidden;
+}
+
+.valentine-theme .submit .btn::before,
+.valentine-theme .submit .btn::after {
+    content: "❤️";
+    position: absolute;
+    opacity: 0.2;
+    font-size: 1.2rem;
+}
+
+.valentine-theme .submit .btn::before {
+    left: 10px;
+    animation: floatHeart 2s infinite;
+}
+
+.valentine-theme .submit .btn::after {
+    right: 10px;
+    animation: floatHeart 2s infinite 0.5s;
+}
+
+/* Footer hearts */
+.valentine-theme footer {
+    position: relative;
+}
+
+.valentine-theme footer::before {
+    content: "❤️🧡💛💚💙💜";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    font-size: 1.5rem;
+    opacity: 0.1;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Optional: Add a small heart cursor */
+.valentine-theme {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff1493" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto;
+}
+}
+
 
 
 
