@@ -61,11 +61,11 @@
     },
     {
         "id": 7,
-        "title": "Wet Wednesday",
-        "date": "2026-02-11",
+        "title": "Groovy Saturday, Valentines Edition",
+        "date": "2026-02-14",
         "venue": "Finnez Fusion Cafe, Humerail",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-10-15-10-36.jpg",
-        "description": "Starring DJs Jaivane, Sbhizo, NBeats and XS. Table booking and Reservations 0415863233. Free Entry.",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0077.JPG",
+        "description": "Starring Abuti Jerome Hosted by Ma11 entertainment. Table booking and Reservations 0415863233. Free Entry.",
         "category": "nightclub",
         "categoryLabel": "Night Club"
     },
@@ -148,9 +148,80 @@
         "description": "Featuring Ms Lu, MC: Pumeza and Spirit The DJ. Phase1 R50, Phase2 R70, Free Entry. 10AM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
+    },
+    {
+        "id": 16,
+        "title": "Friday After Work Drinks",
+        "date": "2026-02-13",
+        "venue": "Endaweni Tshisanyama, Deal Party",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0080.JPG",
+        "description": "Featuring DJs Pro, Leendrocamp and Vaido surpported by resident DJs . Free Entry.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 17,
+        "title": "Authentic Fridays",
+        "date": "2026-02-13",
+        "venue": "Kwa Masinga, Wells Estate",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4a886282-ce18-4063-a922-a6d03a27a389.JPG",
+        "description": "Featuring Prince Music, SK Da DJ, Sonza DJ, Khanya, Nutty and Ace. Free Parking, Free Entry. 11AM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+     },
+     {
+        "id": 18,
+        "title": "Love is Timeless, Live Band Session",
+        "date": "2026-02-15",
+        "venue": "50 Lifestyle (Kwano 5Bob), Kwazakhele",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0078.JPG",
+        "description": "Featuring Yanga Happysoul, Latitah, Mafa Bavuma and Abuti Jerome, supported bt resident DJs. Free Parking, Free Entry. 2PM till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+     },
+     {
+        "id": 19,
+        "title": "Trucker Tuesday",
+        "date": "2026-02-24",
+        "venue": "The Gallery on Produce, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0082.jpg",
+        "description": "Music by DJs Mesin, Sham De Funk and Khoneep. Free Parking, Free Entry Before 8PM. No Under 18's After 9PM.",
+        "category": "Urban",
+        "categoryLabel": "Urban Lifestyle"
+     },
+     {
+        "id": 20,
+        "title": "Love is in the Air, valentines Edition",
+        "date": "2026-02-15",
+        "venue": "Speak Easy Lounge (Kwa Mabaso), Veeplaas",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0081.JPG",
+        "description": "Featuring DJs Zest, MVK, Yolz, Simza, Bravo and The Soulman. Free Parking, Free Entry. 2PM till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+         },
+     {
+        "id": 21,
+        "title": "Eskwerini Saturday, Valentines Edition",
+        "date": "2026-02-14",
+        "venue": "Eskwerini, Wells Estate",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4e510bb9-f1f5-41c3-ad69-9d2bdc1f8e3c.JPG",
+        "description": "Deejay Lineup Khabz(UIT), Snezzo, Frisko and Milton, supported by DJ Rego, SKKY. Free Entry. 3PM till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+     },
+     {
+        "id": 22,
+        "title": "Lovers & Friends",
+        "date": "2026-02-14",
+        "venue": "Tiger's Milk Kitchen/Bar, Moffet On Main",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0088.jpg",
+        "description": "Music by Azile (Tru FM). Free Parking, Free Entry.",
+        "category": "Urban",
+        "categoryLabel": "Urban Lifestyle"
     }
 ]
         
+
 
 
 
