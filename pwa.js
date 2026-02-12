@@ -385,4 +385,42 @@ class iPlugPWA {
 document.addEventListener('DOMContentLoaded', () => {
     window.iplugPWA = new iPlugPWA();
 });
+// ===== Google Analytics Custom Event Tracking =====
+if (typeof gtag !== 'undefined') {
+    // Track PWA installs
+    window.addEventListener('appinstalled', () => {
+        gtag('event', 'pwa_install', {
+            'event_category': 'engagement',
+            'event_label': 'PWA Installed'
+        });
+    });
+
+    // Track offline usage
+    window.addEventListener('offline', () => {
+        gtag('event', 'offline_access', {
+            'event_category': 'engagement',
+            'event_label': 'User went offline'
+        });
+    });
+}
+
+// Expose tracking functions globally so they can be called from other scripts
+window.trackEventSaved = function(eventTitle) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'event_saved', {
+            'event_category': 'engagement',
+            'event_label': eventTitle
+        });
+    }
+};
+
+window.trackReminderSet = function(eventTitle, reminderTime) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'reminder_set', {
+            'event_category': 'engagement',
+            'event_label': eventTitle,
+            'value': reminderTime
+        });
+    }
+};
 
