@@ -22,7 +22,7 @@
         "categoryLabel": "Urban Lifestyle"
       }
     ]
-  },
+    },
   {
     "venueName": "Roof Garden Bar",
     "location": "PE Central",
@@ -44,6 +44,36 @@
         "description": "Music by DJs Apo, Bena B, Reece Brooks, EL Chucko and Lyle May. Free Before 4PM. R100+ Thereafter.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
+      }
+    ]
+  },
+  {
+    "venueName": "Oom Cola Gqalane's Tavern",
+    "location": "Zwide, GQ",
+    "events": [
+      {
+        "id": 11,
+        "title": "Friday Groove",
+        "date": "2026-02-13",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0093.JPG",
+        "description": "Featuring Mvusi Supported by resident DJs, Free Entrance. 5PM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
+  },
+  {
+    "venueName": "Chief Ngqoko's Place",
+    "location": "New Brighton, GQ",
+    "events": [
+      {
+        "id": 11,
+        "title": "Cock Tail Fridaze",
+        "date": "2026-02-13",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0095.JPG",
+        "description": "Music by DJs Mleistar, Youngmoney, Wayne, Axe, Dzibu, Hlesko, O'clock ent and Lisar , Free Entrance. 4PM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
       }
     ]
   },
@@ -333,6 +363,7 @@
     ]
   }
 ]
+
 
 
 
