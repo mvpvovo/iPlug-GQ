@@ -1,16 +1,15 @@
-// DOM Content Loaded
+// ======================
+// iPlug GQ – MAIN SCRIPT
+// ======================
 document.addEventListener('DOMContentLoaded', function() {
-    // Set current year in footer
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navUl = document.querySelector('nav ul');
-    
     if (menuToggle) {
         menuToggle.addEventListener('click', () => {
             navUl.classList.toggle('show');
-            // Change menu icon
             const icon = menuToggle.querySelector('i');
             if (navUl.classList.contains('show')) {
                 icon.classList.remove('fa-bars');
@@ -22,11 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close mobile menu when clicking a link
+    // Close mobile menu when clicking a link (except saved link)
     document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.getAttribute('href') === '#saved') return;
-            
             navUl.classList.remove('show');
             if (menuToggle) {
                 menuToggle.querySelector('i').classList.remove('fa-times');
@@ -35,66 +33,388 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Load events from events.json
     loadEvents();
-
-    // Filter buttons
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Update active button
-            filterBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Filter events
-            const filter = this.getAttribute('data-filter');
-            filterEvents(filter);
-        });
-    });
-
-    // Form submission handling
     setupForm();
-    
-    // Initialize navigation
     setupNavigation();
-    
-    // Initialize lightbox
     setupLightbox();
-    
-    // Setup event button handlers
     setupEventHandlers();
-    
-    // Check initial hash
+
+    // Deep linking: check for ?event=ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('event');
+    if (eventId) {
+        waitForEventCard(eventId);
+    }
+
     checkHash();
 });
 
-// Check URL hash on load
-function checkHash() {
-    const hash = window.location.hash;
-    if (hash === '#saved') {
-        showSavedEvents();
+// ======================
+// DATA LOADING & DISPLAY
+// ======================
+function loadEvents() {
+    fetch('events.json')
+        .then(response => response.json())
+        .then(venues => {
+            // Flatten all events for filtering & PWA features
+            window.allEvents = venues.flatMap(venue =>
+                venue.events.map(event => ({
+                    ...event,
+                    venueName: venue.venueName,
+                    location: venue.location
+                }))
+            );
+            window.venuesData = venues;
+            displayGroupedEvents(window.allEvents);
+        })
+        .catch(error => {
+            console.error('Error loading events:', error);
+            document.getElementById('events-container').innerHTML = `
+                <div class="no-events">
+                    <p>Unable to load events. Please check back soon or submit your event!</p>
+                    <p><small>Error: ${error.message}</small></p>
+                </div>
+            `;
+        });
+}
+
+function displayGroupedEvents(events) {
+    const container = document.getElementById('events-container');
+    if (!container) return;
+
+    if (events.length === 0) {
+        container.innerHTML = '<div class="no-events">No events this week.</div>';
+        return;
+    }
+
+    // Group by venueName (using flattened events)
+    const grouped = {};
+    events.forEach(event => {
+        const key = event.venueName;
+        if (!grouped[key]) {
+            grouped[key] = {
+                venueName: event.venueName,
+                location: event.location,
+                events: []
+            };
+        }
+        grouped[key].events.push(event);
+    });
+
+    let html = '';
+    const sortedVenues = Object.values(grouped).sort((a, b) => {
+        const aDate = a.events[0].date;
+        const bDate = b.events[0].date;
+        return new Date(aDate) - new Date(bDate);
+    });
+
+    sortedVenues.forEach(venue => {
+        html += `
+            <div class="venue-group" data-venue="${venue.venueName}">
+                <div class="venue-header">
+                    <h3><i class="fas fa-map-marker-alt"></i> ${venue.venueName}</h3>
+                    <span class="venue-location">${venue.location}</span>
+                </div>
+                <div class="venue-events-grid">
+        `;
+
+        venue.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+        venue.events.forEach(event => {
+            const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+            html += `
+                <div class="event-card" data-category="${event.category}" data-id="${event.id}">
+                    <img src="${event.flyer}" alt="${event.title} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
+                    <div class="event-info">
+                        <span class="event-date"><i class="far fa-calendar"></i> ${formatDate(event.date)}</span>
+                        <h4 class="event-title">${event.title}</h4>
+                        <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${venue.venueName}</p>
+                        <p class="event-description">${event.description}</p>
+                        <div class="event-actions">
+                            <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
+                                <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save'}
+                            </button>
+                            <button class="reminder-btn" data-event-id="${event.id}">
+                                <i class="far fa-bell"></i> Remind
+                            </button>
+                            <button class="share-btn" data-event-id="${event.id}">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                            <span class="event-category">${event.categoryLabel}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div></div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+// ======================
+// FILTERING
+// ======================
+function filterEvents(filter) {
+    const events = window.allEvents || [];
+    if (filter === 'all') {
+        displayGroupedEvents(events);
     } else {
-        showMainEvents();
+        const filtered = events.filter(event => event.category === filter);
+        displayGroupedEvents(filtered);
     }
 }
 
-// Setup navigation between sections
+// ======================
+// SOCIAL SHARING
+// ======================
+function shareEvent(eventId, platform) {
+    const event = window.allEvents.find(e => e.id == eventId);
+    if (!event) return;
+
+    const baseUrl = window.location.origin + window.location.pathname;
+    const eventUrl = `${baseUrl}?event=${eventId}`;
+    const text = `${event.title} - ${formatDate(event.date)} at ${event.venueName}`;
+    const hashtags = 'iPlugGQ,GqeberhaEvents';
+
+    let shareUrl = '';
+    switch(platform) {
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(eventUrl)}`;
+            break;
+        case 'twitter':
+        case 'x':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(eventUrl)}&hashtags=${hashtags}`;
+            break;
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + eventUrl)}`;
+            break;
+        case 'instagram':
+        case 'tiktok':
+            copyToClipboard(eventUrl);
+            window.iplugPWA?.showNotification(`Link copied! Share it on ${platform}`, 'info');
+            return;
+        default:
+            if (navigator.share) {
+                navigator.share({ title: event.title, text, url: eventUrl })
+                    .catch(() => copyToClipboard(eventUrl));
+                return;
+            } else {
+                copyToClipboard(eventUrl);
+                window.iplugPWA?.showNotification('Link copied to clipboard!', 'info');
+                return;
+            }
+    }
+
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+}
+
+function showShareMenu(eventId, anchor) {
+    const existing = document.querySelector('.share-menu-overlay');
+    if (existing) existing.remove();
+
+    const menuHtml = `
+        <div class="share-menu-overlay">
+            <div class="share-menu">
+                <h4>Share Event</h4>
+                <div class="share-options">
+                    <button onclick="shareEvent(${eventId}, 'facebook')"><i class="fab fa-facebook"></i> Facebook</button>
+                    <button onclick="shareEvent(${eventId}, 'x')"><i class="fab fa-twitter"></i> X</button>
+                    <button onclick="shareEvent(${eventId}, 'whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button onclick="shareEvent(${eventId}, 'instagram')"><i class="fab fa-instagram"></i> Instagram</button>
+                    <button onclick="shareEvent(${eventId}, 'tiktok')"><i class="fab fa-tiktok"></i> TikTok</button>
+                    <button onclick="shareEvent(${eventId}, 'copy')"><i class="fas fa-link"></i> Copy Link</button>
+                </div>
+                <button class="close-menu">&times;</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', menuHtml);
+
+    const overlay = document.querySelector('.share-menu-overlay');
+    overlay.querySelector('.close-menu').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+}
+
+// ======================
+// DEEP LINKING
+// ======================
+function waitForEventCard(eventId) {
+    const checkExist = setInterval(() => {
+        const eventCard = document.querySelector(`.event-card[data-id="${eventId}"]`);
+        if (eventCard) {
+            clearInterval(checkExist);
+            eventCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                eventCard.querySelector('.event-img')?.click();
+            }, 600);
+        }
+    }, 300);
+}
+
+// ======================
+// EVENT HANDLERS (SAVE, REMINDER, SHARE)
+// ======================
+function setupEventHandlers() {
+    document.addEventListener('click', function(e) {
+        // Save
+        if (e.target.closest('.save-btn')) {
+            const btn = e.target.closest('.save-btn');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents.find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                const saved = window.iplugPWA.saveEvent(event);
+                btn.innerHTML = saved ? '<i class="fas fa-heart"></i> Saved' : '<i class="far fa-heart"></i> Save';
+                btn.classList.toggle('saved', saved);
+            }
+        }
+        // Reminder
+        if (e.target.closest('.reminder-btn')) {
+            const btn = e.target.closest('.reminder-btn');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents.find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                window.iplugPWA.showReminderModal(event);
+            }
+        }
+        // Share
+        if (e.target.closest('.share-btn')) {
+            const btn = e.target.closest('.share-btn');
+            const eventId = btn.getAttribute('data-event-id');
+            showShareMenu(eventId, btn);
+        }
+    });
+}
+
+// ======================
+// LIGHTBOX (with Share)
+// ======================
+function setupLightbox() {
+    const modal = document.getElementById('lightbox-modal');
+    const modalImg = document.getElementById('lightbox-image');
+    const modalTitle = document.getElementById('lightbox-title');
+    const modalDetails = document.getElementById('lightbox-details');
+    const modalActions = document.getElementById('lightbox-actions');
+    const closeBtn = document.querySelector('.close-lightbox');
+
+    if (!modal) return;
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('event-img')) {
+            const card = e.target.closest('.event-card');
+            if (!card) return;
+            const eventId = card.getAttribute('data-id');
+            const event = window.allEvents.find(e => e.id == eventId);
+            if (!event) return;
+
+            modalImg.src = e.target.src;
+            modalTitle.textContent = event.title;
+            modalDetails.innerHTML = `
+                <p><strong><i class="far fa-calendar"></i> ${card.querySelector('.event-date')?.textContent || ''}</strong></p>
+                <p><strong><i class="fas fa-map-marker-alt"></i> ${event.venueName}</strong></p>
+            `;
+
+            const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+            modalActions.innerHTML = `
+                <button class="btn-save" data-event-id="${event.id}">
+                    <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save Event'}
+                </button>
+                <button class="btn-reminder" data-event-id="${event.id}">
+                    <i class="far fa-bell"></i> Set Reminder
+                </button>
+                <button class="btn-share" data-event-id="${event.id}">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            `;
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    // Lightbox action buttons
+    modalActions.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-save')) {
+            const btn = e.target.closest('.btn-save');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents.find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                const saved = window.iplugPWA.saveEvent(event);
+                btn.innerHTML = saved ? '<i class="fas fa-heart"></i> Saved' : '<i class="far fa-heart"></i> Save Event';
+            }
+        }
+        if (e.target.closest('.btn-reminder')) {
+            const btn = e.target.closest('.btn-reminder');
+            const eventId = btn.getAttribute('data-event-id');
+            const event = window.allEvents.find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                window.iplugPWA.showReminderModal(event);
+            }
+        }
+        if (e.target.closest('.btn-share')) {
+            const btn = e.target.closest('.btn-share');
+            const eventId = btn.getAttribute('data-event-id');
+            showShareMenu(eventId, btn);
+        }
+    });
+}
+
+// ======================
+// NAVIGATION (Home / My Events)
+// ======================
 function setupNavigation() {
-    // Home link - show main events
-    document.querySelector('a[href="#home"]').addEventListener('click', function(e) {
+    document.querySelector('a[href="#home"]')?.addEventListener('click', function(e) {
         e.preventDefault();
         showMainEvents();
         window.history.pushState(null, null, '#home');
     });
-    
-    // Events link - show main events
-    document.querySelector('a[href="#events"]').addEventListener('click', function(e) {
+    document.querySelector('a[href="#events"]')?.addEventListener('click', function(e) {
         e.preventDefault();
         showMainEvents();
         window.history.pushState(null, null, '#events');
     });
-    
-    // Saved Events link
     const savedLink = document.getElementById('saved-link');
     if (savedLink) {
         savedLink.addEventListener('click', function(e) {
@@ -105,134 +425,39 @@ function setupNavigation() {
     }
 }
 
-// Show main events section
 function showMainEvents() {
     document.querySelector('.events').style.display = 'block';
     document.querySelector('.saved-events').style.display = 'none';
     document.querySelector('.hero').style.display = 'flex';
     document.querySelector('.submit').style.display = 'block';
-    
-    // Update active nav link
-    document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-    });
-    document.querySelector('a[href="#home"]').classList.add('active');
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.querySelector('a[href="#home"]')?.classList.add('active');
 }
 
-// Show saved events section
 function showSavedEvents() {
     document.querySelector('.events').style.display = 'none';
     document.querySelector('.saved-events').style.display = 'block';
     document.querySelector('.hero').style.display = 'none';
     document.querySelector('.submit').style.display = 'none';
-    
-    // Update active nav link
-    document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-    });
-    document.querySelector('#saved-link').classList.add('active');
-    
-    // Load saved events
-    if (window.iplugPWA) {
-        window.iplugPWA.loadSavedEvents();
-    }
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.querySelector('#saved-link')?.classList.add('active');
+    if (window.iplugPWA) window.iplugPWA.loadSavedEvents();
 }
 
-// Load events from JSON file
-function loadEvents() {
-    fetch('events.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load events');
-            }
-            return response.json();
-        })
-        .then(events => {
-            window.allEvents = events; // Store for filtering
-            displayEvents(events);
-        })
-        .catch(error => {
-            console.error('Error loading events:', error);
-            const container = document.getElementById('events-container');
-            container.innerHTML = `
-                <div class="no-events">
-                    <p>Unable to load events. Please check back soon or submit your event!</p>
-                    <p><small>Error: ${error.message}</small></p>
-                </div>
-            `;
-        });
+function checkHash() {
+    if (window.location.hash === '#saved') showSavedEvents();
+    else showMainEvents();
 }
 
-// Display events in the container
-function displayEvents(events) {
-    const container = document.getElementById('events-container');
-    if (!container) return;
+window.addEventListener('popstate', checkHash);
 
-    if (events.length === 0) {
-        container.innerHTML = `
-            <div class="no-events">
-                <p><i class="fas fa-calendar-times fa-2x" style="margin-bottom: 15px; color: var(--accent);"></i></p>
-                <p>No events listed this week. Check back soon or submit your event!</p>
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = events.map(event => {
-        // Check if event is saved
-        const isSaved = window.iplugPWA ? window.iplugPWA.isEventSaved(event.id) : false;
-        
-        return `
-            <div class="event-card" data-category="${event.category}" data-id="${event.id}">
-                <img src="${event.flyer}" alt="${event.title} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
-                <div class="event-info">
-                    <span class="event-date"><i class="far fa-calendar"></i> ${formatDate(event.date)}</span>
-                    <h3 class="event-title">${event.title}</h3>
-                    <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${event.venue}</p>
-                    <p class="event-description">${event.description}</p>
-                    <div class="event-actions">
-                        <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
-                            <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save'}
-                        </button>
-                        <button class="reminder-btn" data-event-id="${event.id}">
-                            <i class="far fa-bell"></i> Remind
-                        </button>
-                        <span class="event-category">${event.categoryLabel}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// Format date from YYYY-MM-DD to DD Month YYYY
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-        weekday: 'short',
-        day: 'numeric', 
-        month: 'short',
-        year: 'numeric'
-    });
-}
-
-// Filter events by category
-function filterEvents(filter) {
-    const events = window.allEvents || [];
-    if (filter === 'all') {
-        displayEvents(events);
-    } else {
-        const filtered = events.filter(event => event.category === filter);
-        displayEvents(filtered);
-    }
-}
-
-// Setup form submission
+// ======================
+// FORM SUBMISSION
+// ======================
 function setupForm() {
     const form = document.getElementById('event-form');
     if (!form) return;
 
-    // Set minimum date to today
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
@@ -241,26 +466,19 @@ function setupForm() {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // Basic validation
         const requiredFields = form.querySelectorAll('[required]');
         let isValid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                field.style.borderColor = 'var(--primary)';
+        requiredFields.forEach(f => {
+            if (!f.value.trim()) {
+                f.style.borderColor = 'var(--primary)';
                 isValid = false;
-            } else {
-                field.style.borderColor = '';
-            }
+            } else f.style.borderColor = '';
         });
-        
         if (!isValid) {
             alert('Please fill in all required fields.');
             return;
         }
 
-        // Get form data
         const formData = new FormData(form);
         const eventData = {
             name: formData.get('event-name'),
@@ -273,178 +491,15 @@ function setupForm() {
             submitted: new Date().toISOString()
         };
 
-        // Save to localStorage as backup (optional)
         try {
-            const submissions = JSON.parse(localStorage.getItem('iplugSubmissions') || '[]');
-            submissions.push(eventData);
-            localStorage.setItem('iplugSubmissions', JSON.stringify(submissions));
-        } catch (e) {
-            console.log('Local storage not available');
-        }
+            const subs = JSON.parse(localStorage.getItem('iplugSubmissions') || '[]');
+            subs.push(eventData);
+            localStorage.setItem('iplugSubmissions', JSON.stringify(subs));
+        } catch(e) { console.log(e); }
 
-        // Show success message
-        alert(`✅ Event submitted successfully!\n\n"${eventData.name}" has been submitted for review. We will contact you at ${eventData.email} if needed.\n\nThank you for supporting Gqeberha's nightlife!`);
-
-        // Reset form
+        alert(`✅ Event submitted successfully!\n\n"${eventData.name}" has been submitted. We'll contact you at ${eventData.email}.`);
         form.reset();
-        
-        // Actually submit via email (opens default email client)
-        setTimeout(() => {
-            form.submit();
-        }, 500);
+        setTimeout(() => form.submit(), 500);
     });
 }
 
-// Setup event button handlers
-function setupEventHandlers() {
-    // Use event delegation for save/reminder buttons
-    document.addEventListener('click', function(e) {
-        // Save button click
-        if (e.target.closest('.save-btn')) {
-            const saveBtn = e.target.closest('.save-btn');
-            const eventId = saveBtn.getAttribute('data-event-id');
-            const event = window.allEvents?.find(e => e.id == eventId);
-            
-            if (event && window.iplugPWA) {
-                const saved = window.iplugPWA.saveEvent(event);
-                
-                // Update button appearance
-                if (saved) {
-                    saveBtn.innerHTML = '<i class="fas fa-heart"></i> Saved';
-                    saveBtn.classList.add('saved');
-                } else {
-                    saveBtn.innerHTML = '<i class="far fa-heart"></i> Save';
-                    saveBtn.classList.remove('saved');
-                }
-            }
-        }
-        
-        // Reminder button click
-        if (e.target.closest('.reminder-btn')) {
-            const reminderBtn = e.target.closest('.reminder-btn');
-            const eventId = reminderBtn.getAttribute('data-event-id');
-            const event = window.allEvents?.find(e => e.id == eventId);
-            
-            if (event && window.iplugPWA) {
-                window.iplugPWA.showReminderModal(event);
-            }
-        }
-    });
-}
-
-// Lightbox functionality for event images
-function setupLightbox() {
-    const modal = document.getElementById('lightbox-modal');
-    const modalImg = document.getElementById('lightbox-image');
-    const modalTitle = document.getElementById('lightbox-title');
-    const modalDetails = document.getElementById('lightbox-details');
-    const modalActions = document.getElementById('lightbox-actions');
-    const closeBtn = document.querySelector('.close-lightbox');
-    
-    if (!modal) return;
-    
-    // Close modal when clicking X
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-    
-    // Close modal when clicking outside image
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-    
-    // Close with Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-    
-    // Add click event to event images (using event delegation)
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('event-img')) {
-            const eventCard = e.target.closest('.event-card');
-            if (!eventCard) return;
-            
-            // Get event details
-            const eventId = eventCard.getAttribute('data-id');
-            const title = eventCard.querySelector('.event-title')?.textContent || 'Event Flyer';
-            const date = eventCard.querySelector('.event-date')?.textContent || '';
-            const venue = eventCard.querySelector('.event-venue')?.textContent || '';
-            const imgSrc = e.target.src;
-            
-            // Get full event data
-            const event = window.allEvents?.find(e => e.id == eventId);
-            if (!event) return;
-            
-            // Set modal content
-            modalImg.src = imgSrc;
-            modalImg.alt = title;
-            modalTitle.textContent = title;
-            modalDetails.innerHTML = `
-                <p><strong><i class="far fa-calendar"></i> ${date}</strong></p>
-                <p><strong><i class="fas fa-map-marker-alt"></i> ${venue}</strong></p>
-            `;
-            
-            // Set up modal actions
-            const isSaved = window.iplugPWA ? window.iplugPWA.isEventSaved(event.id) : false;
-            modalActions.innerHTML = `
-                <button class="btn-save" data-event-id="${event.id}">
-                    <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save Event'}
-                </button>
-                <button class="btn-reminder" data-event-id="${event.id}">
-                    <i class="far fa-bell"></i> Set Reminder
-                </button>
-            `;
-            
-            // Show modal
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-    });
-    
-    // Lightbox button handlers
-    modalActions.addEventListener('click', function(e) {
-        if (e.target.closest('.btn-save')) {
-            const btn = e.target.closest('.btn-save');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents?.find(e => e.id == eventId);
-            
-            if (event && window.iplugPWA) {
-                const saved = window.iplugPWA.saveEvent(event);
-                
-                // Update button appearance
-                if (saved) {
-                    btn.innerHTML = '<i class="fas fa-heart"></i> Saved';
-                } else {
-                    btn.innerHTML = '<i class="far fa-heart"></i> Save Event';
-                }
-            }
-        }
-        
-        if (e.target.closest('.btn-reminder')) {
-            const btn = e.target.closest('.btn-reminder');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents?.find(e => e.id == eventId);
-            
-            if (event && window.iplugPWA) {
-                window.iplugPWA.showReminderModal(event);
-            }
-        }
-    });
-}
-
-// Handle browser back/forward buttons
-window.addEventListener('popstate', function(event) {
-    const hash = window.location.hash;
-    if (hash === '#saved') {
-        showSavedEvents();
-    } else {
-        showMainEvents();
-    }
-});
