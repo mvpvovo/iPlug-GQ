@@ -1,4 +1,4 @@
-/* Reset & Base Styles */
+    /* Reset & Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -642,6 +642,8 @@ footer {
     .hero {
         margin-top: 110px;
     }
+}
+
 /* ===== PWA & APP STYLES ===== */
 
 /* Install Banner */
@@ -1067,7 +1069,9 @@ body.offline::before {
     .feature-card {
         padding: 15px;
     }
-    /* Event Actions - Save/Reminder Buttons */
+}
+
+/* Event Actions - Save/Reminder Buttons */
 .event-actions {
     display: flex;
     gap: 10px;
@@ -1108,39 +1112,6 @@ body.offline::before {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Lightbox Actions */
-.lightbox-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    justify-content: center;
-}
-
-.btn-save, .btn-reminder {
-    padding: 10px 25px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s;
-    font-size: 1rem;
-}
-
-.btn-save {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-reminder {
-    background: var(--secondary);
-    color: white;
-}
-
-.btn-save:hover, .btn-reminder:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-}
-
 /* Navigation Active State */
 nav a.active {
     color: var(--primary);
@@ -1151,27 +1122,6 @@ nav a.active::after {
     width: 100%;
 }
 
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-    .event-actions {
-        flex-wrap: wrap;
-    }
-    
-    .save-btn, .reminder-btn {
-        flex: 1;
-        min-width: 120px;
-        justify-content: center;
-    }
-    
-    .lightbox-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-save, .btn-reminder {
-        width: 80%;
-        max-width: 250px;
-    }
 /* Reminder Modal */
 .reminder-modal-overlay {
     position: fixed;
@@ -1254,90 +1204,7 @@ nav a.active::after {
     background: #555;
 }
 
-/* PWA Notification */
-.pwa-notification {
-    position: fixed;
-    top: 90px;
-    right: 20px;
-    background: #1a1a1a;
-    border-left: 4px solid var(--primary);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    z-index: 10000;
-    max-width: 350px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    transform: translateX(120%);
-    transition: transform 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.pwa-notification.show {
-    transform: translateX(0);
-}
-
-.pwa-notification.success {
-    border-left-color: #4CAF50;
-}
-
-.pwa-notification.info {
-    border-left-color: #2196F3;
-}
-
-.notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-}
-
-.notification-content i {
-    font-size: 1.2rem;
-}
-
-.pwa-notification.success .notification-content i {
-    color: #4CAF50;
-}
-
-.pwa-notification.info .notification-content i {
-    color: #2196F3;
-}
-
-.notification-close {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 15px;
-    line-height: 1;
-}
-
-.notification-close:hover {
-    color: white;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .reminder-modal {
-        padding: 20px;
-        width: 95%;
-    }
-    
-    .reminder-option {
-        padding: 12px 15px;
-        font-size: 0.95rem;
-    }
-    
-    .pwa-notification {
-        left: 20px;
-        right: 20px;
-        max-width: none;
-    }
-    /* ===== VALENTINE'S DAY THEME ===== */
+/* ===== VALENTINE'S DAY THEME ===== */
 .valentine-theme {
     --valentine-pink: #ff69b4;
     --valentine-red: #ff1493;
@@ -1480,6 +1347,8 @@ nav a.active::after {
 /* Optional: Add a small heart cursor */
 .valentine-theme {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff1493" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto;
+}
+
 /* ======================
    VENUE GROUPING
    ====================== */
@@ -1666,7 +1535,8 @@ nav a.active::after {
     .share-menu {
         padding: 20px;
     }
-}    
+}
+
 
 
 
