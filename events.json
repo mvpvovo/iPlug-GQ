@@ -50,6 +50,16 @@
         "categoryLabel": "Kasi Vibe"
     },
     {
+        "id": 23,
+        "title": "Umgqibelo, Love and Champagne",
+        "date": "2026-02-14",
+        "venue": "Black Impala Restaurant, PE Harbour",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0089.JPG",
+        "description": "Featuring DJs Bigboyqooqoo, Maizo, Samz and Compton. Carry pack allowed at R50 Corkage fee, Bottle of spirits allowed at R250 corkage fee. Table Reservations at 0828008911. Free Entry.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+    },
+    {
         "id": 7,
         "title": "Groovy Saturday, Valentines Edition",
         "date": "2026-02-14",
@@ -58,6 +68,16 @@
         "description": "Starring Abuti Jerome Hosted by Ma11 entertainment. Table booking and Reservations 0415863233. Free Entry.",
         "category": "nightclub",
         "categoryLabel": "Night Club"
+    },
+    {
+        "id": 24,
+        "title": "Valentines",
+        "date": "2026-02-14",
+        "venue": "Cofi, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0091.JPG",
+        "description": "Featuring Figgiano and Sima Sax supported by Resident DJs, Table booking 0665899921. Free Entry.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
     },
     {
         "id": 8,
@@ -170,6 +190,16 @@
         "categoryLabel": "Kasi Vibe"
     },
     {
+        "id": 25,
+        "title": "To whom It May Concern",
+        "date": "2026-02-20",
+        "venue": "Mendi Art Center, New Brighton, Gqeberha",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-13-09-09-26.jpg",
+        "description": "Featured Artists Dolla Sapeta, Vuyo Giba, Ayanda Mji, Banele Njadayi and Michael Barry. 16:30 - 18:30.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+    },
+    {
         "id": 19,
         "title": "Trucker Tuesday",
         "date": "2026-02-24",
@@ -220,6 +250,7 @@
         "categoryLabel": "Kasi Vibe"
     }
 ]
+
 
 
 
