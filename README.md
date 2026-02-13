@@ -1,28 +1,28 @@
 # iPlug GQ – Gqeberha Gig Guide
 
-A static website for listing weekly nightlife, house music, and urban lifestyle events in Gqeberha (Port Elizabeth).
+A static website and PWA for listing weekly nightlife, house music, and urban lifestyle events in Gqeberha (Port Elizabeth).
 
-## 🚀 Quick Start
+## Features
+- Events grouped by venue
+- Save events to "My Events"
+- Set reminders for events
+- Share events on social media
+- Install as a PWA on mobile
+- Offline access
 
-1. **Create a GitHub account** (if you don't have one)
-2. **Create a new repository** named `iplug-gq`
-3. **Upload these 5 files** to your repository:
-   - `index.html`
-   - `style.css`
-   - `script.js`
-   - `events.json`
-   - `README.md` (this file)
+## How to Update
+1. Edit `events.json` with new events (nested by venue).
+2. Upload all files to GitHub repository.
+3. GitHub Pages automatically updates the site.
 
-4. **Enable GitHub Pages:**
-   - Go to your repository → Settings → Pages
-   - Under "Branch", select `main` and `/root`
-   - Click **Save**
-   - Wait 1-2 minutes, then visit: `https://YOUR-USERNAME.github.io/iplug-gq`
+## Files
+- `index.html` – Main page
+- `style.css` – Styles
+- `script.js` – Core functionality
+- `pwa.js` – PWA features (save/reminders)
+- `events.json` – Event data
+- `manifest.json` – PWA manifest
+- `service-worker.js` – Service worker for offline
 
-## 🖼️ Adding Your Logo
-
-1. **Upload your logo** to the `images` folder in your repository
-2. **Name it** `iplug-logo.png`
-3. **If different name**, update line 27 in `index.html`:
-   ```html
-   <img src="images/YOUR-LOGO-FILENAME.png" alt="iPlug GQ Logo" height="40">
+## Credits
+Designed by Vovo MVP
