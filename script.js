@@ -50,20 +50,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ======================
+// HELPER: Check if event date has passed (based on local date)
+// ======================
+function isEventPassed(dateString) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
+    return dateString < todayStr; // event date earlier than today → passed
+}
+
+// ======================
 // DATA LOADING & DISPLAY
 // ======================
 function loadEvents() {
     fetch('events.json')
         .then(response => response.json())
         .then(venues => {
-            // Flatten all events for filtering & PWA features
-            window.allEvents = venues.flatMap(venue =>
+            // Flatten all events
+            let allEvents = venues.flatMap(venue =>
                 venue.events.map(event => ({
                     ...event,
                     venueName: venue.venueName,
                     location: venue.location
                 }))
             );
+
+            // 🔥 FILTER OUT PAST EVENTS
+            allEvents = allEvents.filter(event => !isEventPassed(event.date));
+
+            window.allEvents = allEvents;
             window.venuesData = venues;
             displayGroupedEvents(window.allEvents);
         })
