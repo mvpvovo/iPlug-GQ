@@ -53,10 +53,10 @@
     "events": [
       {
         "id": 11,
-        "title": "Friday Groove",
-        "date": "2026-02-13",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0093.JPG",
-        "description": "Featuring Mvusi Supported by resident DJs, Free Entrance. 5PM Till Late.",
+        "title": "Back to Back Friday",
+        "date": "2026-02-27",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/9115fbcf-a20f-4ad6-83cb-72afffb44ad6.JPG",
+        "description": "Featuring DJs Biggz, Picasso, Canto, Dira, T Funk, Bora, Ayster, Leecose and Unexpected Brothers, Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -135,6 +135,45 @@
         "date": "2026-02-14",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0(1).jpeg",
         "description": "MC TikieDaBoss on the decks Freedom, Mabstone, Snero, Lady Dee, Mthist De DJ and China. 15H00 Till Late. Coolerbox are allowed. R20 Entrance Fee.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
+  },
+  {
+    "venueName": "Monde's Lifestyle",
+    "location": "Motherwell",
+    "events": [
+      {
+        "id": 21,
+        "title": "Saturday Groove",
+        "date": "2026-02-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/674ff3e7-2b28-46b6-88ed-de639c8e9ad0.JPG",
+        "description": " Featuring Deejay Frisko, Scroof BW, Saltonic, Babyface, Small and Snezzo. Free Entry. 10AM till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      },
+      {
+        "id": 6,
+        "title": "Soulful Sunday",
+        "date": "2026-02-22",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/74ee42a1-85e4-4ab0-a949-67c33163b037.JPG",
+        "description": "On the decks MSK Point5, Scroof BW, Snezzo, Small, Zotsho, Leo, Babyface and Mtisto. 10H00 Till Late. Free Entrance.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
+  },
+  {
+    "venueName": "Eskwerini",
+    "location": "Motherwell NU2",
+    "events": [
+      {
+        "id": 7,
+        "title": "Back to Back Friday",
+        "date": "2026-02-27",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/e04af2e4-2b75-4067-b06c-fa7aa17acb60.JPG",
+        "description": "Starring Unexpected Brothers, Biggz, Leecose, Canto, Saltonic, Snedrum and Nastro. Free Entry.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -240,15 +279,15 @@
     ]
   },
   {
-    "venueName": "Ekupholeni Cocktail Lounge",
+    "venueName": "Ekupholeni Pool Side",
     "location": "Zwide Gqeberha",
     "events": [
       {
         "id": 3,
-        "title": "Docta Musiq's Birthday Celebration",
-        "date": "2026-02-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9960.JPG",
-        "description": "Valentines Bliss Outdoor event with Snedrum, Jooma, Mbe, MC Michael Matebe, Theme Shorts & Shirts with Shades. Ticket R50. At the gate R70. Coolbox R150.",
+        "title": "Bottomless Cocktails",
+        "date": "2026-02-18",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/3d76d95d-71d9-421e-9cfe-6d55db0379fb.JPG",
+        "description": "Featuring DJ Kelvor, Mamelodi Sundowns and  Orlando Pirates live screening.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -363,6 +402,7 @@
     ]
   }
 ]
+
 
 
 
