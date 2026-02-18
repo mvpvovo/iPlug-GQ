@@ -156,9 +156,27 @@
       {
         "id": 17,
         "title": "Authentic Fridays",
-        "date": "2026-02-13",
+        "date": "2026-02-20",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Mas1.jpg",
+        "description": "Featuring Prince Music, SK Da DJ, Sonza DJ, Kazangzar, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 05PM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+      {
+        "id": 30,
+        "title": "Groovy Saturday",
+        "date": "2026-02-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Mas%202.jpg",
+        "description": "Featuring London, Prince Music, SK Da DJ, Sonza DJ, Kazangzar, Rush Da DJ, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 11AM Till Late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+      {
+        "id": 31,
+        "title": "Live Band and Soul Session Sundays",
+        "date": "2026-02-22",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4a886282-ce18-4063-a922-a6d03a27a389.JPG",
-        "description": "Featuring Prince Music, SK Da DJ, Sonza DJ, Khanya, Nutty and Ace. Free Parking, Free Entry. 11AM Till Late.",
+        "description": "Featuring Makaziwe Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -441,6 +459,7 @@
     ]
   }
 ]
+
 
 
 
