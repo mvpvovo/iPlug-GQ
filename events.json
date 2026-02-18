@@ -161,7 +161,7 @@
         "description": "Featuring Prince Music, SK Da DJ, Sonza DJ, Kazangzar, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 05PM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-      }
+      },
       {
         "id": 30,
         "title": "Groovy Saturday",
@@ -170,7 +170,7 @@
         "description": "Featuring London, Prince Music, SK Da DJ, Sonza DJ, Kazangzar, Rush Da DJ, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 11AM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-      }
+      },
       {
         "id": 31,
         "title": "Live Band and Soul Session Sundays",
@@ -459,6 +459,7 @@
     ]
   }
 ]
+
 
 
 
