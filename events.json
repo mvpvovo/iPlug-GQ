@@ -29,10 +29,10 @@
     "events": [
       {
         "id": 11,
-        "title": "Valentines Soul 2",
-        "date": "2026-02-13",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0070.jpg",
-        "description": "Featuring The Groove Master DJ Jazzy D. Get Tickets on 0792587494, Early bird R100 limited number. 8PM - 1AM.",
+        "title": "Deep Brew",
+        "date": "2026-03-01",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/roof%20top.jpg",
+        "description": "Featuring Sandy Rivera from Kins of Tomorrow. Supported DJs Ayaz & Warra MVP, Free Entry before 14:00.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -48,6 +48,30 @@
     ]
   },
   {
+    "venueName": "K Lounge",
+    "location": "Addo",
+    "events": [
+      {
+        "id": 11,
+        "title": "Saturday Gqom Party",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/k2.jpg",
+        "description": "Featuring Freedom (Khon' impimpi la). Supported DJ Faido, Free Entry. 18:00 till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      },
+      {
+        "id": 13,
+        "title": "Sunday",
+        "date": "2026-03-01",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/k1.jpg",
+        "description": "Music by Elvis Mali (Umhlobo Wenene). Supported by Vigge and Sense.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
+  },
+  {
     "venueName": "Oom Cola Gqalane's Tavern",
     "location": "Zwide, GQ",
     "events": [
@@ -59,6 +83,21 @@
         "description": "Featuring DJs Biggz, Picasso, Canto, Dira, T Funk, Bora, Ayster, Leecose and Unexpected Brothers, Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
+      }
+    ]
+    },
+  {
+    "venueName": "Slipperfields",
+    "location": "Zwide, GQ",
+    "events": [
+      {
+        "id": 11,
+        "title": "Vive La Vivre Festival, Human Rights Day Celebration",
+        "date": "2026-03-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/mandisi.jpg",
+        "description": "Featuring Mandisi Dyantyis and many more, Tickets Available at Quicket. 12:00 - 20:00",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
       }
     ]
   },
@@ -83,10 +122,10 @@
     "events": [
       {
         "id": 16,
-        "title": "Friday After Work Drinks",
-        "date": "2026-02-13",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0080.JPG",
-        "description": "Featuring DJs Pro, Leendrocamp and Vaido surpported by resident DJs . Free Entry.",
+        "title": "Saturday Experience",
+        "date": "2026-02-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Endaweni.jpg",
+        "description": "Featuring DJ Figgiano surpported by resident DJs . Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -230,10 +269,10 @@
     "events": [
       {
         "id": 12,
-        "title": "Valentines Party",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0062.JPG",
-        "description": "Music by DJs Phindu, Vaido and Korea. Free Entry and Free Parking. 12PM till late.",
+        "title": "Sunday Hangout",
+        "date": "2026-02-22",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/pap.jpg",
+        "description": "Music by DJ Vaido. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -294,30 +333,30 @@
     ]
   },
   {
-    "venueName": "50 Lifestyle",
+    "venueName": "50 Lifestyle & Lounge, Kwano 5 Bob",
     "location": "Kwazakhele",
     "events": [
       {
         "id": 18,
-        "title": "Love is Timeless, Live Band Session",
-        "date": "2026-02-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0078.JPG",
-        "description": "Featuring Yanga Happysoul, Latitah, Mafa Bavuma and Abuti Jerome, supported bt resident DJs. Free Parking, Free Entry. 2PM till late.",
+        "title": "Karaoke Friday",
+        "date": "2026-02-20",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/50.jpg",
+        "description": "Featuring Abuti Jerome and Gogo, supported bt resident DJs. , Bottomless Wine For R30 Between 19:00 - 21:00 . 2PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
     ]
   },
   {
-    "venueName": "Speak Easy Lounge",
+    "venueName": "Speak Easy Lounge, Kwa Mabaso",
     "location": "Veeplaas",
     "events": [
       {
         "id": 20,
-        "title": "Love is in the Air, valentines Edition",
-        "date": "2026-02-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0081.JPG",
-        "description": "Featuring DJs Zest, MVK, Yolz, Simza, Bravo and The Soulman. Free Parking, Free Entry. 2PM till late.",
+        "title": "Summer Saturdays",
+        "date": "2026-02-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/baso.jpg",
+        "description": "Featuring DJs Zain SA and DJ Boraz. Free Parking, Free Entry. 1PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -402,6 +441,7 @@
     ]
   }
 ]
+
 
 
 
