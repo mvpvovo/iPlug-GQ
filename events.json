@@ -13,16 +13,25 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
+        "id": 33,
+        "title": "Friday Loves Cocktails, Varsity Shield Afterparty", 
+        "date": "2026-02-20",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0161.JPG",
+        "description": "Vibes by Sparkles, TR13, Bigboyqooqoo, Ayaz B2B Scorpion. Free Entry.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+      },
+      {
         "id": 23,
-        "title": "Umgqibelo, Love and Champagne",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0089.JPG",
-        "description": "Featuring DJs Bigboyqooqoo, Maizo, Samz and Compton. Carry pack allowed at R50 Corkage fee, Bottle of spirits allowed at R250 corkage fee. Table Reservations at 0828008911. Free Entry.",
+        "title": "Umgqibelo,",
+        "date": "2026-02-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0162.JPG",
+        "description": "Featuring DJs Bigboyqooqoo, Maizo, Samz and Lorrering. Carry pack allowed at R50 Corkage fee, Bottle of spirits allowed at R250 corkage fee. Table Reservations at 0828008911. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
     ]
-    },
+  },
   {
     "venueName": "Roof Garden Bar",
     "location": "PE Central",
@@ -459,6 +468,7 @@
     ]
   }
 ]
+
 
 
 
