@@ -251,10 +251,10 @@
     "events": [
       {
         "id": 7,
-        "title": "Mogodu Monday",
-        "date": "2026-02-16",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/5fbc9969-6152-43da-ab08-727fcbdc2301.JPG",
-        "description": "Starring XS, Bigboyqooqoo, Nicki Sandra, Sbhizo, TR13 and NBeats Hosted by Ma11 entertainment. Table booking and Reservations 0415863233. Free Entry.",
+        "title": "Lifestyle Fridays",
+        "date": "2026-02-20",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/192d029b-b43b-4a9d-a078-2b3a308d7078.JPG",
+        "description": "Featuring DJ Axe Hosted by Ma11 entertainment. Table booking and Reservations 0415863233. Free Entry.",
         "category": "nightclub",
         "categoryLabel": "Night Club"
       }
@@ -468,6 +468,7 @@
     ]
   }
 ]
+
 
 
 
