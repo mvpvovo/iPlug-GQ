@@ -40,8 +40,8 @@
         "id": 11,
         "title": "Deep Brew",
         "date": "2026-03-01",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/roof%20top.jpg",
-        "description": "Featuring Sandy Rivera from Kins of Tomorrow. Supported DJs Ayaz & Warra MVP, Free Entry before 14:00.",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/roof%20top.jpg?updatedAt=1771418038438",
+        "description": "Featuring Sandy Rivera from Kins of Tomorrow. Supported DJs Tiiano,Primo, Ayaz, Warra MVP, Morne Munro, Sbhizo, NBeatz,Sham De Funk and Wyatt.  Free Entry before 14:00.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -468,6 +468,7 @@
     ]
   }
 ]
+
 
 
 
