@@ -164,10 +164,9 @@
       },
       {
         "id": 8,
-        "title": "Valentines Day Jam",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0045.JPG",
-        "description": "Featuring DJs Axe and Loopbar surpported by resident DJs . Free Entry.",
+        "title": "One Tribe Experience",
+        "date": "2026-04-11",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image1.jpeg?updatedAt=1770663044790",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -492,6 +491,7 @@
     ]
   }
 ]
+
 
 
 
