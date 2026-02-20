@@ -33,6 +33,31 @@
     ]
   },
   {
+  "venueName": "Deep Brew",
+  "location": "Happy Valley, GQ",
+  "events": [
+    {
+      "id": 34,
+      "title": "Deep Brew Picnic",
+      "date": "2026-03-28",
+      "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0087.JPG?updatedAt=1770911243045",
+      "description": "Day 1 Featuring Clin L (One Man Show).",
+      "category": "Urban",
+      "categoryLabel": "Urban Lifestyle"
+    },
+    {
+      "id": 35,
+      "title": "Deep Brew Picnic",
+      "date": "2026-03-29",
+      "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0087.JPG?updatedAt=1770911243045",
+      "description": "Day 2 Featuring Liquid Deep.",
+      "category": "Urban",
+      "categoryLabel": "Urban Lifestyle"
+    },
+   {
+  ]
+  },
+  {
     "venueName": "Roof Garden Bar",
     "location": "PE Central",
     "events": [
@@ -468,6 +493,7 @@
     ]
   }
 ]
+
 
 
 
