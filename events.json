@@ -118,6 +118,21 @@
         "categoryLabel": "Kasi Vibe"
       }
     ]
+     },
+  {
+    "venueName": "Funiwe's Tavern",
+    "location": "Walmer, GQ",
+    "events": [
+      {
+        "id": 35,
+        "title": "Saturday Groove",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/aae67ba0-4589-4439-9358-61eb21121f4c.JPG",
+        "description": "Featuring DJs Rush Da DJ and Lady Zar, Supported by DJ Warra and DJ Nqaba, Free Entrance.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
     },
   {
     "venueName": "Slipperfields",
@@ -155,10 +170,10 @@
     "events": [
       {
         "id": 16,
-        "title": "Saturday Experience",
-        "date": "2026-02-21",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Endaweni.jpg",
-        "description": "Featuring DJ Figgiano surpported by resident DJs . Free Entry.",
+        "title": "Friday After Work Drinks",
+        "date": "2026-02-27",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0200.JPG",
+        "description": "Featuring Coco SA surpported by resident DJs . Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -197,9 +212,9 @@
       {
         "id": 30,
         "title": "Groovy Saturday",
-        "date": "2026-02-21",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Mas%202.jpg",
-        "description": "Featuring London, Prince Music, SK Da DJ, Sonza DJ, Kazangzar, Rush Da DJ, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 11AM Till Late.",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c758f756-2003-47ce-92e1-c39aff53fb10.JPG",
+        "description": "Featuring Nana The DJ, Prince Music, Sonza DJ, Lady Lee, DJ Qhama, SK. Theme: Shorts and Shades, Free Entry. 15:00 Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -226,6 +241,21 @@
         "description": "MC TikieDaBoss on the decks Freedom, Mabstone, Snero, Lady Dee, Mthist De DJ and China. 15H00 Till Late. Coolerbox are allowed. R20 Entrance Fee.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
+      }
+    ]
+     },
+  {
+    "venueName": "Studio Lounge Tshisanyama",
+    "location": "Richmond Hill",
+    "events": [
+      {
+        "id": 36,
+        "title": "DJ Kelvor Blackmask birthday Celebration",
+        "date": "2026-03-01",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-23-21-14-44.jpg",
+        "description": "Ace Man, Pearl Majola, SmalRibs and live performance by Aluta . Coolerbox are allowed @ R50 Corkage fee.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
       }
     ]
   },
@@ -491,6 +521,7 @@
     ]
   }
 ]
+
 
 
 
