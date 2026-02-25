@@ -156,9 +156,17 @@
       {
         "id": 11,
         "title": "Cock Tail Fridaze",
-        "date": "2026-02-13",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0095.JPG",
-        "description": "Music by DJs Mleistar, Youngmoney, Wayne, Axe, Dzibu, Hlesko, O'clock ent and Lisar , Free Entrance. 4PM Till Late.",
+        "date": "2026-02-27",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch.jpg",
+        "description": "Music by DJs Mleistar, Youngmoney, Wayne, Axe, Shaun Da Groovy, Dzibu, Hlesko, O'clock ent and Olex , Free Entrance. Drink Specials 6PM - 10PM.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      },
+      {
+        "id": 38,
+        "title": "Canto and Friends",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch2.jpg",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -181,16 +189,16 @@
         "id": 8,
         "title": "One Tribe Experience",
         "date": "2026-04-11",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image1.jpeg?updatedAt=1770663044790",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/one%20tribe.jpg",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
       {
         "id": 4,
-        "title": "Live Session Valentines Edition",
-        "date": "2026-02-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0.jpeg",
-        "description": "Music by Lefa Mosea and band. Free Entry.",
+        "title": "Saturday Experience",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Endaweni.jpg",
+        "description": "Music by Wayne Supported by resident DJs. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -364,10 +372,10 @@
     "events": [
       {
         "id": 21,
-        "title": "Eskwerini Saturday, Valentines Edition",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4e510bb9-f1f5-41c3-ad69-9d2bdc1f8e3c.JPG",
-        "description": "Deejay Lineup Khabz(UIT), Snezzo, Frisko and Milton, supported by DJ Rego, SKKY. Free Entry. 3PM till late.",
+        "title": "Impela Nyanga Experience",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skweway.jpg",
+        "description": "Deejay Lineup Wyatt, Lorna M, Azo Da DJ, Mleistar, Gee and SKYY. Free Entry. 3PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -521,6 +529,7 @@
     ]
   }
 ]
+
 
 
 
