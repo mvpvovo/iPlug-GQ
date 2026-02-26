@@ -167,6 +167,7 @@
         "title": "Canto and Friends",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch2.jpg",
+        "description": "Music by DJs Canto, Gungqasi, Mthist, Kelvin Yidlakaze, DJ Inga, Dee Pride. Free Entrance. 6PM - Till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -190,6 +191,7 @@
         "title": "One Tribe Experience",
         "date": "2026-04-11",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/one%20tribe.jpg",
+        "description": "Special guest Oscar Mbo.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -210,10 +212,10 @@
     "events": [
       {
         "id": 17,
-        "title": "Authentic Fridays",
-        "date": "2026-02-20",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Mas1.jpg",
-        "description": "Featuring Prince Music, SK Da DJ, Sonza DJ, Kazangzar, S. Tee Soul, Khanya, Njiks, Nutty and Ace. Free Parking, Free Entry. 05PM Till Late.",
+        "title": "Jams on Friday",
+        "date": "2026-02-27",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/slim.jpg",
+        "description": "Geast Deejay Lim319 Supported by resident DJs. Free Parking, Free Entry. 02PM Till 01:30AM.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -358,9 +360,9 @@
       {
         "id": 12,
         "title": "Sunday Hangout",
-        "date": "2026-02-22",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/pap.jpg",
-        "description": "Music by DJ Vaido. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
+        "date": "2026-03-01",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/kmg.jpg",
+        "description": "Music by DJs Vaido, Real Yano, Siraman and Aceman. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -471,10 +473,10 @@
     "events": [
       {
         "id": 19,
-        "title": "Trucker Tuesday",
-        "date": "2026-02-24",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Trucker%20Tuesday.jpg",
-        "description": "Music by DJs Mesin, Sham De Funk and Khoneep. Free Parking, Free Entry Before 8PM. No Under 18's After 9PM.",
+        "title": "Vinyl Touch",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/vinyl.jpg",
+        "description": "Special guest DJ Claude with Scorpion Dj, DJ Pro, Laz Ola and George Bliss. Free Parking. 6PM till late.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -529,6 +531,7 @@
     ]
   }
 ]
+
 
 
 
