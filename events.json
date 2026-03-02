@@ -110,10 +110,10 @@
     "events": [
       {
         "id": 10,
-        "title": "Saturday Groove",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0232.JPG",
-        "description": "Featuring Radio DJ Celeb Ozz. Free Entrance.",
+        "title": "Old School Cool",
+        "date": "2026-03-08",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c5e98a8e-5b20-4685-88e6-d29be9e39c37.JPG",
+        "description": "Featuring DJs Wayne, Mleistar and Shizzy. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -555,6 +555,7 @@
     ]
   }
 ]
+
 
 
 
