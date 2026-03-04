@@ -327,7 +327,7 @@
     ]
   },
   {
-    "venueName": "Eskwerini",
+    "venueName": "Eskwerini NU2",
     "location": "Motherwell NU2",
     "events": [
       {
@@ -411,7 +411,7 @@
     ]
   },
   {
-    "venueName": "Eskwerini",
+    "venueName": "Eskwerini Wells",
     "location": "Wells Estate",
     "events": [
       {
@@ -588,6 +588,7 @@
     ]
   }
 ]
+
 
 
 
