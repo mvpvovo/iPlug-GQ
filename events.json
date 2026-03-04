@@ -116,6 +116,24 @@
         "description": "Featuring DJs Wayne, Mleistar and Shizzy. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
+        },
+      {
+        "id": 10.1,
+        "title": "Back2Back Fridays",
+        "date": "2026-06-06",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0274.JPG",
+        "description": "Music by DJs Canto, Picasso, Biggz, Real Yano, Dira, T Funk, Bora and Ayster. Free Entrance. 6PM - Till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+        },
+      {
+        "id": 10.2,
+        "title": "Canto and Friends",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch2.jpg",
+        "description": "Music by DJs Canto, Gungqasi, Mthist, Kelvin Yidlakaze, DJ Inga, Dee Pride. Free Entrance. 6PM - Till late.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
       }
     ]
   },
@@ -125,10 +143,25 @@
     "events": [
       {
         "id": 11,
+        "title": "Saturday Nightout",
+        "date": "2026-03-07",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/2a8c0314-9437-4375-a293-327eb062fec7.JPG",
+        "description": "Featuring Blaq Kiidd (DBN) and Ibi Womdantso, Supported by DJ Warra and DJ Nqaba, Free Entrance.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
+     },
+  {
+    "venueName": "Ethafeni Lounge, Emthini",
+    "location": "Motherwell NU10, GQ",
+    "events": [
+      {
+        "id": 44,
         "title": "Saturday Groove",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/aae67ba0-4589-4439-9358-61eb21121f4c.JPG",
-        "description": "Featuring DJs Rush Da DJ and Lady Zar, Supported by DJ Warra and DJ Nqaba, Free Entrance.",
+        "date": "2026-03-07",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/5e7b25c6-c85c-4cfe-82a2-b02631c771af.JPG",
+        "description": "Featuring DJ Biggz and Freedom, Supported by Resident DJs, Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -179,10 +212,10 @@
     "events": [
       {
         "id": 15,
-        "title": "Friday After Work Drinks",
-        "date": "2026-02-27",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0200.JPG",
-        "description": "Featuring Coco SA surpported by resident DJs . Free Entry.",
+        "title": "Gqom VS Amapiano",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0259.JPG",
+        "description": "Featuring Mr Thela. Babalwa M and Goldmax. Tickets available at cumputicket at R150. At the Door R250",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -198,9 +231,9 @@
       {
         "id": 17,
         "title": "Saturday Experience",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Endaweni.jpg",
-        "description": "Music by Wayne Supported by resident DJs. Free Entry.",
+        "date": "2026-03-07",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/41afdb59-376f-436c-b050-606b17f1de77.JPG",
+        "description": "Music by George Bliss Supported by resident DJs. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -213,8 +246,8 @@
       {
         "id": 18,
         "title": "Jams on Friday",
-        "date": "2026-02-27",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/slim.jpg",
+        "date": "2026-03-06",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/88b54f5f-572f-411e-a239-230f7a36c5cb.JPG",
         "description": "Geast Deejay Lim319 Supported by resident DJs. Free Parking, Free Entry. 02PM Till 01:30AM.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
@@ -231,9 +264,9 @@
       {
         "id": 20,
         "title": "Live Band and Soul Session Sundays",
-        "date": "2026-02-22",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/Mas%203.jpg",
-        "description": "Featuring Makaziwe Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
+        "date": "2026-03-08",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/cc2a4a6c-50db-4b31-acc3-ac38180ce654.JPG",
+        "description": "Featuring Monde Fani Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -276,9 +309,9 @@
       {
         "id": 23,
         "title": "Saturday Groove",
-        "date": "2026-02-21",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/674ff3e7-2b28-46b6-88ed-de639c8e9ad0.JPG",
-        "description": " Featuring Deejay Frisko, Scroof BW, Saltonic, Babyface, Small and Snezzo. Free Entry. 10AM till late.",
+        "date": "2026-03-07",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4183ef10-a8cb-42a5-a3a2-dfc4aac0bb34.JPG",
+        "description": " Featuring Deejays Shandu JHB and Fabiano Isdirana Supported by Scroof BW and Babyface. Free Entry. 10AM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -300,9 +333,9 @@
       {
         "id": 25,
         "title": "Back to Back Friday",
-        "date": "2026-02-27",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/e04af2e4-2b75-4067-b06c-fa7aa17acb60.JPG",
-        "description": "Starring Unexpected Brothers, Biggz, Leecose, Canto, Saltonic, Snedrum and Nastro. Free Entry.",
+        "date": "2026-03-06",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0275.JPG",
+        "description": "Starring Unexpected Brothers, Biggz,Picasso, Canto, Saltonic, Snedrum and Nastro. Free Entry.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -369,9 +402,9 @@
       {
         "id": 30,
         "title": "Sunday Hangout",
-        "date": "2026-03-01",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/kmg.jpg",
-        "description": "Music by DJs Vaido, Real Yano, Siraman and Aceman. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
+        "date": "2026-03-08",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0260.JPG",
+        "description": "Music by DJs Vaido, Dibaba, Snedram and Aceman. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -383,10 +416,10 @@
     "events": [
       {
         "id": 31,
-        "title": "Impela Nyanga Experience",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skweway.jpg",
-        "description": "Deejay Lineup Wyatt, Lorna M, Azo Da DJ, Mleistar, Gee and SKYY. Free Entry. 3PM till late.",
+        "title": "Scott and Friends",
+        "date": "2026-03-07",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0261.JPG",
+        "description": "Featuring Deejays Luniko, Siraman, Dave, Dowza, Rabzza Deep, DJ Rego and SKYY. Free Entry. 3PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -407,10 +440,10 @@
     "events": [
       {
         "id": 33,
-        "title": "Lovers & Friends",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0088.jpg",
-        "description": "Music by Azile (Tru FM). Free Parking, Free Entry.",
+        "title": "Friday Night Spins",
+        "date": "2026-03-06",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0255.JPG",
+        "description": "Music by PastorTheDJ (UWFM). Free Parking, Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -530,31 +563,32 @@
     "events": [
       {
         "id": 42,
-        "title": "Punch Lines Only Hip Hop & Comedy",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9964.JPG",
-        "description": "Featuring Stogie T and Tats Nkonzo. Tickets from R150 at Quicket. We are also looking for opening acts. Openmic. Cypher.",
+        "title": "Zoe Modiga",
+        "date": "2026-03-12",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0254.JPG",
+        "description": "Tickets Early Bird R250 and General R350 at Quicket.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
     ]
   },
   {
-    "venueName": "Bheka's Place",
-    "location": "Addo",
+    "venueName": "XCLSV Concepts",
+    "location": " GQ",
     "events": [
       {
         "id": 43,
-        "title": "Month Of Love Women's Affair",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/29d5bc4c-c83a-4992-99d0-071456d71760.JPG",
-        "description": "Featuring Ms Lu, MC: Pumeza and Spirit The DJ. Phase1 R50, Phase2 R70, Free Entry. 10AM Till Late.",
+        "title": "Hangeazy Pique Nique",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0262.JPG",
+        "description": "Phase1 R120, Phase2 R150, Phase3 R200, Phase4 R250 . SAVE THE DATE.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
     ]
   }
 ]
+
 
 
 
