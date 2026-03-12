@@ -230,10 +230,10 @@
       },
       {
         "id": 17,
-        "title": "Saturday Experience",
-        "date": "2026-03-07",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/41afdb59-376f-436c-b050-606b17f1de77.JPG",
-        "description": "Music by George Bliss Supported by resident DJs. Free Entry.",
+        "title": "Friday After Work Drinks",
+        "date": "2026-03-13",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c5f3b01c-05ee-44c6-8cf4-b8b1bf6bc1b4.JPG",
+        "description": "Music by Real Yano, Wayne, Axe and Lubha Supported by resident DJs. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -246,8 +246,8 @@
       {
         "id": 18,
         "title": "Jams on Friday",
-        "date": "2026-03-06",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/88b54f5f-572f-411e-a239-230f7a36c5cb.JPG",
+        "date": "2026-03-13",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/d34a6aa8-5657-4b48-9282-3bec50ad8c3b.JPG",
         "description": "Geast Deejay Lim319 Supported by resident DJs. Free Parking, Free Entry. 02PM Till 01:30AM.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
@@ -264,9 +264,9 @@
       {
         "id": 20,
         "title": "Live Band and Soul Session Sundays",
-        "date": "2026-03-08",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/cc2a4a6c-50db-4b31-acc3-ac38180ce654.JPG",
-        "description": "Featuring Monde Fani Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
+        "date": "2026-03-15",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/ebff5e5a-a642-46cd-9089-40da132b38ee.JPG",
+        "description": "Featuring Lazola Yengeni Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -309,18 +309,18 @@
       {
         "id": 23,
         "title": "Saturday Groove",
-        "date": "2026-03-07",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/4183ef10-a8cb-42a5-a3a2-dfc4aac0bb34.JPG",
-        "description": " Featuring Deejays Shandu JHB and Fabiano Isdirana Supported by Scroof BW and Babyface. Free Entry. 10AM till late.",
+        "date": "2026-03-14",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/35933e12-b02f-49b2-8bca-2b4eaafb9729.JPG",
+        "description": " Featuring Deejay Milton Supported by resident DJs. Free Entry. 10AM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
       {
         "id": 24,
-        "title": "Soulful Sunday",
-        "date": "2026-03-01",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0223.JPG",
-        "description": "On the decks MSK Point5, Fire, Mlungu, Scroof BW, Mtisto, Zotsho, Babyface and Small. 10H00 Till Late. Free Entrance.",
+        "title": "Saltonic's Birthday Celebration",
+        "date": "2026-03-15",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/7d72a6d3-c0a7-4d1f-8df6-1e07d58e071a.JPG",
+        "description": "On the decks Saltonic, Mambush, Snezzo, Ace Mnana, Scroof BW, Mtisto and Zotsho. 10H00 Till Late. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -332,10 +332,10 @@
     "events": [
       {
         "id": 25,
-        "title": "Back to Back Friday",
-        "date": "2026-03-06",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0275.JPG",
-        "description": "Starring Unexpected Brothers, Biggz,Picasso, Canto, Saltonic, Snedrum and Nastro. Free Entry.",
+        "title": "Saltonic & Paul's Birthday Affair",
+        "date": "2026-03-14",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c79dbc25-f0e0-4e93-bd5f-4595980bcbbf.JPG",
+        "description": "Starring Shaun The Groovy, Nana Da DJ, Lebo Da DJ, Canto, Saltonic, Snedrum, Vaido, Scroof, MXB DJs, Kan Danis, Sir NB, Thando The DJ, Leezo, Frisko and Nastro. Free Entry.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -402,9 +402,9 @@
       {
         "id": 30,
         "title": "Sunday Hangout",
-        "date": "2026-03-08",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0260.JPG",
-        "description": "Music by DJs Vaido, Dibaba, Snedram and Aceman. Cooler Box R50. Free Entry and Free Parking. 12PM till late.",
+        "date": "2026-03-15",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/04118e0e-3574-414a-a4b3-4e3ceb0e63f8.JPG",
+        "description": "Music by DJs Vaido, Mbu (RNB), Mkhathini and Luraz. Cooler Box R50. Free Entry and Free Parking. 12PM till 23:00.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -416,10 +416,10 @@
     "events": [
       {
         "id": 31,
-        "title": "Scott and Friends",
-        "date": "2026-03-07",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0261.JPG",
-        "description": "Featuring Deejays Luniko, Siraman, Dave, Dowza, Rabzza Deep, DJ Rego and SKYY. Free Entry. 3PM till late.",
+        "title": "Eskwerini Saturday",
+        "date": "2026-03-14",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0340.JPG",
+        "description": "Featuring Deejays Peabo's, Disko, Lady Lee the DJ, Lim319, Milton, DJ Rego and SKKY. Free Entry. 3PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -588,6 +588,7 @@
     ]
   }
 ]
+
 
 
 
