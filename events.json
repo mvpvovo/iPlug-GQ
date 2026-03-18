@@ -116,18 +116,18 @@
         "description": "Featuring DJ Lwando Supported by resident DJs. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-        },
+      },
       {
-        "id": 10.1,
-        "title": "Back2Back Fridays",
-        "date": "2026-03-06",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0274.JPG",
-        "description": "Music by DJs Canto, Picasso, Biggz, Real Yano, Dira, T Funk, Bora and Ayster. Free Entrance. 6PM - Till late.",
+        "id": 11,
+        "title": "Easter Saturday",
+        "date": "2026-04-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/a23d833b-92b7-4d98-bc0d-e5d314835916.jpg",
+        "description": "Starring Mr Thela and Friends. Ticket R80, At the Gate R100, VIP Ticket R200. Tickets are available at the counter. 5PM - Till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-        },
+      },
       {
-        "id": 10.2,
+        "id": 12,
         "title": "Canto and Friends",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch2.jpg",
@@ -142,7 +142,7 @@
     "location": "Walmer, GQ",
     "events": [
       {
-        "id": 11,
+        "id": 13,
         "title": "Saturday Nightout",
         "date": "2026-03-07",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/2a8c0314-9437-4375-a293-327eb062fec7.JPG",
@@ -151,22 +151,22 @@
         "categoryLabel": "Kasi Vibe"
       }
     ]
-     },
+  },
   {
     "venueName": "Ethafeni Lounge, Emthini",
     "location": "Motherwell NU10, GQ",
     "events": [
       {
-        "id": 44,
+        "id": 14,
         "title": "Ladies Night",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/49afb71e-1e89-4311-8191-c78907ae10de.jpg",
         "description": "Featuring DJs Amy, Lady Kay, Lolz and Simza, Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
-        },
+      },
       {
-        "id": 44.1,
+        "id": 15,
         "title": "Groovy Sunday",
         "date": "2026-03-29",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/5e4cc89c-8e02-4172-bede-6e14be73ffba.jpg",
@@ -181,7 +181,7 @@
     "location": "NMB",
     "events": [
       {
-        "id": 12,
+        "id": 16,
         "title": "Vive La Vivre Festival, Human Rights Day Celebration",
         "date": "2026-03-21",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/mandisi.jpg",
@@ -196,7 +196,7 @@
     "location": "New Brighton, GQ",
     "events": [
       {
-        "id": 13,
+        "id": 17,
         "title": "Cock Tail Fridaze",
         "date": "2026-02-27",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch.jpg",
@@ -205,7 +205,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 14,
+        "id": 18,
         "title": "Canto and Friends",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch2.jpg",
@@ -220,7 +220,7 @@
     "location": "Deal Party",
     "events": [
       {
-        "id": 15,
+        "id": 19,
         "title": "Gqom VS Amapiano",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0259.JPG",
@@ -229,7 +229,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 16,
+        "id": 20,
         "title": "One Tribe Experience",
         "date": "2026-04-11",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0307.PNG",
@@ -238,7 +238,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 17,
+        "id": 21,
         "title": "Friday After Work Drinks",
         "date": "2026-03-13",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c5f3b01c-05ee-44c6-8cf4-b8b1bf6bc1b4.JPG",
@@ -253,7 +253,7 @@
     "location": "Wells Estate",
     "events": [
       {
-        "id": 18,
+        "id": 22,
         "title": "Jams on Friday",
         "date": "2026-03-13",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/d34a6aa8-5657-4b48-9282-3bec50ad8c3b.JPG",
@@ -262,7 +262,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 19,
+        "id": 23,
         "title": "Groovy Saturday",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c758f756-2003-47ce-92e1-c39aff53fb10.JPG",
@@ -271,7 +271,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 20,
+        "id": 24,
         "title": "Live Band and Soul Session Sundays",
         "date": "2026-03-15",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/ebff5e5a-a642-46cd-9089-40da132b38ee.JPG",
@@ -286,7 +286,7 @@
     "location": "Missionvale",
     "events": [
       {
-        "id": 21,
+        "id": 25,
         "title": "Valentines Ball Event",
         "date": "2026-02-14",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0(1).jpeg",
@@ -301,7 +301,7 @@
     "location": "Richmond Hill",
     "events": [
       {
-        "id": 22,
+        "id": 26,
         "title": "DJ Kelvor Blackmask birthday Celebration",
         "date": "2026-03-01",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-23-21-14-44.jpg",
@@ -316,7 +316,7 @@
     "location": "Motherwell",
     "events": [
       {
-        "id": 23,
+        "id": 27,
         "title": "Saturday Groove",
         "date": "2026-03-21",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/a0be8e6a-0bf0-4b90-a469-345e5e6dc6c5.jpg",
@@ -325,7 +325,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 24,
+        "id": 28,
         "title": "Saltonic's Birthday Celebration",
         "date": "2026-03-15",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/7d72a6d3-c0a7-4d1f-8df6-1e07d58e071a.JPG",
@@ -340,7 +340,7 @@
     "location": "Motherwell NU2",
     "events": [
       {
-        "id": 25,
+        "id": 29,
         "title": "PariBus, Sebenza Mntasekhaya",
         "date": "2026-05-02",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/576a2ee7-5678-45b1-9e12-c410a7c35a53.jpg",
@@ -355,7 +355,7 @@
     "location": "Humerail",
     "events": [
       {
-        "id": 26,
+        "id": 30,
         "title": "Lifestyle Fridays",
         "date": "2026-02-20",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/192d029b-b43b-4a9d-a078-2b3a308d7078.JPG",
@@ -370,7 +370,7 @@
     "location": "Gqeberha",
     "events": [
       {
-        "id": 27,
+        "id": 31,
         "title": "Valentines",
         "date": "2026-02-14",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0091.JPG",
@@ -385,7 +385,7 @@
     "location": "Uitenhage",
     "events": [
       {
-        "id": 28,
+        "id": 32,
         "title": "Dowza's 10th Annual Birthday Celebration, Outdoor Event",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/3c5189c6-2cb8-4b68-a61c-139a09cbb203.jpg",
@@ -394,7 +394,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 29,
+        "id": 33,
         "title": "Hang Loose Sundaze",
         "date": "2026-03-01",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0224.JPG",
@@ -409,7 +409,7 @@
     "location": "2 Mdoda RD",
     "events": [
       {
-        "id": 30,
+        "id": 34,
         "title": "Sunday Hangout",
         "date": "2026-03-22",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/12e3f9a0-4998-42f3-99b6-d4651f623a64.jpg",
@@ -424,7 +424,7 @@
     "location": "Wells Estate",
     "events": [
       {
-        "id": 31,
+        "id": 35,
         "title": "Eskwerini Saturday",
         "date": "2026-03-14",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0340.JPG",
@@ -433,7 +433,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 32,
+        "id": 36,
         "title": "Sunday Back Outside Live, Fundraising For A Cause",
         "date": "2026-03-22",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c67cc150-0ca1-4e2e-adbf-4c467e003f9b.jpg",
@@ -448,7 +448,7 @@
     "location": "Moffet On Main",
     "events": [
       {
-        "id": 33,
+        "id": 37,
         "title": "Friday Night Spins",
         "date": "2026-03-06",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0255.JPG",
@@ -463,7 +463,7 @@
     "location": "Zwide Gqeberha",
     "events": [
       {
-        "id": 34,
+        "id": 38,
         "title": "Saturday Dance Night",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0222.JPG",
@@ -478,7 +478,7 @@
     "location": "Motherwell NU8",
     "events": [
       {
-        "id": 35,
+        "id": 39,
         "title": "Live Band Sundays",
         "date": "2026-03-01",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0233.JPG",
@@ -493,7 +493,7 @@
     "location": "Kwazakhele",
     "events": [
       {
-        "id": 36,
+        "id": 40,
         "title": "Easter Blast Saturday",
         "date": "2026-04-04",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/d5e4fbbb-c467-4569-9a25-61c78633b903.jpg",
@@ -508,7 +508,7 @@
     "location": "Veeplaas",
     "events": [
       {
-        "id": 37,
+        "id": 41,
         "title": "Sunday Detox, Impela Nyanga Edition",
         "date": "2026-03-01",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0231.JPG",
@@ -523,7 +523,7 @@
     "location": "New Brighton, Gqeberha",
     "events": [
       {
-        "id": 38,
+        "id": 42,
         "title": "To whom It May Concern",
         "date": "2026-02-20",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/PHOTO-2026-02-13-09-09-26.jpg",
@@ -538,7 +538,7 @@
     "location": "Gqeberha",
     "events": [
       {
-        "id": 39,
+        "id": 43,
         "title": "Vinyl Touch",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/vinyl.jpg",
@@ -547,7 +547,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 40,
+        "id": 44,
         "title": "Gqom Room",
         "date": "2026-02-27",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0068.jpg",
@@ -556,7 +556,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 41,
+        "id": 45,
         "title": "Skwankwankwa Session 011",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skwa%20cooler.jpg",
@@ -571,7 +571,7 @@
     "location": "52 Westbourne Road",
     "events": [
       {
-        "id": 42,
+        "id": 46,
         "title": "Mbuso Khoza",
         "date": "2026-03-20",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/a3bde30f-ea87-4e47-b078-98f125476dcc.jpg",
@@ -583,10 +583,10 @@
   },
   {
     "venueName": "XCLSV Concepts",
-    "location": " GQ",
+    "location": "GQ",
     "events": [
       {
-        "id": 43,
+        "id": 47,
         "title": "Hangeazy Pique Nique",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0262.JPG",
@@ -595,13 +595,13 @@
         "categoryLabel": "Kasi Vibe"
       }
     ]
-},
+  },
   {
     "venueName": "Loxion Nights",
     "location": "Parliament Street Central, Gqeberha",
     "events": [
       {
-        "id": 44,
+        "id": 48,
         "title": "A Night with Fabiano & Freedom",
         "date": "2026-04-04",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/ebbaf0d6-ec31-4350-a52c-fa4699d62f06.jpg",
@@ -610,7 +610,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 45,
+        "id": 49,
         "title": "Official Weekend Launch",
         "date": "2026-03-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c3f9e08a-5460-4b48-b85f-a3356bc6d546.jpg",
@@ -619,7 +619,7 @@
         "categoryLabel": "Urban Lifestyle"
       },
       {
-        "id": 46,
+        "id": 50,
         "title": "Skwankwankwa Session 011",
         "date": "2026-02-28",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skwa%20cooler.jpg",
@@ -628,13 +628,13 @@
         "categoryLabel": "Urban Lifestyle"
       }
     ]
- },
+  },
   {
     "venueName": "Mum Ruby's, kwa Yanga",
-    "location": " Vumani Street, Kwazakhele, GQ",
+    "location": "Vumani Street, Kwazakhele, GQ",
     "events": [
       {
-        "id": 47,
+        "id": 51,
         "title": "Music Experience 2",
         "date": "2026-04-05",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/7c29c9be-a72c-41f1-ab60-6d2f21706c69.jpg",
@@ -643,6 +643,8 @@
         "categoryLabel": "Kasi Vibe"
       }
     ]
+  }
+]
 
 
 
