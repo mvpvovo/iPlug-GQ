@@ -62,10 +62,10 @@
     "events": [
       {
         "id": 6,
-        "title": "Deep Brew",
-        "date": "2026-03-01",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/roof%20top.jpg?updatedAt=1771418038438",
-        "description": "Featuring Sandy Rivera from Kins of Tomorrow. Supported DJs Tiiano,Primo, Ayaz, Warra MVP, Morne Munro, Sbhizo, NBeatz,Sham De Funk and Wyatt.  Free Entry before 14:00.",
+        "title": "We Love R&B, Your Soulful Escape",
+        "date": "2026-04-03",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/1f1aca18-0c3b-4416-a7fb-caa19c893e29.jpg",
+        "description": "Casa Amor Edition. Tickets Available on Howler.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -110,10 +110,10 @@
     "events": [
       {
         "id": 10,
-        "title": "Old School Cool",
-        "date": "2026-03-08",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c5e98a8e-5b20-4685-88e6-d29be9e39c37.JPG",
-        "description": "Featuring DJs Wayne, Mleistar and Shizzy. Free Entrance.",
+        "title": "Saturday Groove",
+        "date": "2026-03-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/e6dfe7bb-4c58-4713-bd3a-618aa039f764.jpg",
+        "description": "Featuring DJ Lwando Supported by resident DJs. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
         },
@@ -158,10 +158,19 @@
     "events": [
       {
         "id": 44,
-        "title": "Saturday Groove",
-        "date": "2026-03-07",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/5e7b25c6-c85c-4cfe-82a2-b02631c771af.JPG",
-        "description": "Featuring DJ Biggz and Freedom, Supported by Resident DJs, Free Entrance.",
+        "title": "Ladies Night",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/49afb71e-1e89-4311-8191-c78907ae10de.jpg",
+        "description": "Featuring DJs Amy, Lady Kay, Lolz and Simza, Free Entrance.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+        },
+      {
+        "id": 44.1,
+        "title": "Groovy Sunday",
+        "date": "2026-03-29",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/5e4cc89c-8e02-4172-bede-6e14be73ffba.jpg",
+        "description": "Music by Jerome supported by resident DJs. Free Entrance. 3PM - Till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -309,9 +318,9 @@
       {
         "id": 23,
         "title": "Saturday Groove",
-        "date": "2026-03-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/35933e12-b02f-49b2-8bca-2b4eaafb9729.JPG",
-        "description": " Featuring Deejay Milton Supported by resident DJs. Free Entry. 10AM till late.",
+        "date": "2026-03-21",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/a0be8e6a-0bf0-4b90-a469-345e5e6dc6c5.jpg",
+        "description": " Featuring Deejays Azo De DJ, Saltonic, Nastro and Snezzo. Free Entry. 10AM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -332,10 +341,10 @@
     "events": [
       {
         "id": 25,
-        "title": "Saltonic & Paul's Birthday Affair",
-        "date": "2026-03-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c79dbc25-f0e0-4e93-bd5f-4595980bcbbf.JPG",
-        "description": "Starring Shaun The Groovy, Nana Da DJ, Lebo Da DJ, Canto, Saltonic, Snedrum, Vaido, Scroof, MXB DJs, Kan Danis, Sir NB, Thando The DJ, Leezo, Frisko and Nastro. Free Entry.",
+        "title": "PariBus, Sebenza Mntasekhaya",
+        "date": "2026-05-02",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/576a2ee7-5678-45b1-9e12-c410a7c35a53.jpg",
+        "description": "Starring Cairo CPT, Mleistar, Fabiano, Freedom, Saltonic, Snedrum,  Picasso and Nastro. Tickets R50, At the Gate R70, R100 After 10PM.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -377,10 +386,10 @@
     "events": [
       {
         "id": 28,
-        "title": "One Tribe Experience, Activation",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0225.JPG",
-        "description": "Featuring DJs Sbhizo, XS, Wyatt and Leendrocamp surpported by resident DJs. Free Entry.",
+        "title": "Dowza's 10th Annual Birthday Celebration, Outdoor Event",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/3c5189c6-2cb8-4b68-a61c-139a09cbb203.jpg",
+        "description": "Featuring Babalwa M, Goldmax, Dowza, Shaun ZA, Yoza, Max, Figgiano, Luniq, Mas X, Smith, EmoBlack, Dibaba, Deep House Ministry and Leendrocamp. Denim and White. Phase 2 Tickets R120.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -402,9 +411,9 @@
       {
         "id": 30,
         "title": "Sunday Hangout",
-        "date": "2026-03-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/04118e0e-3574-414a-a4b3-4e3ceb0e63f8.JPG",
-        "description": "Music by DJs Vaido, Mbu (RNB), Mkhathini and Luraz. Cooler Box R50. Free Entry and Free Parking. 12PM till 23:00.",
+        "date": "2026-03-22",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/12e3f9a0-4998-42f3-99b6-d4651f623a64.jpg",
+        "description": "Music by DJs Vaido, Aphonik, Korea, Romeo and DJ Skop. Cooler Box R50. Free Entry and Free Parking. 12PM till 23:00.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -425,10 +434,10 @@
       },
       {
         "id": 32,
-        "title": "Sunday Back Outside Live",
-        "date": "2026-02-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_9968.jpg",
-        "description": "Live perfomances by Jooma, Blaq Tye, Brown and DJ Romeo, DJ Rego & SKKY on the decks. 15H00 Till Late. Free Entrance.",
+        "title": "Sunday Back Outside Live, Fundraising For A Cause",
+        "date": "2026-03-22",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c67cc150-0ca1-4e2e-adbf-4c467e003f9b.jpg",
+        "description": "Live perfomances by Thembelani Mbilini, Monde Fani, Brown no Goodies, Chizama, Sam, Nomnandi & Star The Vocalist. 15H00 Till Late. Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -485,10 +494,10 @@
     "events": [
       {
         "id": 36,
-        "title": "Karaoke Friday",
-        "date": "2026-02-20",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/50.jpg",
-        "description": "Featuring Abuti Jerome and Gogo, supported bt resident DJs. , Bottomless Wine For R30 Between 19:00 - 21:00 . 2PM till late.",
+        "title": "Easter Blast Saturday",
+        "date": "2026-04-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/d5e4fbbb-c467-4569-9a25-61c78633b903.jpg",
+        "description": "Featuring Pastor The DJ, supported by Abuti Jerome and DJ Wayne. Outdoor Event. 2PM till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -563,10 +572,10 @@
     "events": [
       {
         "id": 42,
-        "title": "Zoe Modiga",
-        "date": "2026-03-12",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0254.JPG",
-        "description": "Tickets Early Bird R250 and General R350 at Quicket.",
+        "title": "Mbuso Khoza",
+        "date": "2026-03-20",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/a3bde30f-ea87-4e47-b078-98f125476dcc.jpg",
+        "description": "Tickets from R250 at Quicket, 7PM till late.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -586,9 +595,54 @@
         "categoryLabel": "Kasi Vibe"
       }
     ]
-  }
-]
-
+},
+  {
+    "venueName": "Loxion Nights",
+    "location": "Parliament Street Central, Gqeberha",
+    "events": [
+      {
+        "id": 44,
+        "title": "A Night with Fabiano & Freedom",
+        "date": "2026-04-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/ebbaf0d6-ec31-4350-a52c-fa4699d62f06.jpg",
+        "description": "Supported by Biggz, Picasso, Canto, Unexpected Brothers, Lindo, Mamba and B Man.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+      },
+      {
+        "id": 45,
+        "title": "Official Weekend Launch",
+        "date": "2026-03-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c3f9e08a-5460-4b48-b85f-a3356bc6d546.jpg",
+        "description": "Featuring DJ Ligwa, Supported by Biggz, Picasso, Canto, Unexpected Brothers, Lindo, Mamba and B Man . Entrance R30.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+      },
+      {
+        "id": 46,
+        "title": "Skwankwankwa Session 011",
+        "date": "2026-02-28",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/skwa%20cooler.jpg",
+        "description": "CoolerBox Tickets are now available on FIXR, Phase 1,2 and 3 tickes sold out. Unlimited Hubbly available at R1300. Skwankwaknwa Changed My Life .",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
+      }
+    ]
+ },
+  {
+    "venueName": "Mum Ruby's, kwa Yanga",
+    "location": " Vumani Street, Kwazakhele, GQ",
+    "events": [
+      {
+        "id": 47,
+        "title": "Music Experience 2",
+        "date": "2026-04-05",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/7c29c9be-a72c-41f1-ab60-6d2f21706c69.jpg",
+        "description": "Featuring DJs Biggz, Mleistar, Warra, Lwando and Fisho. Free Entrance.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+    ]
 
 
 
