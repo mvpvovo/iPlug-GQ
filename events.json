@@ -86,10 +86,10 @@
     "events": [
       {
         "id": 8,
-        "title": "Saturday Gqom Party",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/k2.jpg",
-        "description": "Featuring Freedom (Khon' impimpi la). Supported DJ Faido, Free Entry. 18:00 till late.",
+        "title": "Another Gqom Party",
+        "date": "2026-04-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/c555874f-35bc-4ae4-9018-de99d5b7e3cb.JPG",
+        "description": "Featuring The Farmboys. Supported DJ Faido and DJ Stone, Free Entry. 12:00 till late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -177,15 +177,15 @@
     ]
   },
   {
-    "venueName": "Slipperfields",
+    "venueName": "Splash Festival",
     "location": "NMB",
     "events": [
       {
         "id": 16,
-        "title": "Vive La Vivre Festival, Human Rights Day Celebration",
-        "date": "2026-03-21",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/mandisi.jpg",
-        "description": "Featuring Mandisi Dyantyis and many more, Tickets Available at Quicket. 12:00 - 20:00",
+        "title": "Splash Festival, Summerstrand, Food Court",
+        "date": "2026-004-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMG_0571.jpg",
+        "description": "Free Entrance. 11:00 - 20:00",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -198,9 +198,9 @@
       {
         "id": 17,
         "title": "Cock Tail Fridaze",
-        "date": "2026-02-27",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/chch.jpg",
-        "description": "Music by DJs Mleistar, Youngmoney, Wayne, Axe, Shaun Da Groovy, Dzibu, Hlesko, O'clock ent and Olex , Free Entrance. Drink Specials 6PM - 10PM.",
+        "date": "2026-04-03",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Chief.jpg?updatedAt=1775122162825",
+        "description": "Music by DJs Pelco, Youngmoney, Wayne, Lee, Shaun Da Groovy, Dzibu, O'clock ent and Axe , Free Entrance. Drink Specials 6PM - 10PM.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
@@ -221,10 +221,10 @@
     "events": [
       {
         "id": 19,
-        "title": "Gqom VS Amapiano",
-        "date": "2026-03-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/IMG_0259.JPG",
-        "description": "Featuring Mr Thela. Babalwa M and Goldmax. Tickets available at cumputicket at R150. At the Door R250",
+        "title": "Deeper Thursday",
+        "date": "2026-04-02",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMG_0573.JPG",
+        "description": "Featuring DJs Ayaz. Khoneep and Scorpion. Supported by Resident DJs",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       },
@@ -239,10 +239,10 @@
       },
       {
         "id": 21,
-        "title": "Friday After Work Drinks",
-        "date": "2026-03-13",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c5f3b01c-05ee-44c6-8cf4-b8b1bf6bc1b4.JPG",
-        "description": "Music by Real Yano, Wayne, Axe and Lubha Supported by resident DJs. Free Entry.",
+        "title": "Easter Hangout",
+        "date": "2026-04-03",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMG_0572.JPG",
+        "description": "Music by Zain SA and Mjazz Supported by resident DJs. Free Entry.",
         "category": "urban",
         "categoryLabel": "Urban Lifestyle"
       }
@@ -264,35 +264,35 @@
       {
         "id": 23,
         "title": "Groovy Saturday",
-        "date": "2026-02-28",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/c758f756-2003-47ce-92e1-c39aff53fb10.JPG",
-        "description": "Featuring Nana The DJ, Prince Music, Sonza DJ, Lady Lee, DJ Qhama, SK. Theme: Shorts and Shades, Free Entry. 15:00 Till Late.",
+        "date": "2026-04-04",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/c90c22e2-974b-47dd-84f9-492f6c8d52ac.JPG",
+        "description": "Featuring DJs Shweme and Cedric, Free Entry. 15:00 Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       },
       {
         "id": 24,
         "title": "Live Band and Soul Session Sundays",
-        "date": "2026-03-15",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/ebff5e5a-a642-46cd-9089-40da132b38ee.JPG",
-        "description": "Featuring Lazola Yengeni Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
+        "date": "2026-04-05",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/kwas.jpg?updatedAt=1775122162154",
+        "description": "Featuring Max Supported by DJ Eddie. Free Parking, Free Entry. 15PM Till Late.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
     ]
   },
   {
-    "venueName": "Mila's Braai",
-    "location": "Missionvale",
+    "venueName": "Donkin Reserve",
+    "location": "Gqeberha Central",
     "events": [
       {
         "id": 25,
-        "title": "Valentines Ball Event",
-        "date": "2026-02-14",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/image0(1).jpeg",
-        "description": "MC TikieDaBoss on the decks Freedom, Mabstone, Snero, Lady Dee, Mthist De DJ and China. 15H00 Till Late. Coolerbox are allowed. R20 Entrance Fee.",
-        "category": "kasivibe",
-        "categoryLabel": "Kasi Vibe"
+        "title": "Skwankwankwa",
+        "date": "2026-04-25",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMG_0474.JPG",
+        "description": "All tickets are sold out.",
+        "category": "urban",
+        "categoryLabel": "Urban Lifestyle"
       }
     ]
   },
@@ -345,6 +345,15 @@
         "date": "2026-05-02",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/576a2ee7-5678-45b1-9e12-c410a7c35a53.jpg",
         "description": "Starring Cairo CPT, Mleistar, Fabiano, Freedom, Saltonic, Snedrum,  Picasso and Nastro. Tickets R50, At the Gate R70, R100 After 10PM.",
+        "category": "kasivibe",
+        "categoryLabel": "Kasi Vibe"
+      }
+      {
+        "id": 29,
+        "title": "Sunday Hangout",
+        "date": "2026-04-05",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/enda.jpg?updatedAt=1775122162577",
+        "description": "DJs Vaido, Lorenzo, Warra and Ayaz supported by Saltonic and Snedrum.  Free Entrance.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
@@ -411,9 +420,9 @@
       {
         "id": 34,
         "title": "Sunday Hangout",
-        "date": "2026-03-22",
-        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/Launch%20week/12e3f9a0-4998-42f3-99b6-d4651f623a64.jpg",
-        "description": "Music by DJs Vaido, Aphonik, Korea, Romeo and DJ Skop. Cooler Box R50. Free Entry and Free Parking. 12PM till 23:00.",
+        "date": "2026-04-05",
+        "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/magx.jpg?updatedAt=1775122162494",
+        "description": "Music by DJs Vaido, Lamza, Scott, Aceman and Thabzito. Cooler Box R50. Free Entry and Free Parking. 12PM till 23:00.",
         "category": "kasivibe",
         "categoryLabel": "Kasi Vibe"
       }
