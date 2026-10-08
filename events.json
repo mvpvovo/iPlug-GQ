@@ -183,7 +183,7 @@
       {
         "id": 16,
         "title": "Splash Festival, Summerstrand, Food Court",
-        "date": "2026-004-04",
+        "date": "2026-04-04",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/IMG_0571.jpg",
         "description": "Free Entrance. 11:00 - 20:00",
         "category": "urban",
@@ -349,7 +349,7 @@
         "categoryLabel": "Kasi Vibe"
       },
       {
-        "id": 29,
+        "id": 53,
         "title": "Sunday Hangout",
         "date": "2026-04-05",
         "flyer": "https://ik.imagekit.io/vurvay/Weekly%20events/enda.jpg?updatedAt=1775122162577",
@@ -654,8 +654,6 @@
     ]
   }
 ]
-
-
 
 
 

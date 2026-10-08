@@ -65,34 +65,227 @@ function isEventPassed(dateString) {
 // DATA LOADING & DISPLAY
 // ======================
 function loadEvents() {
-    fetch('events.json')
-        .then(response => response.json())
-        .then(venues => {
-            // Flatten all events
-            let allEvents = venues.flatMap(venue =>
-                venue.events.map(event => ({
-                    ...event,
-                    venueName: venue.venueName,
-                    location: venue.location
-                }))
-            );
-
-            // 🔥 FILTER OUT PAST EVENTS
-            allEvents = allEvents.filter(event => !isEventPassed(event.date));
-
-            window.allEvents = allEvents;
-            window.venuesData = venues;
+    fetch('events.csv')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} while loading events.csv`);
+            }
+            return response.text();
+        })
+        .then(parseEventsCsv)
+        .then(events => {
+            window.allEvents = events.filter(event => !isEventPassed(event.date));
             displayGroupedEvents(window.allEvents);
         })
         .catch(error => {
             console.error('Error loading events:', error);
-            document.getElementById('events-container').innerHTML = `
-                <div class="no-events">
-                    <p>Unable to load events. Please check back soon or submit your event!</p>
-                    <p><small>Error: ${error.message}</small></p>
-                </div>
-            `;
+            const message = document.createElement('div');
+            message.className = 'no-events';
+            message.textContent = 'Unable to load events. Please check back soon or submit your event!';
+            document.getElementById('events-container').replaceChildren(message);
         });
+}
+
+function parseEventsCsv(csv) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let insideQuotes = false;
+    const input = csv.replace(/^\uFEFF/, '');
+
+    for (let i = 0; i < input.length; i++) {
+        const character = input[i];
+        if (insideQuotes) {
+            if (character === '"' && input[i + 1] === '"') {
+                field += '"';
+                i++;
+            } else if (character === '"') {
+                insideQuotes = false;
+            } else {
+                field += character;
+            }
+        } else if (character === '"' && field.length === 0) {
+            insideQuotes = true;
+        } else if (character === ',') {
+            row.push(field);
+            field = '';
+        } else if (character === '\n' || character === '\r') {
+            row.push(field);
+            rows.push(row);
+            row = [];
+            field = '';
+            if (character === '\r' && input[i + 1] === '\n') i++;
+        } else {
+            field += character;
+        }
+    }
+
+    if (insideQuotes) {
+        throw new Error('The CSV has an unclosed quoted field.');
+    }
+    if (field.length || row.length) {
+        row.push(field);
+        rows.push(row);
+    }
+    if (!rows.length) {
+        throw new Error('The CSV is empty.');
+    }
+
+    const headers = rows.shift().map(header => header.trim().toLowerCase());
+    const columns = {
+        id: headers.indexOf('event id'),
+        title: headers.indexOf('event name'),
+        date: headers.indexOf('date'),
+        venueName: headers.indexOf('venue'),
+        location: headers.indexOf('venue location'),
+        flyer: headers.indexOf('flyer image url'),
+        description: headers.indexOf('event description'),
+        category: headers.indexOf('category')
+    };
+    const requiredColumns = ['title', 'date', 'venueName', 'location', 'flyer', 'description', 'category'];
+    const missingColumns = requiredColumns.filter(column => columns[column] === -1);
+    if (missingColumns.length) {
+        throw new Error(`Missing required CSV column(s): ${missingColumns.join(', ')}.`);
+    }
+    if (new Set(headers).size !== headers.length) {
+        throw new Error('The CSV contains duplicate column headers.');
+    }
+
+    const categoryLabels = {
+        nightclub: 'Night Club',
+        kasivibe: 'Kasi Vibe',
+        urban: 'Urban Lifestyle',
+        other: 'Other'
+    };
+    const categoryValues = {
+        'night club': 'nightclub',
+        nightclub: 'nightclub',
+        'kasi vibe': 'kasivibe',
+        kasivibe: 'kasivibe',
+        'urban lifestyle': 'urban',
+        urban: 'urban',
+        other: 'other'
+    };
+    const parsedEvents = [];
+
+    rows.forEach((values, index) => {
+        const line = index + 2;
+        if (values.every(value => !value.trim())) return;
+        const value = column => (values[columns[column]] || '').trim();
+        const title = value('title');
+        const rawDate = value('date');
+        const venueName = value('venueName');
+        const location = value('location');
+        const flyer = value('flyer');
+        const description = value('description');
+        const categoryKey = value('category').toLowerCase();
+        const category = categoryValues[categoryKey];
+        const missing = [
+            ['Event Name', title],
+            ['Date', rawDate],
+            ['Venue', venueName],
+            ['Venue Location', location],
+            ['Flyer Image URL', flyer],
+            ['Event Description', description],
+            ['Category', category]
+        ].filter(([, fieldValue]) => !fieldValue).map(([name]) => name);
+
+        if (missing.length) {
+            throw new Error(`CSV row ${line} is missing or has an invalid value for: ${missing.join(', ')}.`);
+        }
+
+        const date = parseEventDate(rawDate);
+        let flyerUrl;
+        try {
+            flyerUrl = new URL(flyer);
+        } catch {
+            throw new Error(`CSV row ${line} has an invalid Flyer Image URL.`);
+        }
+        if (!['http:', 'https:'].includes(flyerUrl.protocol)) {
+            throw new Error(`CSV row ${line} Flyer Image URL must use HTTP or HTTPS.`);
+        }
+
+        let id = null;
+        if (columns.id !== -1 && value('id')) {
+            id = Number(value('id'));
+            if (!Number.isSafeInteger(id) || id < 1) {
+                throw new Error(`CSV row ${line} Event ID must be a positive whole number or blank.`);
+            }
+        }
+
+        parsedEvents.push({
+            id,
+            title,
+            date,
+            venueName,
+            location,
+            flyer: flyerUrl.href,
+            description,
+            category,
+            categoryLabel: categoryLabels[category]
+        });
+    });
+
+    const usedIds = new Set();
+    parsedEvents.forEach(event => {
+        if (event.id === null) return;
+        if (usedIds.has(event.id)) {
+            throw new Error(`The CSV contains duplicate Event ID ${event.id}.`);
+        }
+        usedIds.add(event.id);
+    });
+    parsedEvents.forEach(event => {
+        if (event.id !== null) return;
+        const key = `${event.title}\u0000${event.date}\u0000${event.venueName}\u0000${event.location}`;
+        let id = hashEventId(key);
+        while (usedIds.has(id)) id = (id + 1) % 4294967296;
+        event.id = id;
+        usedIds.add(id);
+    });
+
+    return parsedEvents;
+}
+
+function parseEventDate(value) {
+    let year;
+    let month;
+    let day;
+    let match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (match) {
+        [, year, month, day] = match;
+    } else {
+        match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if (!match) {
+            throw new Error(`Invalid event date "${value}". Use YYYY-MM-DD or DD/MM/YYYY.`);
+        }
+        [, day, month, year] = match;
+    }
+
+    const normalized = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const parsed = new Date(`${normalized}T00:00:00Z`);
+    if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== normalized) {
+        throw new Error(`Invalid event date "${value}".`);
+    }
+    return normalized;
+}
+
+function hashEventId(value) {
+    let hash = 2166136261;
+    for (let i = 0; i < value.length; i++) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[character]);
 }
 
 function displayGroupedEvents(events) {
@@ -127,10 +320,10 @@ function displayGroupedEvents(events) {
 
     sortedVenues.forEach(venue => {
         html += `
-            <div class="venue-group" data-venue="${venue.venueName}">
+            <div class="venue-group" data-venue="${escapeHtml(venue.venueName)}">
                 <div class="venue-header">
-                    <h3><i class="fas fa-map-marker-alt"></i> ${venue.venueName}</h3>
-                    <span class="venue-location">${venue.location}</span>
+                    <h3><i class="fas fa-map-marker-alt"></i> ${escapeHtml(venue.venueName)}</h3>
+                    <span class="venue-location">${escapeHtml(venue.location)}</span>
                 </div>
                 <div class="venue-events-grid">
         `;
@@ -140,12 +333,12 @@ function displayGroupedEvents(events) {
             const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
             html += `
                 <div class="event-card" data-category="${event.category}" data-id="${event.id}">
-                    <img src="${event.flyer}" alt="${event.title} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
+                    <img src="${escapeHtml(event.flyer)}" alt="${escapeHtml(event.title)} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
                     <div class="event-info">
                         <span class="event-date"><i class="far fa-calendar"></i> ${formatDate(event.date)}</span>
-                        <h4 class="event-title">${event.title}</h4>
-                        <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${venue.venueName}</p>
-                        <p class="event-description">${event.description}</p>
+                        <h4 class="event-title">${escapeHtml(event.title)}</h4>
+                        <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(venue.venueName)}</p>
+                        <p class="event-description">${escapeHtml(event.description)}</p>
                         <div class="event-actions">
                             <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
                                 <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save'}
@@ -519,4 +712,3 @@ function setupForm() {
         setTimeout(() => form.submit(), 500);
     });
 }
-

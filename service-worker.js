@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iplug-gq-v1.2';
+const CACHE_NAME = 'iplug-gq-v1.3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -6,7 +6,7 @@ const urlsToCache = [
   '/script.js',
   '/pwa.js',
   '/manifest.json',
-  '/events.json',
+  '/events.csv',
   'https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png',
   'https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@300;400;500&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
