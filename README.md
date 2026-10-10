@@ -4,11 +4,15 @@ A static website and PWA for listing weekly nightlife, house music, and urban li
 
 ## Features
 - Events grouped by venue
+- Search events by name, venue, location, description, or category
+- Filter by category, this weekend, or the next seven days
+- Download calendar reminders for events
 - Save events to "My Events"
 - Set reminders for events
 - Share events on social media
 - Install as a PWA on mobile
 - Offline access
+- Submit events with a pre-filled WhatsApp message for review
 
 ## How to Update Events from a Spreadsheet
 1. Open `iPlugGQ_Weekly_Events.xlsx` and add or update events on the **Events** tab, one event per row.

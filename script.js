@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (menuToggle) {
         menuToggle.addEventListener('click', () => {
             navUl.classList.toggle('show');
+            const expanded = navUl.classList.contains('show');
+            menuToggle.setAttribute('aria-expanded', String(expanded));
+            menuToggle.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
             const icon = menuToggle.querySelector('i');
-            if (navUl.classList.contains('show')) {
+            if (expanded) {
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
             } else {
@@ -27,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.getAttribute('href') === '#saved') return;
             navUl.classList.remove('show');
             if (menuToggle) {
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.setAttribute('aria-label', 'Open navigation menu');
                 menuToggle.querySelector('i').classList.remove('fa-times');
                 menuToggle.querySelector('i').classList.add('fa-bars');
             }
@@ -38,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     setupLightbox();
     setupEventHandlers();
+    setupEventFilters();
 
     // Deep linking: check for ?event=ID
     const urlParams = new URLSearchParams(window.location.search);
@@ -65,6 +71,8 @@ function isEventPassed(dateString) {
 // DATA LOADING & DISPLAY
 // ======================
 function loadEvents() {
+    document.getElementById('events-container').setAttribute('aria-busy', 'true');
+    document.getElementById('events-count').textContent = 'Loading events…';
     fetch('events.csv')
         .then(response => {
             if (!response.ok) {
@@ -75,14 +83,24 @@ function loadEvents() {
         .then(parseEventsCsv)
         .then(events => {
             window.allEvents = events.filter(event => !isEventPassed(event.date));
-            displayGroupedEvents(window.allEvents);
+            document.getElementById('events-container').setAttribute('aria-busy', 'false');
+            applyEventFilters();
         })
         .catch(error => {
             console.error('Error loading events:', error);
-            const message = document.createElement('div');
-            message.className = 'no-events';
-            message.textContent = 'Unable to load events. Please check back soon or submit your event!';
-            document.getElementById('events-container').replaceChildren(message);
+            const container = document.getElementById('events-container');
+            container.setAttribute('aria-busy', 'false');
+            container.innerHTML = `
+                <div class="no-events error-state">
+                    <span class="empty-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                    <h3>We hit a small snag.</h3>
+                    <p>Events couldn’t load just now. Give it another try, or send us your event directly.</p>
+                    <div class="empty-actions">
+                        <button class="btn" id="retry-events" type="button">Try again</button>
+                        <a class="btn-secondary" href="#submit">Submit an event</a>
+                    </div>
+                </div>`;
+            document.getElementById('events-count').textContent = 'Events unavailable';
         });
 }
 
@@ -293,7 +311,24 @@ function displayGroupedEvents(events) {
     if (!container) return;
 
     if (events.length === 0) {
-        container.innerHTML = '<div class="no-events">No events this week.</div>';
+        const hasEvents = (window.allEvents || []).length > 0;
+        container.innerHTML = hasEvents ? `
+            <div class="no-events filtered-empty">
+                <span class="empty-icon"><i class="fas fa-magnifying-glass"></i></span>
+                <h3>No matches this time.</h3>
+                <p>Try another search, category, or date range.</p>
+                <button class="btn-secondary" id="reset-event-filters" type="button">Clear filters</button>
+            </div>` : `
+            <div class="no-events">
+                <span class="empty-icon"><i class="far fa-calendar-xmark"></i></span>
+                <p class="section-eyebrow">YOUR WEEKEND IS WIDE OPEN</p>
+                <h3>No upcoming events just yet.</h3>
+                <p>Got something happening in GQ? Send it through and help the city make plans.</p>
+                <div class="empty-actions">
+                    <a class="btn" href="#submit">Submit an event</a>
+                    <a class="btn-secondary" href="https://wa.me/27815294035" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+                </div>
+            </div>`;
         return;
     }
 
@@ -332,7 +367,7 @@ function displayGroupedEvents(events) {
         venue.events.forEach(event => {
             const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
             html += `
-                <div class="event-card" data-category="${event.category}" data-id="${event.id}">
+                <article class="event-card" data-category="${event.category}" data-id="${event.id}">
                     <img src="${escapeHtml(event.flyer)}" alt="${escapeHtml(event.title)} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
                     <div class="event-info">
                         <span class="event-date"><i class="far fa-calendar"></i> ${formatDate(event.date)}</span>
@@ -349,10 +384,13 @@ function displayGroupedEvents(events) {
                             <button class="share-btn" data-event-id="${event.id}">
                                 <i class="fas fa-share-alt"></i> Share
                             </button>
+                            <button class="calendar-btn" data-event-id="${event.id}" aria-label="Add ${escapeHtml(event.title)} to calendar">
+                                <i class="far fa-calendar-plus"></i><span>Add to calendar</span>
+                            </button>
                             <span class="event-category">${event.categoryLabel}</span>
                         </div>
                     </div>
-                </div>
+                </article>
             `;
         });
 
@@ -363,7 +401,8 @@ function displayGroupedEvents(events) {
 }
 
 function formatDate(dateString) {
-    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', {
         weekday: 'short',
         day: 'numeric',
@@ -375,14 +414,85 @@ function formatDate(dateString) {
 // ======================
 // FILTERING
 // ======================
+function setupEventFilters() {
+    document.getElementById('event-search')?.addEventListener('input', applyEventFilters);
+    document.getElementById('date-filter')?.addEventListener('change', applyEventFilters);
+
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(filterButton => {
+                const isActive = filterButton === button;
+                filterButton.classList.toggle('active', isActive);
+                filterButton.setAttribute('aria-pressed', String(isActive));
+            });
+            applyEventFilters();
+        });
+    });
+
+    document.addEventListener('click', event => {
+        if (event.target.closest('#reset-event-filters')) {
+            resetEventFilters();
+        }
+        if (event.target.closest('#retry-events')) {
+            loadEvents();
+        }
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey &&
+            !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+            event.preventDefault();
+            document.getElementById('event-search')?.focus();
+        }
+    });
+}
+
+function resetEventFilters() {
+    document.getElementById('event-search').value = '';
+    document.getElementById('date-filter').value = 'weekend';
+    document.querySelector('.filter-btn[data-filter="all"]').click();
+}
+
 function filterEvents(filter) {
+    const button = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
+    if (button) button.click();
+}
+
+function applyEventFilters() {
     const events = window.allEvents || [];
-    if (filter === 'all') {
-        displayGroupedEvents(events);
-    } else {
-        const filtered = events.filter(event => event.category === filter);
-        displayGroupedEvents(filtered);
+    const category = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const search = document.getElementById('event-search').value.trim().toLocaleLowerCase();
+    const dateRange = document.getElementById('date-filter').value;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let rangeStart = today;
+    let rangeEnd = null;
+    if (dateRange === '7days') {
+        rangeEnd = new Date(today);
+        rangeEnd.setDate(rangeEnd.getDate() + 7);
+    } else if (dateRange === 'weekend') {
+        rangeStart = new Date(today);
+        const daysUntilSaturday = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
+        rangeStart.setDate(rangeStart.getDate() + daysUntilSaturday);
+        rangeEnd = new Date(rangeStart);
+        rangeEnd.setDate(rangeEnd.getDate() + (today.getDay() === 0 ? 1 : 2));
     }
+
+    const filtered = events.filter(event => {
+        if (category !== 'all' && event.category !== category) return false;
+        if (search && ![event.title, event.venueName, event.location, event.description, event.categoryLabel]
+            .some(value => value.toLocaleLowerCase().includes(search))) return false;
+        if (dateRange !== 'all') {
+            const eventDate = new Date(`${event.date}T00:00:00`);
+            if (eventDate < rangeStart || eventDate >= rangeEnd) return false;
+        }
+        return true;
+    });
+
+    const count = document.getElementById('events-count');
+    count.textContent = `${filtered.length} ${filtered.length === 1 ? 'event' : 'events'}`;
+    displayGroupedEvents(filtered);
 }
 
 // ======================
@@ -429,6 +539,41 @@ function shareEvent(eventId, platform) {
     if (shareUrl) {
         window.open(shareUrl, '_blank', 'noopener,noreferrer');
     }
+}
+
+function downloadEventCalendar(eventId) {
+    const event = (window.allEvents || []).find(item => item.id == eventId);
+    if (!event) return;
+
+    const escapeCalendarText = value => String(value)
+        .replace(/\\/g, '\\\\')
+        .replace(/\r?\n/g, '\\n')
+        .replace(/,/g, '\\,')
+        .replace(/;/g, '\\;');
+    const eventDate = event.date.replace(/-/g, '');
+    const calendar = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//iPlug GQ//Events//EN',
+        'BEGIN:VEVENT',
+        `UID:${event.id}@ipluggq.co.za`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`,
+        `DTSTART;VALUE=DATE:${eventDate}`,
+        `DTEND;VALUE=DATE:${new Date(new Date(`${event.date}T00:00:00Z`).getTime() + 86400000).toISOString().slice(0, 10).replace(/-/g, '')}`,
+        `SUMMARY:${escapeCalendarText(event.title)}`,
+        `LOCATION:${escapeCalendarText(`${event.venueName}, ${event.location}`)}`,
+        `DESCRIPTION:${escapeCalendarText(event.description)}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\r\n');
+    const url = URL.createObjectURL(new Blob([calendar], { type: 'text/calendar;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'iplug-gq-event'}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function copyToClipboard(text) {
@@ -492,6 +637,9 @@ function waitForEventCard(eventId) {
 // ======================
 function setupEventHandlers() {
     document.addEventListener('click', function(e) {
+        if (e.target.closest('.calendar-btn')) {
+            downloadEventCalendar(e.target.closest('.calendar-btn').getAttribute('data-event-id'));
+        }
         // Save
         if (e.target.closest('.save-btn')) {
             const btn = e.target.closest('.save-btn');
@@ -563,7 +711,7 @@ function setupLightbox() {
             modalTitle.textContent = event.title;
             modalDetails.innerHTML = `
                 <p><strong><i class="far fa-calendar"></i> ${card.querySelector('.event-date')?.textContent || ''}</strong></p>
-                <p><strong><i class="fas fa-map-marker-alt"></i> ${event.venueName}</strong></p>
+                <p><strong><i class="fas fa-map-marker-alt"></i> ${escapeHtml(event.venueName)}</strong></p>
             `;
 
             const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
@@ -670,25 +818,14 @@ function setupForm() {
 
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         dateInput.min = today;
     }
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        const requiredFields = form.querySelectorAll('[required]');
-        let isValid = true;
-        requiredFields.forEach(f => {
-            if (!f.value.trim()) {
-                f.style.borderColor = 'var(--primary)';
-                isValid = false;
-            } else f.style.borderColor = '';
-        });
-        if (!isValid) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-
+        if (!form.reportValidity()) return;
         const formData = new FormData(form);
         const eventData = {
             name: formData.get('event-name'),
@@ -697,18 +834,29 @@ function setupForm() {
             flyer: formData.get('flyer-url'),
             description: formData.get('description'),
             category: formData.get('category'),
-            email: formData.get('contact-email'),
-            submitted: new Date().toISOString()
+            email: formData.get('contact-email')
         };
+        const message = [
+            'Hi iPlug GQ! Please review my event for the weekly guide:',
+            '',
+            `Event: ${eventData.name}`,
+            `Date: ${eventData.date}`,
+            `Venue: ${eventData.venue}`,
+            `Flyer: ${eventData.flyer}`,
+            `Category: ${eventData.category}`,
+            `Description: ${eventData.description}`,
+            `Contact email: ${eventData.email}`
+        ].join('\n');
+        const whatsappUrl = `https://wa.me/27815294035?text=${encodeURIComponent(message)}`;
+        const status = document.getElementById('form-status');
+        const whatsappWindow = window.open(whatsappUrl, '_blank');
 
-        try {
-            const subs = JSON.parse(localStorage.getItem('iplugSubmissions') || '[]');
-            subs.push(eventData);
-            localStorage.setItem('iplugSubmissions', JSON.stringify(subs));
-        } catch(e) { console.log(e); }
-
-        alert(`✅ Event submitted successfully!\n\n"${eventData.name}" has been submitted. We'll contact you at ${eventData.email}.`);
-        form.reset();
-        setTimeout(() => form.submit(), 500);
+        if (whatsappWindow) {
+            whatsappWindow.opener = null;
+            status.textContent = 'WhatsApp opened with your event details. Review the message and tap Send to submit it.';
+            form.reset();
+        } else {
+            status.innerHTML = `Your browser blocked the new tab. <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">Tap here to open WhatsApp with your event details.</a>`;
+        }
     });
 }

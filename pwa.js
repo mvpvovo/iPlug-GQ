@@ -49,7 +49,7 @@ class iPlugPWA {
   }
 
   // Set Reminder
-  setReminder(event, reminderType) {
+  async setReminder(event, reminderType) {
     const reminderTimes = {
       '1day': 24 * 60 * 60 * 1000,
       '3hours': 3 * 60 * 60 * 1000,
@@ -71,9 +71,22 @@ class iPlugPWA {
     };
     
     this.saveToStorage();
-    this.scheduleNotification(event, notificationTime);
-    this.showNotification(`Reminder set for "${event.title}"`, 'success');
     this.updateSavedCounts();
+    let permissionGranted = false;
+    try {
+      permissionGranted = await this.requestNotificationPermission();
+    } catch (error) {
+      console.error('Unable to request notification permission:', error);
+    }
+    if (permissionGranted) {
+      this.scheduleNotification(event, notificationTime);
+      this.showNotification(`Reminder set for "${event.title}"`, 'success');
+    } else {
+      const message = 'Notification' in window
+        ? 'Reminder saved. Allow notifications in your browser settings to receive an alert.'
+        : 'Reminder saved to My Events. This browser does not support notifications.';
+      this.showNotification(message, 'warning');
+    }
   }
 
   removeReminder(eventId) {
@@ -117,13 +130,16 @@ class iPlugPWA {
   }
 
   createSavedEventCard(event) {
+    const title = this.escapeHtml(event.title);
+    const flyer = this.escapeHtml(event.flyer);
+    const venueName = this.escapeHtml(event.venueName);
     return `
       <div class="saved-item" data-id="${event.id}">
-        <img src="${event.flyer}" alt="${event.title}" class="saved-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
+        <img src="${flyer}" alt="${title}" class="saved-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
         <div class="saved-info">
-          <h4>${event.title}</h4>
-          <p><i class="far fa-calendar"></i> ${new Date(event.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
-          <p><i class="fas fa-map-marker-alt"></i> ${event.venueName}</p>
+          <h4>${title}</h4>
+          <p><i class="far fa-calendar"></i> ${new Date(`${event.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+          <p><i class="fas fa-map-marker-alt"></i> ${venueName}</p>
           <button onclick="window.iplugPWA.unsaveEvent(${event.id})" class="btn-remove">
             <i class="fas fa-trash"></i> Remove
           </button>
@@ -137,10 +153,10 @@ class iPlugPWA {
     return `
       <div class="reminder-item" data-id="${reminder.eventId}">
         <div class="reminder-info">
-          <h4>${reminder.eventTitle}</h4>
+          <h4>${this.escapeHtml(reminder.eventTitle)}</h4>
           <p><i class="far fa-clock"></i> Reminder: ${this.formatReminderType(reminder.reminderType)} before</p>
-          <p><i class="far fa-calendar"></i> Event: ${new Date(reminder.eventDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
-          ${event ? `<p><i class="fas fa-map-marker-alt"></i> ${event.venueName}</p>` : ''}
+          <p><i class="far fa-calendar"></i> Event: ${new Date(`${reminder.eventDate}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+          ${event ? `<p><i class="fas fa-map-marker-alt"></i> ${this.escapeHtml(event.venueName)}</p>` : ''}
           <button onclick="window.iplugPWA.removeReminder(${reminder.eventId})" class="btn-remove">
             <i class="fas fa-bell-slash"></i> Cancel Reminder
           </button>
@@ -189,14 +205,12 @@ class iPlugPWA {
     }
   }
 
-  requestNotificationPermission() {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          this.showNotification('Notifications enabled!', 'success');
-        }
-      });
-    }
+  async requestNotificationPermission() {
+    if (!('Notification' in window)) return false;
+    const permission = Notification.permission === 'default'
+      ? await Notification.requestPermission()
+      : Notification.permission;
+    return permission === 'granted';
   }
 
   showReminderModal(event) {
@@ -205,7 +219,7 @@ class iPlugPWA {
         <div class="reminder-modal-overlay">
             <div class="reminder-modal">
                 <h3><i class="fas fa-bell"></i> Set Reminder</h3>
-                <p>For "${event.title}"</p>
+                <p></p>
                 <div class="reminder-options">
                     <button class="reminder-option" data-time="1day">
                         <i class="far fa-clock"></i> 1 Day Before
@@ -228,11 +242,15 @@ class iPlugPWA {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
     
     const modal = document.querySelector('.reminder-modal-overlay');
+    modal.querySelector('.reminder-modal p').textContent = `For "${event.title}"`;
     
     modal.querySelectorAll('.reminder-option').forEach(option => {
         option.addEventListener('click', () => {
             const time = option.getAttribute('data-time');
-            this.setReminder(event, time);
+            this.setReminder(event, time).catch(error => {
+              console.error('Unable to save event reminder:', error);
+              this.showNotification('Could not save this reminder. Please try again.', 'error');
+            });
             modal.remove();
         });
     });
@@ -254,10 +272,11 @@ class iPlugPWA {
     notification.innerHTML = `
       <div class="notification-content">
         <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-        <span>${message}</span>
+        <span></span>
       </div>
       <button class="notification-close">&times;</button>
     `;
+    notification.querySelector('.notification-content span').textContent = message;
     
     document.body.appendChild(notification);
     
@@ -274,6 +293,16 @@ class iPlugPWA {
     });
   }
 
+  escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[character]);
+  }
+
   // PWA Installation
   registerServiceWorker() {
     if ('serviceWorker' in navigator) {
@@ -286,6 +315,10 @@ class iPlugPWA {
   }
 
   setupInstallPrompt() {
+    document.querySelectorAll('#app-install, #feature-install').forEach(btn => {
+      btn.addEventListener('click', () => this.promptInstallation());
+    });
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       this.deferredPrompt = e;
@@ -295,10 +328,6 @@ class iPlugPWA {
           this.showInstallBanner();
         }
       }, 3000);
-      
-      document.querySelectorAll('#app-install, #feature-install').forEach(btn => {
-        btn.addEventListener('click', () => this.promptInstallation());
-      });
     });
 
     window.addEventListener('appinstalled', () => {
@@ -358,9 +387,3 @@ class iPlugPWA {
 // Initialize PWA
 const iplugPWA = new iPlugPWA();
 window.iplugPWA = iplugPWA;
-
-// Request notification permission on first interaction
-document.addEventListener('click', () => {
-  iplugPWA.requestNotificationPermission();
-}, { once: true });
-

@@ -7,7 +7,7 @@
 
     <!-- Open Graph / Social Sharing -->
     <meta property="og:title" content="iPlug GQ – Gqeberha's #1 Gig Guide">
-    <meta property="og:description" content="Your weekly source for nightclub events, kasi vibes, and urban lifestyle happenings.">
+    <meta property="og:description" content="Find your next night out, day groove, and local favourite in Gqeberha.">
     <meta property="og:image" content="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
     <meta property="og:url" content="https://ipluggq.co.za">
     <meta property="og:type" content="website">
@@ -27,26 +27,26 @@
     </script>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#ff0080">
+    <meta name="theme-color" content="#10100f">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="iPlug GQ">
-    <meta name="description" content="Gqeberha's #1 Gig Guide for nightlife, kasi vibes, and urban events">
+    <meta name="description" content="Find your next night out, day groove, and local favourite in Gqeberha with iPlug GQ.">
     <link rel="apple-touch-icon" href="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
     
     <!-- Styles & Fonts -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="valentine-theme">
+<body>
     <!-- Header with Logo -->
     <header>
         <div class="container">
-            <a href="#" class="logo">
+            <a href="#home" class="logo" aria-label="iPlug GQ home">
                 <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png" alt="iPlug GQ Logo">
             </a>
             <nav>
@@ -58,7 +58,8 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+            <button id="app-install" class="nav-install" type="button"><i class="fas fa-arrow-down-to-bracket"></i> Install app</button>
+            <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
@@ -74,38 +75,66 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>Gqeberha's #1 Gig Guide</h1>
-            <p>Your weekly source for nightclub events, kasi mjaivo, and urban lifestyle happenings in Gqeberha (Port Elizabeth) and surrounding areas.</p>
+            <p class="hero-kicker"><span></span> YOUR CITY. YOUR WEEKEND.</p>
+            <h1>Gqeberha is <span>outside.</span></h1>
+            <p>Find your next night out, day groove, and local favourite — all in one place.</p>
             <div class="hero-buttons">
-                <a href="#events" class="btn">View This Week's Events</a>
-                <button id="app-install" class="btn-secondary">📱 Install App</button>
+                <a href="#events" class="btn"><i class="fas fa-arrow-down"></i> Find your plans</a>
+                <a href="#submit" class="btn-secondary">List an event <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-bg" style="background-image: url('https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg');"></div>
+        <div class="hero-location"><i class="fas fa-location-dot"></i> GQ, Eastern Cape</div>
     </section>
 
     <!-- Events Section -->
     <section class="events" id="events">
         <div class="container">
-            <h2><i class="fas fa-calendar-alt"></i> This Week's Gigs</h2>
-            <p class="section-subtitle">Updated every Wednesday. Save events and set reminders!</p>
+            <div class="events-heading">
+                <div>
+                    <p class="section-eyebrow">THE CITY'S ON</p>
+                    <h2>This week<span class="heading-period">.</span></h2>
+                    <p class="section-subtitle">Good people. Good music. Your next favourite night.</p>
+                </div>
+                <span class="events-count" id="events-count" aria-live="polite">Loading events…</span>
+            </div>
+
+            <div class="event-tools">
+                <label class="event-search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="visually-hidden">Search events or venues</span>
+                    <input id="event-search" type="search" placeholder="Search events, venues…" autocomplete="off">
+                    <kbd>/</kbd>
+                </label>
+                <label class="date-filter">
+                    <i class="far fa-calendar" aria-hidden="true"></i>
+                    <span class="visually-hidden">Choose a date range</span>
+                    <select id="date-filter">
+                        <option value="weekend">This weekend</option>
+                        <option value="7days">Next 7 days</option>
+                        <option value="all">All upcoming</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-chevron" aria-hidden="true"></i>
+                </label>
+            </div>
 
             <!-- Filter Buttons -->
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">All Events</button>
-                <button class="filter-btn" data-filter="nightclub">Night Club</button>
-                <button class="filter-btn" data-filter="kasivibe">Kasi Vibe</button>
-                <button class="filter-btn" data-filter="urban">Urban Lifestyle</button>
+            <div class="filter-buttons" role="group" aria-label="Filter by event category">
+                <button class="filter-btn active" data-filter="all" aria-pressed="true">Everything</button>
+                <button class="filter-btn" data-filter="nightclub" aria-pressed="false">Night Club</button>
+                <button class="filter-btn" data-filter="kasivibe" aria-pressed="false">Kasi Vibe</button>
+                <button class="filter-btn" data-filter="urban" aria-pressed="false">Urban Lifestyle</button>
+                <button class="filter-btn" data-filter="other" aria-pressed="false">Other</button>
             </div>
 
             <!-- Events Container -->
-            <div class="events-container" id="events-container">
+            <div class="events-container" id="events-container" aria-live="polite" aria-busy="true">
                 <!-- Events loaded from events.csv -->
             </div>
 
             <div class="update-note">
-                <p><i class="fas fa-info-circle"></i> <strong>Weekly Update:</strong> New events are added every Wednesday. To list your event, <a href="#submit">submit your flyer</a>.</p>
+                <p><i class="fas fa-sparkles"></i> Fresh plans land every Wednesday. <a href="#submit">Got an event? Put it on the map <i class="fas fa-arrow-right"></i></a></p>
             </div>
         </div>
     </section>
@@ -156,10 +185,12 @@
     <!-- Submit Event Section -->
     <section class="submit" id="submit">
         <div class="container">
-            <h2><i class="fas fa-upload"></i> Submit Your Event</h2>
-            <p>Promoters, venues, and artists: Send us your flyer to be featured in the weekly guide.</p>
-            
-            <form id="event-form" action="mailto:iPlugGQ@hotmail.com" method="post" enctype="text/plain">
+            <div class="submit-intro">
+                <p class="section-eyebrow">BRING THE VIBE</p>
+                <h2>Got a good one?</h2>
+                <p>Send your event to the iPlug GQ team. We’ll review it for the weekly guide.</p>
+            </div>
+            <form id="event-form">
                 <div class="form-group">
                     <label for="event-name">Event Name *</label>
                     <input type="text" id="event-name" name="event-name" required>
@@ -195,10 +226,10 @@
                     <label for="contact-email">Your Email *</label>
                     <input type="email" id="contact-email" name="contact-email" required>
                 </div>
-                <button type="submit" class="btn">Submit Event</button>
+                <button type="submit" class="btn"><i class="fab fa-whatsapp"></i> Send for review</button>
             </form>
-            
-            <p class="form-note">Alternatively, you can WhatsApp event details to <strong>+27 81 529 4035</strong></p>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+            <p class="form-note">Your WhatsApp app will open with the event details ready to send to <a href="https://wa.me/27815294035" target="_blank" rel="noopener noreferrer">+27 81 529 4035</a>.</p>
         </div>
     </section>
 
@@ -305,11 +336,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
