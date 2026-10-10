@@ -1,59 +1,47 @@
 {
-  "name": "iPlug GQ",
-  "short_name": "iPlugGQ",
-  "description": "Find your next night out, day groove, and local favourite in Gqeberha.",
-  "start_url": "/",
+  "name": "iPlug GQ – Gqeberha Gig Guide",
+  "short_name": "iPlug GQ",
+  "description": "The definitive gig guide for Gqeberha (Port Elizabeth). Weekly nightlife, kasi grooves, and urban lifestyle events.",
+  "start_url": "./",
+  "scope": "./",
+  "id": "iplug-gq",
   "display": "standalone",
-  "background_color": "#10100f",
-  "theme_color": "#10100f",
+  "background_color": "#0e0f0c",
+  "theme_color": "#0e0f0c",
   "orientation": "portrait",
-  "scope": "/",
-  "id": "/",
   "icons": [
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-72,h-72",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-96,h-96",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-128,h-128",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-144,h-144",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-192,h-192",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png",
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-512,h-512",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -62,34 +50,22 @@
   "categories": ["entertainment", "lifestyle", "events", "music"],
   "shortcuts": [
     {
-      "name": "View This Week's Events",
+      "name": "This Week's Events",
       "short_name": "Events",
-      "description": "Browse all events happening this week",
-      "url": "/#events",
-      "icons": [{ "src": "/icons/event-96.png", "sizes": "96x96" }]
+      "description": "Browse gigs happening in GQ this week",
+      "url": "./#events"
     },
     {
-      "name": "Submit New Event",
+      "name": "Submit An Event",
       "short_name": "Submit",
-      "description": "Submit your event flyer",
-      "url": "/#submit",
-      "icons": [{ "src": "/icons/submit-96.png", "sizes": "96x96" }]
+      "description": "Submit your event flyer for review",
+      "url": "./#submit"
     },
     {
       "name": "My Saved Events",
       "short_name": "Saved",
-      "description": "View events you've saved",
-      "url": "/#saved",
-      "icons": [{ "src": "/icons/saved-96.png", "sizes": "96x96" }]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg",
-      "sizes": "1280x720",
-      "type": "image/jpeg",
-      "form_factor": "wide",
-      "label": "iPlug GQ Event Listing"
+      "description": "View saved gigs and reminders",
+      "url": "./#saved"
     }
   ]
 }

@@ -1,106 +1,242 @@
-// ======================
-// iPlug GQ – MAIN SCRIPT
-// ======================
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('current-year').textContent = new Date().getFullYear();
+// ==========================================
+// iPlug GQ – Core Application Script
+// Gqeberha's #1 Gig Guide
+// ==========================================
 
-    // Mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic year in footer
+    const currentYearEl = document.getElementById('current-year');
+    if (currentYearEl) {
+        currentYearEl.textContent = new Date().getFullYear();
+    }
+
+    // Initialize application modules
+    setupMobileNav();
+    setupNavigation();
+    setupFilters();
+    setupLightbox();
+    setupForm();
+    setupDeepLinking();
+
+    // Load and render events
+    loadEvents();
+});
+
+// ==========================================
+// NAVIGATION & MOBILE MENU
+// ==========================================
+function setupMobileNav() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navUl = document.querySelector('nav ul');
-    if (menuToggle) {
+
+    if (menuToggle && navUl) {
         menuToggle.addEventListener('click', () => {
             navUl.classList.toggle('show');
             const expanded = navUl.classList.contains('show');
             menuToggle.setAttribute('aria-expanded', String(expanded));
             menuToggle.setAttribute('aria-label', expanded ? 'Close navigation menu' : 'Open navigation menu');
             const icon = menuToggle.querySelector('i');
-            if (expanded) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+            if (icon) {
+                icon.className = expanded ? 'fas fa-xmark' : 'fas fa-bars';
             }
         });
-    }
 
-    // Close mobile menu when clicking a link (except saved link)
-    document.querySelectorAll('nav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            if (this.getAttribute('href') === '#saved') return;
-            navUl.classList.remove('show');
-            if (menuToggle) {
-                menuToggle.setAttribute('aria-expanded', 'false');
-                menuToggle.setAttribute('aria-label', 'Open navigation menu');
-                menuToggle.querySelector('i').classList.remove('fa-times');
-                menuToggle.querySelector('i').classList.add('fa-bars');
+        // Close menu when clicking outside or clicking any nav link
+        document.addEventListener('click', (e) => {
+            if (!navUl.contains(e.target) && !menuToggle.contains(e.target) && navUl.classList.contains('show')) {
+                closeNavMenu(menuToggle, navUl);
             }
+        });
+
+        navUl.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                closeNavMenu(menuToggle, navUl);
+            });
+        });
+    }
+}
+
+function closeNavMenu(menuToggle, navUl) {
+    navUl.classList.remove('show');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    const icon = menuToggle.querySelector('i');
+    if (icon) icon.className = 'fas fa-bars';
+}
+
+function setupNavigation() {
+    const homeLinks = document.querySelectorAll('a[href="#home"], .logo');
+    const eventLinks = document.querySelectorAll('a[href="#events"]');
+    const savedLink = document.getElementById('saved-link');
+    const pastGigsLink = document.getElementById('past-gigs-link');
+
+    homeLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showMainView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.history.pushState(null, null, '#home');
         });
     });
 
-    loadEvents();
-    setupForm();
-    setupNavigation();
-    setupLightbox();
-    setupEventHandlers();
-    setupEventFilters();
+    eventLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showMainView();
+            const dateFilter = document.getElementById('date-filter');
+            if (dateFilter && dateFilter.value === 'past') {
+                dateFilter.value = 'weekend';
+                applyFilters();
+            }
+            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, null, '#events');
+        });
+    });
 
-    // Deep linking: check for ?event=ID
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('event');
-    if (eventId) {
-        waitForEventCard(eventId);
+    if (pastGigsLink) {
+        pastGigsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showMainView();
+            const dateFilter = document.getElementById('date-filter');
+            if (dateFilter) {
+                dateFilter.value = 'past';
+                applyFilters();
+            }
+            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, null, '#past-gigs');
+        });
     }
 
-    checkHash();
-});
+    if (savedLink) {
+        savedLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSavedView();
+            window.history.pushState(null, null, '#saved');
+        });
+    }
 
-// ======================
-// HELPER: Check if event date has passed (based on local date)
-// ======================
+    document.getElementById('switch-upcoming-btn')?.addEventListener('click', () => {
+        const dateFilter = document.getElementById('date-filter');
+        if (dateFilter) {
+            dateFilter.value = (window.upcomingEvents && window.upcomingEvents.length > 0) ? 'weekend' : 'all';
+            applyFilters();
+        }
+    });
+
+    window.addEventListener('popstate', checkHash);
+    checkHash();
+}
+
+function showMainView() {
+    document.querySelector('.events').style.display = 'block';
+    document.querySelector('.hero').style.display = 'flex';
+    document.querySelector('.submit').style.display = 'block';
+    document.querySelector('.saved-events').style.display = 'none';
+
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.querySelector('a[href="#events"]')?.classList.add('active');
+}
+
+function showSavedView() {
+    document.querySelector('.events').style.display = 'none';
+    document.querySelector('.hero').style.display = 'none';
+    document.querySelector('.submit').style.display = 'none';
+    document.querySelector('.saved-events').style.display = 'block';
+
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('saved-link')?.classList.add('active');
+
+    if (window.iplugPWA) {
+        window.iplugPWA.loadSavedEvents();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function checkHash() {
+    if (window.location.hash === '#saved') {
+        showSavedView();
+    } else if (window.location.hash === '#past-gigs') {
+        showMainView();
+        const dateFilter = document.getElementById('date-filter');
+        if (dateFilter) {
+            dateFilter.value = 'past';
+            applyFilters();
+        }
+    } else {
+        showMainView();
+    }
+}
+
+// ==========================================
+// DATA LOADING & PARSING
+// ==========================================
 function isEventPassed(dateString) {
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const todayStr = `${year}-${month}-${day}`;
-    return dateString < todayStr; // event date earlier than today → passed
+    return dateString < todayStr;
 }
 
-// ======================
-// DATA LOADING & DISPLAY
-// ======================
+function optimizeImageUrl(url, width = 600) {
+    if (!url) return 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-600,q-75,f-auto';
+    if (url.includes('ik.imagekit.io')) {
+        if (url.includes('?tr=')) return url;
+        const separator = url.includes('?') ? '&' : '?';
+        return `${url}${separator}tr=w-${width},q-75,f-auto`;
+    }
+    return url;
+}
+
 function loadEvents() {
-    document.getElementById('events-container').setAttribute('aria-busy', 'true');
-    document.getElementById('events-count').textContent = 'Loading events…';
+    const container = document.getElementById('events-container');
+    const countEl = document.getElementById('events-count');
+
+    if (container) container.setAttribute('aria-busy', 'true');
+    if (countEl) countEl.textContent = 'Loading gigs…';
+
     fetch('events.csv')
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status} while loading events.csv`);
+                throw new Error(`HTTP ${response.status} loading events.csv`);
             }
             return response.text();
         })
         .then(parseEventsCsv)
         .then(events => {
-            window.allEvents = events.filter(event => !isEventPassed(event.date));
-            document.getElementById('events-container').setAttribute('aria-busy', 'false');
-            applyEventFilters();
+            window.allRawEvents = events;
+            window.upcomingEvents = events.filter(e => !isEventPassed(e.date));
+            window.pastEvents = events.filter(e => isEventPassed(e.date));
+
+            // Smart UX: If no upcoming events in CSV (e.g. gap between weekly updates), default to archive mode
+            const dateFilter = document.getElementById('date-filter');
+            if (window.upcomingEvents.length === 0 && window.pastEvents.length > 0) {
+                if (dateFilter && dateFilter.value !== 'past') {
+                    dateFilter.value = 'past';
+                }
+            }
+
+            if (container) container.setAttribute('aria-busy', 'false');
+            applyFilters();
+            injectSchemaStructuredData(events);
         })
         .catch(error => {
             console.error('Error loading events:', error);
-            const container = document.getElementById('events-container');
-            container.setAttribute('aria-busy', 'false');
-            container.innerHTML = `
-                <div class="no-events error-state">
-                    <span class="empty-icon"><i class="fas fa-triangle-exclamation"></i></span>
-                    <h3>We hit a small snag.</h3>
-                    <p>Events couldn’t load just now. Give it another try, or send us your event directly.</p>
-                    <div class="empty-actions">
-                        <button class="btn" id="retry-events" type="button">Try again</button>
-                        <a class="btn-secondary" href="#submit">Submit an event</a>
-                    </div>
-                </div>`;
-            document.getElementById('events-count').textContent = 'Events unavailable';
+            if (container) {
+                container.setAttribute('aria-busy', 'false');
+                container.innerHTML = `
+                    <div class="no-events error-state">
+                        <span class="empty-icon"><i class="fas fa-triangle-exclamation"></i></span>
+                        <h3>Events could not load</h3>
+                        <p>We had a glitch loading the guide. Check your connection or try again.</p>
+                        <div class="empty-actions">
+                            <button class="btn" id="retry-events-btn" type="button">Try again</button>
+                            <a class="btn-secondary" href="https://wa.me/27815294035" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+                        </div>
+                    </div>`;
+                document.getElementById('retry-events-btn')?.addEventListener('click', loadEvents);
+            }
+            if (countEl) countEl.textContent = 'Guide offline';
         });
 }
 
@@ -112,45 +248,39 @@ function parseEventsCsv(csv) {
     const input = csv.replace(/^\uFEFF/, '');
 
     for (let i = 0; i < input.length; i++) {
-        const character = input[i];
+        const char = input[i];
         if (insideQuotes) {
-            if (character === '"' && input[i + 1] === '"') {
+            if (char === '"' && input[i + 1] === '"') {
                 field += '"';
                 i++;
-            } else if (character === '"') {
+            } else if (char === '"') {
                 insideQuotes = false;
             } else {
-                field += character;
+                field += char;
             }
-        } else if (character === '"' && field.length === 0) {
+        } else if (char === '"' && field.length === 0) {
             insideQuotes = true;
-        } else if (character === ',') {
+        } else if (char === ',') {
             row.push(field);
             field = '';
-        } else if (character === '\n' || character === '\r') {
+        } else if (char === '\n' || char === '\r') {
             row.push(field);
             rows.push(row);
             row = [];
             field = '';
-            if (character === '\r' && input[i + 1] === '\n') i++;
+            if (char === '\r' && input[i + 1] === '\n') i++;
         } else {
-            field += character;
+            field += char;
         }
-    }
-
-    if (insideQuotes) {
-        throw new Error('The CSV has an unclosed quoted field.');
     }
     if (field.length || row.length) {
         row.push(field);
         rows.push(row);
     }
-    if (!rows.length) {
-        throw new Error('The CSV is empty.');
-    }
+    if (!rows.length) return [];
 
-    const headers = rows.shift().map(header => header.trim().toLowerCase());
-    const columns = {
+    const headers = rows.shift().map(h => h.trim().toLowerCase());
+    const colMap = {
         id: headers.indexOf('event id'),
         title: headers.indexOf('event name'),
         date: headers.indexOf('date'),
@@ -160,14 +290,6 @@ function parseEventsCsv(csv) {
         description: headers.indexOf('event description'),
         category: headers.indexOf('category')
     };
-    const requiredColumns = ['title', 'date', 'venueName', 'location', 'flyer', 'description', 'category'];
-    const missingColumns = requiredColumns.filter(column => columns[column] === -1);
-    if (missingColumns.length) {
-        throw new Error(`Missing required CSV column(s): ${missingColumns.join(', ')}.`);
-    }
-    if (new Set(headers).size !== headers.length) {
-        throw new Error('The CSV contains duplicate column headers.');
-    }
 
     const categoryLabels = {
         nightclub: 'Night Club',
@@ -175,61 +297,53 @@ function parseEventsCsv(csv) {
         urban: 'Urban Lifestyle',
         other: 'Other'
     };
-    const categoryValues = {
-        'night club': 'nightclub',
-        nightclub: 'nightclub',
-        'kasi vibe': 'kasivibe',
-        kasivibe: 'kasivibe',
-        'urban lifestyle': 'urban',
-        urban: 'urban',
-        other: 'other'
-    };
+
     const parsedEvents = [];
+    const usedIds = new Set();
 
     rows.forEach((values, index) => {
-        const line = index + 2;
-        if (values.every(value => !value.trim())) return;
-        const value = column => (values[columns[column]] || '').trim();
-        const title = value('title');
-        const rawDate = value('date');
-        const venueName = value('venueName');
-        const location = value('location');
-        const flyer = value('flyer');
-        const description = value('description');
-        const categoryKey = value('category').toLowerCase();
-        const category = categoryValues[categoryKey];
-        const missing = [
-            ['Event Name', title],
-            ['Date', rawDate],
-            ['Venue', venueName],
-            ['Venue Location', location],
-            ['Flyer Image URL', flyer],
-            ['Event Description', description],
-            ['Category', category]
-        ].filter(([, fieldValue]) => !fieldValue).map(([name]) => name);
+        if (!values || values.every(v => !v.trim())) return;
+        const getVal = key => (colMap[key] !== -1 ? (values[colMap[key]] || '').trim() : '');
 
-        if (missing.length) {
-            throw new Error(`CSV row ${line} is missing or has an invalid value for: ${missing.join(', ')}.`);
+        const title = getVal('title');
+        const rawDate = getVal('date');
+        const venueName = getVal('venueName');
+        const location = getVal('location') || 'Gqeberha';
+        const flyer = getVal('flyer');
+        const description = getVal('description');
+        const rawCategory = getVal('category').toLowerCase().replace(/\s+/g, '');
+
+        if (!title || !rawDate || !venueName) {
+            console.warn(`Row ${index + 2} skipped due to missing essential fields`);
+            return;
         }
 
-        const date = parseEventDate(rawDate);
-        let flyerUrl;
+        let date;
         try {
-            flyerUrl = new URL(flyer);
+            date = normalizeEventDate(rawDate);
         } catch {
-            throw new Error(`CSV row ${line} has an invalid Flyer Image URL.`);
-        }
-        if (!['http:', 'https:'].includes(flyerUrl.protocol)) {
-            throw new Error(`CSV row ${line} Flyer Image URL must use HTTP or HTTPS.`);
+            console.warn(`Row ${index + 2} skipped due to invalid date format:`, rawDate);
+            return;
         }
 
-        let id = null;
-        if (columns.id !== -1 && value('id')) {
-            id = Number(value('id'));
-            if (!Number.isSafeInteger(id) || id < 1) {
-                throw new Error(`CSV row ${line} Event ID must be a positive whole number or blank.`);
-            }
+        let category = 'other';
+        if (rawCategory.includes('nightclub') || rawCategory.includes('club')) category = 'nightclub';
+        else if (rawCategory.includes('kasi') || rawCategory.includes('tavern')) category = 'kasivibe';
+        else if (rawCategory.includes('urban') || rawCategory.includes('lifestyle')) category = 'urban';
+
+        let id = Number(getVal('id'));
+        if (!id || !Number.isSafeInteger(id) || usedIds.has(id)) {
+            id = generateEventHashId(`${title}-${date}-${venueName}`);
+            while (usedIds.has(id)) id++;
         }
+        usedIds.add(id);
+
+        // Detect if Free Entry is mentioned in description
+        const isFree = /(free entry|free entrance|free before|no cover)/i.test(description);
+
+        // Detect ticket links if present (Quicket, Howler, Computicket)
+        const ticketMatch = description.match(/(https?:\/\/[^\s]+(?:quicket|howler|computicket|ticket)[^\s]*)/i);
+        const ticketUrl = ticketMatch ? ticketMatch[0] : null;
 
         parsedEvents.push({
             id,
@@ -237,102 +351,282 @@ function parseEventsCsv(csv) {
             date,
             venueName,
             location,
-            flyer: flyerUrl.href,
+            flyer: flyer || 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg',
             description,
             category,
-            categoryLabel: categoryLabels[category]
+            categoryLabel: categoryLabels[category] || 'Other',
+            isFree,
+            ticketUrl
         });
-    });
-
-    const usedIds = new Set();
-    parsedEvents.forEach(event => {
-        if (event.id === null) return;
-        if (usedIds.has(event.id)) {
-            throw new Error(`The CSV contains duplicate Event ID ${event.id}.`);
-        }
-        usedIds.add(event.id);
-    });
-    parsedEvents.forEach(event => {
-        if (event.id !== null) return;
-        const key = `${event.title}\u0000${event.date}\u0000${event.venueName}\u0000${event.location}`;
-        let id = hashEventId(key);
-        while (usedIds.has(id)) id = (id + 1) % 4294967296;
-        event.id = id;
-        usedIds.add(id);
     });
 
     return parsedEvents;
 }
 
-function parseEventDate(value) {
-    let year;
-    let month;
-    let day;
+function normalizeEventDate(value) {
+    let year, month, day;
     let match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
     if (match) {
         [, year, month, day] = match;
     } else {
         match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-        if (!match) {
-            throw new Error(`Invalid event date "${value}". Use YYYY-MM-DD or DD/MM/YYYY.`);
-        }
+        if (!match) throw new Error('Invalid format');
         [, day, month, year] = match;
     }
-
-    const normalized = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const parsed = new Date(`${normalized}T00:00:00Z`);
-    if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== normalized) {
-        throw new Error(`Invalid event date "${value}".`);
-    }
-    return normalized;
+    const iso = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return iso;
 }
 
-function hashEventId(value) {
+function generateEventHashId(str) {
     let hash = 2166136261;
-    for (let i = 0; i < value.length; i++) {
-        hash ^= value.charCodeAt(i);
+    for (let i = 0; i < str.length; i++) {
+        hash ^= str.charCodeAt(i);
         hash = Math.imul(hash, 16777619);
     }
-    return hash >>> 0;
+    return Math.abs(hash >>> 0);
 }
 
-function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, character => ({
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, c => ({
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
         "'": '&#39;'
-    })[character]);
+    })[c]);
 }
 
-function displayGroupedEvents(events) {
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short'
+    });
+}
+
+function formatFullDate(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+// ==========================================
+// FILTERING & SEARCH
+// ==========================================
+function setupFilters() {
+    const searchInput = document.getElementById('event-search');
+    const areaFilter = document.getElementById('area-filter');
+    const dateFilter = document.getElementById('date-filter');
+    const freeFilterBtn = document.getElementById('filter-free');
+
+    searchInput?.addEventListener('input', applyFilters);
+    areaFilter?.addEventListener('change', applyFilters);
+    dateFilter?.addEventListener('change', applyFilters);
+
+    freeFilterBtn?.addEventListener('click', () => {
+        const isActive = freeFilterBtn.classList.toggle('active');
+        freeFilterBtn.setAttribute('aria-pressed', String(isActive));
+        freeFilterBtn.dataset.free = String(isActive);
+        applyFilters();
+    });
+
+    document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
+            button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
+            applyFilters();
+        });
+    });
+
+    // Keyboard shortcut: '/' focuses search input
+    document.addEventListener('keydown', e => {
+        if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+            e.preventDefault();
+            searchInput?.focus();
+        }
+    });
+
+    document.addEventListener('click', e => {
+        if (e.target.closest('#reset-filters-btn')) {
+            resetAllFilters();
+        }
+    });
+}
+
+function resetAllFilters() {
+    const searchInput = document.getElementById('event-search');
+    const areaFilter = document.getElementById('area-filter');
+    const dateFilter = document.getElementById('date-filter');
+    const freeFilterBtn = document.getElementById('filter-free');
+
+    if (searchInput) searchInput.value = '';
+    if (areaFilter) areaFilter.value = 'all';
+    if (dateFilter) dateFilter.value = (window.upcomingEvents && window.upcomingEvents.length > 0) ? 'weekend' : 'all';
+
+    if (freeFilterBtn) {
+        freeFilterBtn.classList.remove('active');
+        freeFilterBtn.dataset.free = 'false';
+        freeFilterBtn.setAttribute('aria-pressed', 'false');
+    }
+
+    document.querySelectorAll('.filter-btn:not(#filter-free)').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === 0);
+        btn.setAttribute('aria-pressed', idx === 0 ? 'true' : 'false');
+    });
+
+    applyFilters();
+}
+
+function matchArea(event, areaKey) {
+    if (areaKey === 'all') return true;
+    const text = `${event.venueName} ${event.location}`.toLowerCase();
+
+    const areaKeywords = {
+        central: ['central', 'richmond hill', 'donkin', 'stanley', 'parliament'],
+        summerstrand: ['summerstrand', 'humewood', 'happy valley', 'boardwalk', 'nmb'],
+        harbour: ['harbour', 'deal party', 'endaweni'],
+        newbrighton: ['new brighton', 'zwide', 'oom cola', 'chief ngqoko', 'red location'],
+        motherwell: ['motherwell', 'wells estate', 'ethafeni', 'kwa masinga', 'monde', 'eskwerini'],
+        addo: ['addo', 'k lounge', 'sundays river']
+    };
+
+    const keywords = areaKeywords[areaKey] || [];
+    return keywords.some(k => text.includes(k));
+}
+
+function applyFilters() {
+    const allEvents = window.allRawEvents || [];
+    const category = document.querySelector('.filter-btn.active:not(#filter-free)')?.dataset.filter || 'all';
+    const area = document.getElementById('area-filter')?.value || 'all';
+    const dateRange = document.getElementById('date-filter')?.value || 'weekend';
+    const freeOnly = document.getElementById('filter-free')?.dataset.free === 'true';
+    const search = (document.getElementById('event-search')?.value || '').trim().toLowerCase();
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+    // Handle Archive banner display
+    const archiveBanner = document.getElementById('archive-banner');
+    const sectionTitle = document.getElementById('events-section-title');
+    if (archiveBanner) {
+        const isArchive = dateRange === 'past';
+        archiveBanner.style.display = isArchive ? 'flex' : 'none';
+        if (sectionTitle) {
+            sectionTitle.innerHTML = isArchive ? 'Past gigs archive<span class="heading-period">.</span>' : 'This week<span class="heading-period">.</span>';
+        }
+    }
+
+    const filtered = allEvents.filter(event => {
+        // Date filtering
+        const isPassed = isEventPassed(event.date);
+
+        if (dateRange === 'past') {
+            if (!isPassed) return false;
+        } else {
+            // For all non-past ranges, ignore past events
+            if (isPassed) return false;
+
+            if (dateRange === 'today') {
+                if (event.date !== todayStr) return false;
+            } else if (dateRange === 'weekend') {
+                // Determine upcoming Saturday and Sunday
+                const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
+                const satDate = new Date(today);
+                satDate.setDate(satDate.getDate() + daysUntilSat);
+                const sunDate = new Date(satDate);
+                sunDate.setDate(sunDate.getDate() + (today.getDay() === 0 ? 0 : 1));
+
+                const eventD = new Date(`${event.date}T00:00:00`);
+                // Also allow Friday events if today is Friday or after
+                const friDate = new Date(satDate);
+                friDate.setDate(friDate.getDate() - 1);
+
+                if (eventD < friDate || eventD > sunDate) return false;
+            } else if (dateRange === '7days') {
+                const limit = new Date(today);
+                limit.setDate(limit.getDate() + 7);
+                const eventD = new Date(`${event.date}T00:00:00`);
+                if (eventD < today || eventD > limit) return false;
+            }
+        }
+
+        // Category filter
+        if (category !== 'all' && event.category !== category) {
+            return false;
+        }
+
+        // Area filter
+        if (!matchArea(event, area)) {
+            return false;
+        }
+
+        // Free Entry filter
+        if (freeOnly && !event.isFree) {
+            return false;
+        }
+
+        // Search text
+        if (search) {
+            const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
+            if (!haystack.includes(search)) return false;
+        }
+
+        return true;
+    });
+
+    const countEl = document.getElementById('events-count');
+    if (countEl) {
+        countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'event' : 'events'}`;
+    }
+
+    renderGroupedEvents(filtered, dateRange === 'past');
+}
+
+// ==========================================
+// RENDERING
+// ==========================================
+function renderGroupedEvents(events, isArchiveMode = false) {
     const container = document.getElementById('events-container');
     if (!container) return;
 
     if (events.length === 0) {
-        const hasEvents = (window.allEvents || []).length > 0;
-        container.innerHTML = hasEvents ? `
-            <div class="no-events filtered-empty">
-                <span class="empty-icon"><i class="fas fa-magnifying-glass"></i></span>
-                <h3>No matches this time.</h3>
-                <p>Try another search, category, or date range.</p>
-                <button class="btn-secondary" id="reset-event-filters" type="button">Clear filters</button>
-            </div>` : `
+        const hasAnyEvents = (window.allRawEvents || []).length > 0;
+        container.innerHTML = `
             <div class="no-events">
-                <span class="empty-icon"><i class="far fa-calendar-xmark"></i></span>
-                <p class="section-eyebrow">YOUR WEEKEND IS WIDE OPEN</p>
-                <h3>No upcoming events just yet.</h3>
-                <p>Got something happening in GQ? Send it through and help the city make plans.</p>
+                <span class="empty-icon"><i class="fas fa-magnifying-glass"></i></span>
+                <h3>No gigs match your filters</h3>
+                <p>Try switching date range, clearing search terms, or checking out the past gigs archive.</p>
                 <div class="empty-actions">
-                    <a class="btn" href="#submit">Submit an event</a>
-                    <a class="btn-secondary" href="https://wa.me/27815294035" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+                    <button class="btn" id="reset-filters-btn" type="button">Clear filters</button>
+                    ${!isArchiveMode ? `<button class="btn-secondary" id="open-archive-btn" type="button"><i class="fas fa-clock-rotate-left"></i> View Past Gigs</button>` : ''}
+                    <a class="btn-secondary" href="#submit">Submit an event</a>
                 </div>
             </div>`;
+
+        document.getElementById('open-archive-btn')?.addEventListener('click', () => {
+            const dateFilter = document.getElementById('date-filter');
+            if (dateFilter) {
+                dateFilter.value = 'past';
+                applyFilters();
+            }
+        });
         return;
     }
 
-    // Group by venueName (using flattened events)
+    // Group by venueName
     const grouped = {};
     events.forEach(event => {
         const key = event.venueName;
@@ -346,48 +640,75 @@ function displayGroupedEvents(events) {
         grouped[key].events.push(event);
     });
 
-    let html = '';
+    // Sort venues by earliest event date
     const sortedVenues = Object.values(grouped).sort((a, b) => {
         const aDate = a.events[0].date;
         const bDate = b.events[0].date;
-        return new Date(aDate) - new Date(bDate);
+        return isArchiveMode ? new Date(bDate) - new Date(aDate) : new Date(aDate) - new Date(bDate);
     });
 
+    let html = '';
     sortedVenues.forEach(venue => {
+        venue.events.sort((a, b) => isArchiveMode ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
+
         html += `
-            <div class="venue-group" data-venue="${escapeHtml(venue.venueName)}">
+            <div class="venue-group">
                 <div class="venue-header">
-                    <h3><i class="fas fa-map-marker-alt"></i> ${escapeHtml(venue.venueName)}</h3>
-                    <span class="venue-location">${escapeHtml(venue.location)}</span>
+                    <h3><i class="fas fa-location-dot"></i> ${escapeHtml(venue.venueName)}</h3>
+                    <span class="venue-location"><i class="fas fa-map-pin"></i> ${escapeHtml(venue.location)}</span>
                 </div>
                 <div class="venue-events-grid">
         `;
 
-        venue.events.sort((a, b) => new Date(a.date) - new Date(b.date));
         venue.events.forEach(event => {
             const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+            const optimizedFlyer = optimizeImageUrl(event.flyer, 600);
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+
             html += `
-                <article class="event-card" data-category="${event.category}" data-id="${event.id}">
-                    <img src="${escapeHtml(event.flyer)}" alt="${escapeHtml(event.title)} flyer" class="event-img" onerror="this.src='https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80'">
+                <article class="event-card ${isArchiveMode ? 'past-card' : ''}" data-id="${event.id}">
+                    <div class="event-img-wrap" data-event-id="${event.id}">
+                        <img src="${escapeHtml(optimizedFlyer)}" 
+                             alt="${escapeHtml(event.title)} flyer" 
+                             class="event-img" 
+                             loading="lazy" 
+                             decoding="async" 
+                             onerror="this.src='https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-600,q-75,f-auto'">
+                        <span class="event-img-badge">${formatDate(event.date)}</span>
+                        <span class="event-category-badge">${escapeHtml(event.categoryLabel)}</span>
+                        ${event.isFree ? `<span class="event-tag-free"><i class="fas fa-ticket"></i> Free</span>` : ''}
+                        ${isArchiveMode ? `<span class="event-tag-past"><i class="fas fa-clock-rotate-left"></i> Past</span>` : ''}
+                    </div>
+
                     <div class="event-info">
-                        <span class="event-date"><i class="far fa-calendar"></i> ${formatDate(event.date)}</span>
-                        <h4 class="event-title">${escapeHtml(event.title)}</h4>
-                        <p class="event-venue"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(venue.venueName)}</p>
+                        <span class="event-date-text"><i class="far fa-calendar"></i> ${formatFullDate(event.date)}</span>
+                        <h4 class="event-title" data-event-id="${event.id}">${escapeHtml(event.title)}</h4>
+                        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="event-venue-link" title="Open in Google Maps">
+                            <i class="fas fa-location-dot"></i> ${escapeHtml(event.venueName)}, ${escapeHtml(event.location)}
+                        </a>
                         <p class="event-description">${escapeHtml(event.description)}</p>
+
                         <div class="event-actions">
-                            <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
-                                <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save'}
+                            ${event.ticketUrl ? `
+                                <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn">
+                                    <i class="fas fa-ticket"></i> Tickets
+                                </a>
+                            ` : ''}
+                            <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}" title="Save to My Events">
+                                <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> <span>${isSaved ? 'Saved' : 'Save'}</span>
                             </button>
-                            <button class="reminder-btn" data-event-id="${event.id}">
-                                <i class="far fa-bell"></i> Remind
+                            <button class="reminder-btn" data-event-id="${event.id}" title="Set reminder">
+                                <i class="far fa-bell"></i>
                             </button>
-                            <button class="share-btn" data-event-id="${event.id}">
-                                <i class="fas fa-share-alt"></i> Share
+                            <button class="calendar-btn" data-event-id="${event.id}" title="Add to Calendar">
+                                <i class="far fa-calendar-plus"></i>
                             </button>
-                            <button class="calendar-btn" data-event-id="${event.id}" aria-label="Add ${escapeHtml(event.title)} to calendar">
-                                <i class="far fa-calendar-plus"></i><span>Add to calendar</span>
+                            <button class="share-btn" data-event-id="${event.id}" title="Share this gig">
+                                <i class="fas fa-share-nodes"></i>
                             </button>
-                            <span class="event-category">${event.categoryLabel}</span>
+                            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="maps-btn" title="Map directions">
+                                <i class="fas fa-map-location-dot"></i>
+                            </a>
                         </div>
                     </div>
                 </article>
@@ -398,131 +719,183 @@ function displayGroupedEvents(events) {
     });
 
     container.innerHTML = html;
+    setupEventCardHandlers();
 }
 
-function formatDate(dateString) {
-    const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-    });
-}
-
-// ======================
-// FILTERING
-// ======================
-function setupEventFilters() {
-    document.getElementById('event-search')?.addEventListener('input', applyEventFilters);
-    document.getElementById('date-filter')?.addEventListener('change', applyEventFilters);
-
-    document.querySelectorAll('.filter-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(filterButton => {
-                const isActive = filterButton === button;
-                filterButton.classList.toggle('active', isActive);
-                filterButton.setAttribute('aria-pressed', String(isActive));
-            });
-            applyEventFilters();
+// ==========================================
+// EVENT CARD INTERACTIONS
+// ==========================================
+function setupEventCardHandlers() {
+    // Flyer & Title click -> Lightbox
+    document.querySelectorAll('.event-img-wrap, .event-title').forEach(el => {
+        el.addEventListener('click', () => {
+            const eventId = el.getAttribute('data-event-id');
+            const event = (window.allRawEvents || []).find(e => e.id == eventId);
+            if (event) openLightbox(event);
         });
     });
 
-    document.addEventListener('click', event => {
-        if (event.target.closest('#reset-event-filters')) {
-            resetEventFilters();
-        }
-        if (event.target.closest('#retry-events')) {
-            loadEvents();
-        }
+    // Save button
+    document.querySelectorAll('.save-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const eventId = btn.getAttribute('data-event-id');
+            const event = (window.allRawEvents || []).find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                const saved = window.iplugPWA.saveEvent(event);
+                btn.classList.toggle('saved', saved);
+                btn.innerHTML = `<i class="${saved ? 'fas' : 'far'} fa-heart"></i> <span>${saved ? 'Saved' : 'Save'}</span>`;
+            }
+        });
     });
 
-    document.addEventListener('keydown', event => {
-        if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey &&
-            !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
-            event.preventDefault();
-            document.getElementById('event-search')?.focus();
-        }
+    // Reminder button
+    document.querySelectorAll('.reminder-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const eventId = btn.getAttribute('data-event-id');
+            const event = (window.allRawEvents || []).find(e => e.id == eventId);
+            if (event && window.iplugPWA) {
+                window.iplugPWA.showReminderModal(event);
+            }
+        });
+    });
+
+    // Calendar button
+    document.querySelectorAll('.calendar-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const eventId = btn.getAttribute('data-event-id');
+            showCalendarMenu(eventId);
+        });
+    });
+
+    // Share button
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const eventId = btn.getAttribute('data-event-id');
+            showShareMenu(eventId);
+        });
     });
 }
 
-function resetEventFilters() {
-    document.getElementById('event-search').value = '';
-    document.getElementById('date-filter').value = 'weekend';
-    document.querySelector('.filter-btn[data-filter="all"]').click();
+// ==========================================
+// CALENDAR & MAPS INTEGRATION
+// ==========================================
+function createGoogleCalendarLink(event) {
+    const cleanDate = event.date.replace(/-/g, '');
+    const start = `${cleanDate}T160000Z`;
+    const end = `${cleanDate}T235959Z`;
+    const title = encodeURIComponent(event.title);
+    const details = encodeURIComponent(`${event.description}\n\nVenue: ${event.venueName}, ${event.location}\nDiscover more on iPlug GQ: https://ipluggq.com/?event=${event.id}`);
+    const location = encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`);
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
 }
 
-function filterEvents(filter) {
-    const button = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
-    if (button) button.click();
-}
-
-function applyEventFilters() {
-    const events = window.allEvents || [];
-    const category = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-    const search = document.getElementById('event-search').value.trim().toLocaleLowerCase();
-    const dateRange = document.getElementById('date-filter').value;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    let rangeStart = today;
-    let rangeEnd = null;
-    if (dateRange === '7days') {
-        rangeEnd = new Date(today);
-        rangeEnd.setDate(rangeEnd.getDate() + 7);
-    } else if (dateRange === 'weekend') {
-        rangeStart = new Date(today);
-        const daysUntilSaturday = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
-        rangeStart.setDate(rangeStart.getDate() + daysUntilSaturday);
-        rangeEnd = new Date(rangeStart);
-        rangeEnd.setDate(rangeEnd.getDate() + (today.getDay() === 0 ? 1 : 2));
-    }
-
-    const filtered = events.filter(event => {
-        if (category !== 'all' && event.category !== category) return false;
-        if (search && ![event.title, event.venueName, event.location, event.description, event.categoryLabel]
-            .some(value => value.toLocaleLowerCase().includes(search))) return false;
-        if (dateRange !== 'all') {
-            const eventDate = new Date(`${event.date}T00:00:00`);
-            if (eventDate < rangeStart || eventDate >= rangeEnd) return false;
-        }
-        return true;
-    });
-
-    const count = document.getElementById('events-count');
-    count.textContent = `${filtered.length} ${filtered.length === 1 ? 'event' : 'events'}`;
-    displayGroupedEvents(filtered);
-}
-
-// ======================
-// SOCIAL SHARING
-// ======================
-function shareEvent(eventId, platform) {
-    const event = window.allEvents.find(e => e.id == eventId);
+function downloadEventIcs(eventId) {
+    const event = (window.allRawEvents || []).find(item => item.id == eventId);
     if (!event) return;
 
-    const baseUrl = window.location.origin + window.location.pathname;
-    const eventUrl = `${baseUrl}?event=${eventId}`;
-    const text = `${event.title} - ${formatDate(event.date)} at ${event.venueName}`;
-    const hashtags = 'iPlugGQ,GqeberhaEvents';
+    const escapeCalendarText = val => String(val || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/\r?\n/g, '\\n')
+        .replace(/,/g, '\\,')
+        .replace(/;/g, '\\;');
+
+    const eventDate = event.date.replace(/-/g, '');
+    const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//iPlug GQ//Gig Guide//EN',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        `UID:${event.id}@ipluggq.com`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`,
+        `DTSTART;VALUE=DATE:${eventDate}`,
+        `DTEND;VALUE=DATE:${eventDate}`,
+        `SUMMARY:${escapeCalendarText(event.title)}`,
+        `LOCATION:${escapeCalendarText(`${event.venueName}, ${event.location}, Gqeberha`)}`,
+        `DESCRIPTION:${escapeCalendarText(event.description)}`,
+        `URL:https://ipluggq.com/?event=${event.id}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'iplug-gq-event'}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function showCalendarMenu(eventId) {
+    const event = (window.allRawEvents || []).find(e => e.id == eventId);
+    if (!event) return;
+
+    const existing = document.querySelector('.share-menu-overlay');
+    if (existing) existing.remove();
+
+    const googleUrl = createGoogleCalendarLink(event);
+
+    const modalHtml = `
+        <div class="share-menu-overlay">
+            <div class="share-menu">
+                <h4><i class="far fa-calendar-plus"></i> Add to Calendar</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">"${escapeHtml(event.title)}"</p>
+                <div class="share-options" style="grid-template-columns: 1fr;">
+                    <a href="${googleUrl}" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; gap:8px; padding:12px; background:var(--surface-card); border:1px solid var(--line); border-radius:6px; color:#fff;">
+                        <i class="fab fa-google" style="color:var(--primary);"></i> Add to Google Calendar
+                    </a>
+                    <button id="download-ics-btn" type="button" style="display:flex; align-items:center; gap:8px; padding:12px; background:var(--surface-card); border:1px solid var(--line); border-radius:6px; color:#fff; cursor:pointer;">
+                        <i class="fab fa-apple" style="color:var(--secondary);"></i> Download Apple / Outlook .ics
+                    </button>
+                </div>
+                <button class="close-menu" type="button">Close</button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    const overlay = document.querySelector('.share-menu-overlay');
+
+    overlay.querySelector('#download-ics-btn')?.addEventListener('click', () => {
+        downloadEventIcs(eventId);
+        overlay.remove();
+    });
+
+    overlay.querySelector('.close-menu')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
+// ==========================================
+// SOCIAL SHARING
+// ==========================================
+function shareEvent(eventId, platform) {
+    const event = (window.allRawEvents || []).find(e => e.id == eventId);
+    if (!event) return;
+
+    const eventUrl = `https://ipluggq.com/?event=${eventId}`;
+    const text = `Check out ${event.title} happening on ${formatDate(event.date)} at ${event.venueName} (Gqeberha)!`;
 
     let shareUrl = '';
-    switch(platform) {
+    switch (platform) {
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${encodeURIComponent(`${text}\n${eventUrl}`)}`;
+            break;
+        case 'x':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(eventUrl)}&hashtags=iPlugGQ,Gqeberha`;
+            break;
         case 'facebook':
             shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(eventUrl)}`;
             break;
-        case 'twitter':
-        case 'x':
-            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(eventUrl)}&hashtags=${hashtags}`;
-            break;
-        case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + eventUrl)}`;
-            break;
-        case 'instagram':
-        case 'tiktok':
+        case 'copy':
             copyToClipboard(eventUrl);
-            window.iplugPWA?.showNotification(`Link copied! Share it on ${platform}`, 'info');
+            window.iplugPWA?.showNotification('Event link copied to clipboard!', 'success');
             return;
         default:
             if (navigator.share) {
@@ -531,7 +904,7 @@ function shareEvent(eventId, platform) {
                 return;
             } else {
                 copyToClipboard(eventUrl);
-                window.iplugPWA?.showNotification('Link copied to clipboard!', 'info');
+                window.iplugPWA?.showNotification('Event link copied!', 'success');
                 return;
             }
     }
@@ -541,39 +914,29 @@ function shareEvent(eventId, platform) {
     }
 }
 
-function downloadEventCalendar(eventId) {
-    const event = (window.allEvents || []).find(item => item.id == eventId);
-    if (!event) return;
+function showShareMenu(eventId) {
+    const existing = document.querySelector('.share-menu-overlay');
+    if (existing) existing.remove();
 
-    const escapeCalendarText = value => String(value)
-        .replace(/\\/g, '\\\\')
-        .replace(/\r?\n/g, '\\n')
-        .replace(/,/g, '\\,')
-        .replace(/;/g, '\\;');
-    const eventDate = event.date.replace(/-/g, '');
-    const calendar = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//iPlug GQ//Events//EN',
-        'BEGIN:VEVENT',
-        `UID:${event.id}@ipluggq.co.za`,
-        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`,
-        `DTSTART;VALUE=DATE:${eventDate}`,
-        `DTEND;VALUE=DATE:${new Date(new Date(`${event.date}T00:00:00Z`).getTime() + 86400000).toISOString().slice(0, 10).replace(/-/g, '')}`,
-        `SUMMARY:${escapeCalendarText(event.title)}`,
-        `LOCATION:${escapeCalendarText(`${event.venueName}, ${event.location}`)}`,
-        `DESCRIPTION:${escapeCalendarText(event.description)}`,
-        'END:VEVENT',
-        'END:VCALENDAR'
-    ].join('\r\n');
-    const url = URL.createObjectURL(new Blob([calendar], { type: 'text/calendar;charset=utf-8' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'iplug-gq-event'}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const menuHtml = `
+        <div class="share-menu-overlay">
+            <div class="share-menu">
+                <h4><i class="fas fa-share-nodes"></i> Share This Gig</h4>
+                <div class="share-options">
+                    <button onclick="shareEvent(${eventId}, 'whatsapp')"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp</button>
+                    <button onclick="shareEvent(${eventId}, 'x')"><i class="fab fa-x-twitter"></i> X (Twitter)</button>
+                    <button onclick="shareEvent(${eventId}, 'facebook')"><i class="fab fa-facebook-f" style="color:#1877f2;"></i> Facebook</button>
+                    <button onclick="shareEvent(${eventId}, 'copy')"><i class="fas fa-link" style="color:var(--primary);"></i> Copy Link</button>
+                </div>
+                <button class="close-menu" type="button">Close</button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', menuHtml);
+    const overlay = document.querySelector('.share-menu-overlay');
+    overlay.querySelector('.close-menu')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 }
 
 function copyToClipboard(text) {
@@ -589,229 +952,113 @@ function copyToClipboard(text) {
     }
 }
 
-function showShareMenu(eventId, anchor) {
-    const existing = document.querySelector('.share-menu-overlay');
-    if (existing) existing.remove();
-
-    const menuHtml = `
-        <div class="share-menu-overlay">
-            <div class="share-menu">
-                <h4>Share Event</h4>
-                <div class="share-options">
-                    <button onclick="shareEvent(${eventId}, 'facebook')"><i class="fab fa-facebook"></i> Facebook</button>
-                    <button onclick="shareEvent(${eventId}, 'x')"><i class="fab fa-twitter"></i> X</button>
-                    <button onclick="shareEvent(${eventId}, 'whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                    <button onclick="shareEvent(${eventId}, 'instagram')"><i class="fab fa-instagram"></i> Instagram</button>
-                    <button onclick="shareEvent(${eventId}, 'tiktok')"><i class="fab fa-tiktok"></i> TikTok</button>
-                    <button onclick="shareEvent(${eventId}, 'copy')"><i class="fas fa-link"></i> Copy Link</button>
-                </div>
-                <button class="close-menu">&times;</button>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', menuHtml);
-
-    const overlay = document.querySelector('.share-menu-overlay');
-    overlay.querySelector('.close-menu').addEventListener('click', () => overlay.remove());
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
-}
-
-// ======================
-// DEEP LINKING
-// ======================
-function waitForEventCard(eventId) {
-    const checkExist = setInterval(() => {
-        const eventCard = document.querySelector(`.event-card[data-id="${eventId}"]`);
-        if (eventCard) {
-            clearInterval(checkExist);
-            eventCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => {
-                eventCard.querySelector('.event-img')?.click();
-            }, 600);
-        }
-    }, 300);
-}
-
-// ======================
-// EVENT HANDLERS (SAVE, REMINDER, SHARE)
-// ======================
-function setupEventHandlers() {
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.calendar-btn')) {
-            downloadEventCalendar(e.target.closest('.calendar-btn').getAttribute('data-event-id'));
-        }
-        // Save
-        if (e.target.closest('.save-btn')) {
-            const btn = e.target.closest('.save-btn');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents.find(e => e.id == eventId);
-            if (event && window.iplugPWA) {
-                const saved = window.iplugPWA.saveEvent(event);
-                btn.innerHTML = saved ? '<i class="fas fa-heart"></i> Saved' : '<i class="far fa-heart"></i> Save';
-                btn.classList.toggle('saved', saved);
-            }
-        }
-        // Reminder
-        if (e.target.closest('.reminder-btn')) {
-            const btn = e.target.closest('.reminder-btn');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents.find(e => e.id == eventId);
-            if (event && window.iplugPWA) {
-                window.iplugPWA.showReminderModal(event);
-            }
-        }
-        // Share
-        if (e.target.closest('.share-btn')) {
-            const btn = e.target.closest('.share-btn');
-            const eventId = btn.getAttribute('data-event-id');
-            showShareMenu(eventId, btn);
-        }
-    });
-}
-
-// ======================
-// LIGHTBOX (with Share)
-// ======================
+// ==========================================
+// LIGHTBOX MODAL
+// ==========================================
 function setupLightbox() {
     const modal = document.getElementById('lightbox-modal');
-    const modalImg = document.getElementById('lightbox-image');
-    const modalTitle = document.getElementById('lightbox-title');
-    const modalDetails = document.getElementById('lightbox-details');
-    const modalActions = document.getElementById('lightbox-actions');
-    const closeBtn = document.querySelector('.close-lightbox');
+    const closeBtn = modal?.querySelector('.close-lightbox');
 
     if (!modal) return;
 
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+    closeBtn?.addEventListener('click', closeLightbox);
+    modal.addEventListener('click', e => {
+        if (e.target === modal) closeLightbox();
     });
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-    document.addEventListener('keydown', (e) => {
+
+    document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('event-img')) {
-            const card = e.target.closest('.event-card');
-            if (!card) return;
-            const eventId = card.getAttribute('data-id');
-            const event = window.allEvents.find(e => e.id == eventId);
-            if (!event) return;
-
-            modalImg.src = e.target.src;
-            modalTitle.textContent = event.title;
-            modalDetails.innerHTML = `
-                <p><strong><i class="far fa-calendar"></i> ${card.querySelector('.event-date')?.textContent || ''}</strong></p>
-                <p><strong><i class="fas fa-map-marker-alt"></i> ${escapeHtml(event.venueName)}</strong></p>
-            `;
-
-            const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
-            modalActions.innerHTML = `
-                <button class="btn-save" data-event-id="${event.id}">
-                    <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save Event'}
-                </button>
-                <button class="btn-reminder" data-event-id="${event.id}">
-                    <i class="far fa-bell"></i> Set Reminder
-                </button>
-                <button class="btn-share" data-event-id="${event.id}">
-                    <i class="fas fa-share-alt"></i> Share
-                </button>
-            `;
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-    });
-
-    // Lightbox action buttons
-    modalActions.addEventListener('click', function(e) {
-        if (e.target.closest('.btn-save')) {
-            const btn = e.target.closest('.btn-save');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents.find(e => e.id == eventId);
-            if (event && window.iplugPWA) {
-                const saved = window.iplugPWA.saveEvent(event);
-                btn.innerHTML = saved ? '<i class="fas fa-heart"></i> Saved' : '<i class="far fa-heart"></i> Save Event';
-            }
-        }
-        if (e.target.closest('.btn-reminder')) {
-            const btn = e.target.closest('.btn-reminder');
-            const eventId = btn.getAttribute('data-event-id');
-            const event = window.allEvents.find(e => e.id == eventId);
-            if (event && window.iplugPWA) {
-                window.iplugPWA.showReminderModal(event);
-            }
-        }
-        if (e.target.closest('.btn-share')) {
-            const btn = e.target.closest('.btn-share');
-            const eventId = btn.getAttribute('data-event-id');
-            showShareMenu(eventId, btn);
+            closeLightbox();
         }
     });
 }
 
-// ======================
-// NAVIGATION (Home / My Events)
-// ======================
-function setupNavigation() {
-    document.querySelector('a[href="#home"]')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        showMainEvents();
-        window.history.pushState(null, null, '#home');
+function openLightbox(event) {
+    const modal = document.getElementById('lightbox-modal');
+    const img = document.getElementById('lightbox-image');
+    const title = document.getElementById('lightbox-title');
+    const details = document.getElementById('lightbox-details');
+    const actions = document.getElementById('lightbox-actions');
+
+    if (!modal) return;
+
+    img.src = optimizeImageUrl(event.flyer, 1000);
+    title.textContent = event.title;
+
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+
+    details.innerHTML = `
+        <p><i class="far fa-calendar"></i> <strong>${formatFullDate(event.date)}</strong></p>
+        <p><i class="fas fa-location-dot"></i> <strong>${escapeHtml(event.venueName)}</strong> (${escapeHtml(event.location)})</p>
+        <p style="margin-top: 10px; color: #d0d2c7;">${escapeHtml(event.description)}</p>
+    `;
+
+    const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+    actions.innerHTML = `
+        ${event.ticketUrl ? `
+            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="btn-small">
+                <i class="fas fa-ticket"></i> Buy Tickets
+            </a>
+        ` : ''}
+        <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
+            <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> ${isSaved ? 'Saved' : 'Save Gig'}
+        </button>
+        <button class="reminder-btn" data-event-id="${event.id}">
+            <i class="far fa-bell"></i> Remind
+        </button>
+        <button class="calendar-btn" data-event-id="${event.id}">
+            <i class="far fa-calendar-plus"></i> Add to Calendar
+        </button>
+        <button class="share-btn" data-event-id="${event.id}">
+            <i class="fas fa-share-nodes"></i> Share
+        </button>
+        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="maps-btn">
+            <i class="fas fa-map-location-dot"></i> Directions
+        </a>
+    `;
+
+    // Hook up modal action buttons
+    actions.querySelector('.save-btn')?.addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        if (window.iplugPWA) {
+            const saved = window.iplugPWA.saveEvent(event);
+            btn.classList.toggle('saved', saved);
+            btn.innerHTML = `<i class="${saved ? 'fas' : 'far'} fa-heart"></i> ${saved ? 'Saved' : 'Save Gig'}`;
+            // Also update any card button in the background
+            document.querySelectorAll(`.save-btn[data-event-id="${event.id}"]`).forEach(b => {
+                b.classList.toggle('saved', saved);
+                b.innerHTML = `<i class="${saved ? 'fas' : 'far'} fa-heart"></i> <span>${saved ? 'Saved' : 'Save'}</span>`;
+            });
+        }
     });
-    document.querySelector('a[href="#events"]')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        showMainEvents();
-        window.history.pushState(null, null, '#events');
+
+    actions.querySelector('.reminder-btn')?.addEventListener('click', () => {
+        window.iplugPWA?.showReminderModal(event);
     });
-    const savedLink = document.getElementById('saved-link');
-    if (savedLink) {
-        savedLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showSavedEvents();
-            window.history.pushState(null, null, '#saved');
-        });
+
+    actions.querySelector('.calendar-btn')?.addEventListener('click', () => {
+        showCalendarMenu(event.id);
+    });
+
+    actions.querySelector('.share-btn')?.addEventListener('click', () => {
+        showShareMenu(event.id);
+    });
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const modal = document.getElementById('lightbox-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
     }
 }
 
-function showMainEvents() {
-    document.querySelector('.events').style.display = 'block';
-    document.querySelector('.saved-events').style.display = 'none';
-    document.querySelector('.hero').style.display = 'flex';
-    document.querySelector('.submit').style.display = 'block';
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    document.querySelector('a[href="#home"]')?.classList.add('active');
-}
-
-function showSavedEvents() {
-    document.querySelector('.events').style.display = 'none';
-    document.querySelector('.saved-events').style.display = 'block';
-    document.querySelector('.hero').style.display = 'none';
-    document.querySelector('.submit').style.display = 'none';
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    document.querySelector('#saved-link')?.classList.add('active');
-    if (window.iplugPWA) window.iplugPWA.loadSavedEvents();
-}
-
-function checkHash() {
-    if (window.location.hash === '#saved') showSavedEvents();
-    else showMainEvents();
-}
-
-window.addEventListener('popstate', checkHash);
-
-// ======================
-// FORM SUBMISSION
-// ======================
+// ==========================================
+// SUBMIT FORM (WHATSAPP INTEGRATION)
+// ==========================================
 function setupForm() {
     const form = document.getElementById('event-form');
     if (!form) return;
@@ -819,44 +1066,114 @@ function setupForm() {
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
         const now = new Date();
-        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        dateInput.min = today;
+        const minIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        dateInput.min = minIso;
     }
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (!form.reportValidity()) return;
-        const formData = new FormData(form);
-        const eventData = {
-            name: formData.get('event-name'),
-            date: formData.get('event-date'),
-            venue: formData.get('venue'),
-            flyer: formData.get('flyer-url'),
-            description: formData.get('description'),
-            category: formData.get('category'),
-            email: formData.get('contact-email')
-        };
-        const message = [
-            'Hi iPlug GQ! Please review my event for the weekly guide:',
-            '',
-            `Event: ${eventData.name}`,
-            `Date: ${eventData.date}`,
-            `Venue: ${eventData.venue}`,
-            `Flyer: ${eventData.flyer}`,
-            `Category: ${eventData.category}`,
-            `Description: ${eventData.description}`,
-            `Contact email: ${eventData.email}`
-        ].join('\n');
-        const whatsappUrl = `https://wa.me/27815294035?text=${encodeURIComponent(message)}`;
-        const status = document.getElementById('form-status');
-        const whatsappWindow = window.open(whatsappUrl, '_blank');
 
-        if (whatsappWindow) {
-            whatsappWindow.opener = null;
-            status.textContent = 'WhatsApp opened with your event details. Review the message and tap Send to submit it.';
-            form.reset();
-        } else {
-            status.innerHTML = `Your browser blocked the new tab. <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">Tap here to open WhatsApp with your event details.</a>`;
+        const formData = new FormData(form);
+        const name = formData.get('event-name');
+        const date = formData.get('event-date');
+        const venue = formData.get('venue');
+        const category = formData.get('category');
+        const flyer = formData.get('flyer-url') || 'Flyer image will be attached directly in chat';
+        const contact = formData.get('contact-email');
+        const desc = formData.get('description');
+
+        const messageLines = [
+            '🔥 *iPlug GQ Event Submission*',
+            '--------------------------------',
+            `*Event:* ${name}`,
+            `*Date:* ${date}`,
+            `*Venue:* ${venue}`,
+            `*Category:* ${category}`,
+            `*Flyer Link / Note:* ${flyer}`,
+            `*Contact:* ${contact}`,
+            '',
+            `*Details / Lineup:*`,
+            desc,
+            '--------------------------------',
+            'Please review my event for the upcoming weekly guide.'
+        ];
+
+        const whatsappUrl = `https://wa.me/27815294035?text=${encodeURIComponent(messageLines.join('\n'))}`;
+        const statusEl = document.getElementById('form-status');
+
+        window.open(whatsappUrl, '_blank');
+        if (statusEl) {
+            statusEl.innerHTML = `<strong>WhatsApp opened!</strong> Review your details in WhatsApp and tap <em>Send</em>. If you have the flyer image, please attach it directly in the chat.`;
         }
+        form.reset();
     });
+}
+
+// ==========================================
+// DEEP LINKING
+// ==========================================
+function setupDeepLinking() {
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event');
+    if (!eventId) return;
+
+    let attempts = 0;
+    const interval = setInterval(() => {
+        attempts++;
+        const card = document.querySelector(`.event-card[data-id="${eventId}"]`);
+        if (card) {
+            clearInterval(interval);
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.style.borderColor = 'var(--primary)';
+            card.style.boxShadow = '0 0 20px rgba(245, 255, 88, 0.4)';
+            setTimeout(() => {
+                const event = (window.allRawEvents || []).find(e => e.id == eventId);
+                if (event) openLightbox(event);
+            }, 500);
+        }
+        if (attempts > 20) clearInterval(interval);
+    }, 250);
+}
+
+// ==========================================
+// SCHEMA.ORG STRUCTURED DATA
+// ==========================================
+function injectSchemaStructuredData(events) {
+    const upcoming = events.filter(e => !isEventPassed(e.date)).slice(0, 20);
+    if (!upcoming.length) return;
+
+    const schemaData = {
+        '@context': 'https://schema.org',
+        '@graph': upcoming.map(event => ({
+            '@type': 'Event',
+            'name': event.title,
+            'startDate': `${event.date}T18:00:00+02:00`,
+            'endDate': `${event.date}T23:59:59+02:00`,
+            'eventStatus': 'https://schema.org/EventScheduled',
+            'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+            'location': {
+                '@type': 'Place',
+                'name': event.venueName,
+                'address': {
+                    '@type': 'PostalAddress',
+                    'addressLocality': 'Gqeberha',
+                    'addressRegion': 'Eastern Cape',
+                    'addressCountry': 'ZA'
+                }
+            },
+            'image': [event.flyer],
+            'description': event.description,
+            'organizer': {
+                '@type': 'Organization',
+                'name': 'iPlug GQ',
+                'url': 'https://ipluggq.com'
+            }
+        }))
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(schemaData);
+    document.head.appendChild(script);
 }
