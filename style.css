@@ -180,13 +180,14 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(14, 15, 12, 0.92);
+    background: rgba(14, 15, 12, 0.94);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line);
     transition: var(--transition);
 }
 
-header .container {
+header .header-main-nav,
+header > .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -281,92 +282,112 @@ nav a.active::after {
     padding: 6px;
 }
 
-/* --- Install App Floating Banner --- */
-.install-banner {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    max-width: 500px;
-    margin: 0 auto;
-    z-index: 10000;
-    background: #171813;
-    border: 1px solid rgba(245, 255, 88, 0.45);
-    border-radius: var(--radius-md);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
-    padding: 14px 18px;
-    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+/* --- Top One-Button PWA Installer Bar --- */
+.top-pwa-bar {
+    display: block;
+    background: linear-gradient(90deg, #13140f 0%, #1c1e15 50%, #13140f 100%);
+    border-bottom: 1px solid rgba(245, 255, 88, 0.28);
+    position: relative;
+    z-index: 1001;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+.top-pwa-bar .container,
+.top-pwa-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 42px !important;
+    gap: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
-.install-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-}
-
-.install-content p {
-    font-size: 0.88rem;
-    color: var(--text);
-    margin: 0;
+.top-pwa-message {
     display: flex;
     align-items: center;
     gap: 10px;
-    line-height: 1.4;
+    color: #e4e6dc;
+    font-size: 0.84rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-.install-content p i {
+.top-pwa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(245, 255, 88, 0.14);
+    border: 1px solid rgba(245, 255, 88, 0.35);
     color: var(--primary);
-    font-size: 1.3rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     flex-shrink: 0;
 }
 
-.install-banner-actions {
+.top-pwa-badge i {
+    font-size: 0.7rem;
+}
+
+.top-pwa-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.top-pwa-actions {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
 }
 
-.install-btn {
+.top-pwa-install-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 18px;
-    border-radius: var(--radius-sm);
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
     background: var(--primary);
     color: #10100f;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
     border: none;
     cursor: pointer;
+    box-shadow: 0 0 14px rgba(245, 255, 88, 0.35);
     transition: var(--transition);
+    white-space: nowrap;
 }
 
-.install-btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(245, 255, 88, 0.3);
+.top-pwa-install-btn:hover {
+    background: #ffffff;
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
+    transform: translateY(-1px);
 }
 
-.dismiss-btn {
+.top-pwa-dismiss-btn {
     background: none;
     border: none;
-    color: var(--text-muted);
-    font-size: 1.4rem;
-    cursor: pointer;
-    padding: 0 6px;
+    color: var(--text-dim);
+    font-size: 1.3rem;
     line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.dismiss-btn:hover {
-    color: #fff;
+.top-pwa-dismiss-btn:hover {
+    color: #ffffff;
 }
 
 .mobile-nav-install {
@@ -497,14 +518,11 @@ nav a.active::after {
     width: 100%;
 }
 
+.app-installed .top-pwa-bar,
 .app-installed .install-banner,
 .app-installed #app-install,
 .app-installed .mobile-nav-install {
     display: none !important;
-}
-
-.dismiss-btn:hover {
-    color: #fff;
 }
 
 /* --- Hero Section --- */
@@ -1916,8 +1934,25 @@ footer {
 }
 
 @media (max-width: 768px) {
-    header .container {
+    header .header-main-nav,
+    header > .container {
         min-height: 60px;
+    }
+
+    .top-pwa-bar .container,
+    .top-pwa-container {
+        min-height: 38px !important;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .top-pwa-text {
+        font-size: 0.76rem;
+    }
+
+    .top-pwa-install-btn {
+        padding: 5px 12px;
+        font-size: 0.74rem;
     }
 
     .logo img {
@@ -1931,7 +1966,7 @@ footer {
     nav ul {
         display: none;
         position: absolute;
-        top: 60px;
+        top: 100%;
         left: 0;
         width: 100%;
         flex-direction: column;
@@ -2066,11 +2101,17 @@ footer {
         text-align: left;
     }
 
-    .install-banner {
-        left: 16px;
-        right: 16px;
-        bottom: 16px;
-        max-width: none;
+    .top-pwa-message {
+        gap: 6px;
+    }
+
+    .top-pwa-text {
+        font-size: 0.72rem;
+    }
+
+    .top-pwa-badge {
+        font-size: 0.68rem;
+        padding: 1px 6px;
     }
 
     .pwa-notification {

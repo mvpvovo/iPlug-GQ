@@ -53,6 +53,13 @@
     <meta name="description" content="Find your next night out, day groove, and local favourite in Gqeberha with iPlug GQ.">
     <link rel="apple-touch-icon" href="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
     
+    <!-- PWA Standalone Detection (Anti-flicker for installed users) -->
+    <script>
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            document.documentElement.classList.add('app-installed');
+        }
+    </script>
+    
     <!-- Styles & Fonts -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,9 +68,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Header with Logo -->
-    <header>
-        <div class="container">
+    <!-- Header with Logo & One-Button Top PWA Installer -->
+    <header id="site-header">
+        <!-- Top One-Button PWA Installer (Visible only to users who don't have the app installed yet) -->
+        <div id="top-pwa-bar" class="top-pwa-bar" role="region" aria-label="Install iPlug GQ App">
+            <div class="container top-pwa-container">
+                <div class="top-pwa-message">
+                    <span class="top-pwa-badge"><i class="fas fa-bolt"></i> GET APP</span>
+                    <span class="top-pwa-text">Install iPlug GQ for faster offline gig guides & reminders</span>
+                </div>
+                <div class="top-pwa-actions">
+                    <button id="top-pwa-install-btn" class="top-pwa-install-btn" type="button" aria-label="Install iPlug GQ App">
+                        <i class="fas fa-arrow-down-to-bracket"></i> <span>Install App</span>
+                    </button>
+                    <button id="top-pwa-dismiss" class="top-pwa-dismiss-btn" type="button" aria-label="Dismiss top installer bar">&times;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container header-main-nav">
             <a href="#home" class="logo" aria-label="iPlug GQ home">
                 <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ Logo">
             </a>
@@ -88,17 +111,6 @@
             <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
         </div>
     </header>
-
-    <!-- Install App Banner -->
-    <div id="install-banner" class="install-banner">
-        <div class="install-content">
-            <p><i class="fas fa-mobile-screen-button"></i> <span><strong>Install iPlug GQ</strong> for instant gig updates & offline access</span></p>
-            <div class="install-banner-actions">
-                <button id="install-btn" class="install-btn" type="button"><i class="fas fa-download"></i> Install</button>
-                <button id="dismiss-install" class="dismiss-btn" aria-label="Dismiss banner" type="button">&times;</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">

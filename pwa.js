@@ -14,6 +14,7 @@ class iPlugPWA {
     init() {
         this.loadSavedData();
         this.registerServiceWorker();
+        this.setupTopInstallBar();
         this.setupInstallPrompt();
         this.setupInstallModal();
     }
@@ -358,17 +359,40 @@ class iPlugPWA {
     // ==========================================
     // PWA INSTALLATION SYSTEM
     // ==========================================
+    setupTopInstallBar() {
+        const topBar = document.getElementById('top-pwa-bar');
+        if (!topBar) return;
+
+        // If running in installed PWA standalone mode or dismissed in this session
+        if (this.isStandalone || sessionStorage.getItem('top_pwa_dismissed') === 'true') {
+            topBar.style.display = 'none';
+        } else {
+            topBar.style.display = 'block';
+        }
+
+        const dismissBtn = document.getElementById('top-pwa-dismiss');
+        if (dismissBtn) {
+            dismissBtn.addEventListener('click', () => {
+                topBar.style.display = 'none';
+                sessionStorage.setItem('top_pwa_dismissed', 'true');
+            });
+        }
+    }
+
     setupInstallPrompt() {
-        // If already running as installed PWA app, hide install banners & adjust body
+        // If already running as installed PWA app, hide install bars & adjust body
         if (this.isStandalone) {
             document.body.classList.add('app-installed');
+            document.documentElement.classList.add('app-installed');
             const navInstall = document.getElementById('app-install');
             if (navInstall) navInstall.style.display = 'none';
+            const topBar = document.getElementById('top-pwa-bar');
+            if (topBar) topBar.style.display = 'none';
             return;
         }
 
         // Attach to all install buttons
-        document.querySelectorAll('#app-install, #feature-install, #install-btn, #mobile-menu-install').forEach(btn => {
+        document.querySelectorAll('#top-pwa-install-btn, #app-install, #feature-install, #install-btn, #mobile-menu-install').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.promptInstallation();
@@ -381,48 +405,28 @@ class iPlugPWA {
             this.deferredPrompt = e;
             console.log('[iPlug PWA] Captured beforeinstallprompt event');
 
-            // Show bottom banner after 2 seconds unless dismissed in this session
-            setTimeout(() => {
-                if (!this.isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
-                    this.showInstallBanner();
-                }
-            }, 2000);
-        });
-
-        // Fallback for iOS & browsers without beforeinstallprompt:
-        // Show banner after 3 seconds on mobile browsers
-        setTimeout(() => {
-            if (!this.isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
-                this.showInstallBanner();
+            // Make sure top installer bar is visible if not dismissed
+            const topBar = document.getElementById('top-pwa-bar');
+            if (topBar && !this.isStandalone && !sessionStorage.getItem('top_pwa_dismissed')) {
+                topBar.style.display = 'block';
             }
-        }, 3000);
+        });
 
         // Listen for successful installation
         window.addEventListener('appinstalled', () => {
             this.isStandalone = true;
             this.deferredPrompt = null;
             document.body.classList.add('app-installed');
-            this.hideInstallBanner();
+            document.documentElement.classList.add('app-installed');
+            localStorage.setItem('iplug_app_installed', 'true');
+
+            const topBar = document.getElementById('top-pwa-bar');
+            if (topBar) topBar.style.display = 'none';
+            const navInstall = document.getElementById('app-install');
+            if (navInstall) navInstall.style.display = 'none';
+
             this.showNotification('🎉 iPlug GQ installed successfully!', 'success');
         });
-
-        // Setup dismiss button for banner
-        document.getElementById('dismiss-install')?.addEventListener('click', () => {
-            this.hideInstallBanner();
-            sessionStorage.setItem('install_banner_dismissed', 'true');
-        });
-    }
-
-    showInstallBanner() {
-        const banner = document.getElementById('install-banner');
-        if (banner && !this.isStandalone) {
-            banner.style.display = 'block';
-        }
-    }
-
-    hideInstallBanner() {
-        const banner = document.getElementById('install-banner');
-        if (banner) banner.style.display = 'none';
     }
 
     promptInstallation() {
@@ -432,9 +436,10 @@ class iPlugPWA {
             this.deferredPrompt.userChoice.then(({ outcome }) => {
                 if (outcome === 'accepted') {
                     console.log('[iPlug PWA] User accepted installation prompt');
+                    const topBar = document.getElementById('top-pwa-bar');
+                    if (topBar) topBar.style.display = 'none';
                 }
                 this.deferredPrompt = null;
-                this.hideInstallBanner();
             });
             return;
         }
