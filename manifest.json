@@ -2,9 +2,9 @@
   "name": "iPlug GQ – Gqeberha Gig Guide",
   "short_name": "iPlug GQ",
   "description": "The definitive gig guide for Gqeberha (Port Elizabeth). Weekly nightlife, kasi grooves, and urban lifestyle events.",
-  "start_url": "./",
-  "scope": "./",
-  "id": "iplug-gq",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#0e0f0c",
   "theme_color": "#0e0f0c",
@@ -44,7 +44,13 @@
       "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-512,h-512",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=w-512,h-512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "categories": ["entertainment", "lifestyle", "events", "music"],
@@ -53,19 +59,19 @@
       "name": "This Week's Events",
       "short_name": "Events",
       "description": "Browse gigs happening in GQ this week",
-      "url": "./#events"
+      "url": "/#events"
     },
     {
       "name": "Submit An Event",
       "short_name": "Submit",
       "description": "Submit your event flyer for review",
-      "url": "./#submit"
+      "url": "/#submit"
     },
     {
       "name": "My Saved Events",
       "short_name": "Saved",
       "description": "View saved gigs and reminders",
-      "url": "./#saved"
+      "url": "/#saved"
     }
   ]
 }

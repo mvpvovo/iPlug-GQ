@@ -256,19 +256,19 @@ nav a.active::after {
     gap: 8px;
     padding: 8px 16px;
     border-radius: var(--radius-full);
-    border: 1px solid var(--line-light);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text);
+    border: 1px solid var(--primary);
+    background: rgba(245, 255, 88, 0.12);
+    color: var(--primary);
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: var(--transition);
 }
 
 .nav-install:hover {
     border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(245, 255, 88, 0.08);
+    color: #10100f;
+    background: var(--primary);
 }
 
 .menu-toggle {
@@ -285,68 +285,222 @@ nav a.active::after {
 .install-banner {
     display: none;
     position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 999;
-    background: #1c1d18;
-    border: 1px solid rgba(245, 255, 88, 0.35);
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    z-index: 10000;
+    background: #171813;
+    border: 1px solid rgba(245, 255, 88, 0.45);
     border-radius: var(--radius-md);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
     padding: 14px 18px;
-    max-width: 420px;
-    animation: slideUp 0.3s ease;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .install-content {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 14px;
 }
 
 .install-content p {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     color: var(--text);
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    line-height: 1.4;
 }
 
 .install-content p i {
     color: var(--primary);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+    flex-shrink: 0;
 }
 
 .install-banner-actions {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-left: auto;
+    flex-shrink: 0;
 }
 
 .install-btn {
-    padding: 6px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
     border-radius: var(--radius-sm);
     background: var(--primary);
     color: #10100f;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
     border: none;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.install-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(245, 255, 88, 0.3);
 }
 
 .dismiss-btn {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 0 6px;
+    line-height: 1;
+}
+
+.dismiss-btn:hover {
+    color: #fff;
+}
+
+.mobile-nav-install {
+    display: none;
+}
+
+/* --- Install Modal Guide (iOS & Android) --- */
+.install-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10001;
+    background: rgba(10, 11, 9, 0.88);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.install-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--surface);
+    border: 1px solid var(--line-light);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+    animation: modalScale 0.22s ease;
+}
+
+.close-install-modal {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
     cursor: pointer;
     line-height: 1;
+    padding: 4px;
+}
+
+.close-install-modal:hover {
+    color: #fff;
+}
+
+.install-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.install-modal-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #12130e;
+    padding: 4px;
+    border: 1px solid var(--line-light);
+}
+
+.install-modal-header h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.install-modal-header p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.install-step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.install-step-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px;
+    background: var(--surface-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+}
+
+.step-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #10100f;
+    font-weight: 800;
+    font-size: 0.82rem;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.step-text {
+    font-size: 0.88rem;
+    color: #e4e6dc;
+    line-height: 1.4;
+}
+
+.step-sub {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.install-modal-close-btn {
+    width: 100%;
+}
+
+.app-installed .install-banner,
+.app-installed #app-install,
+.app-installed .mobile-nav-install {
+    display: none !important;
 }
 
 .dismiss-btn:hover {
@@ -1793,7 +1947,37 @@ footer {
     }
 
     .nav-install {
-        display: none;
+        display: inline-flex !important;
+        margin-left: auto;
+        margin-right: 12px;
+        padding: 6px 14px;
+        font-size: 0.78rem;
+        background: var(--primary);
+        color: #10100f;
+        font-weight: 700;
+        border: none;
+    }
+
+    .mobile-nav-install {
+        display: block !important;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+    }
+
+    .mobile-install-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        background: var(--primary);
+        color: #10100f;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
     }
 
     .hero {

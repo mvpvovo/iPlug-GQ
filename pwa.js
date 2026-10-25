@@ -1,11 +1,11 @@
 // ==========================================
-// iPlug GQ – PWA, Saved Events & Offline
+// iPlug GQ – PWA, Easy Install & Offline
 // ==========================================
 
 class iPlugPWA {
     constructor() {
         this.deferredPrompt = null;
-        this.isInstalled = false;
+        this.isStandalone = this.checkIsStandalone();
         this.SAVED_EVENTS_KEY = 'iplug_saved_events';
         this.EVENT_REMINDERS_KEY = 'iplug_event_reminders';
         this.init();
@@ -13,7 +13,31 @@ class iPlugPWA {
 
     init() {
         this.loadSavedData();
+        this.registerServiceWorker();
         this.setupInstallPrompt();
+        this.setupInstallModal();
+    }
+
+    checkIsStandalone() {
+        return (
+            window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true ||
+            document.referrer.includes('android-app://')
+        );
+    }
+
+    registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => {
+                        console.log('[iPlug PWA] Service Worker registered:', reg.scope);
+                    })
+                    .catch(err => {
+                        console.warn('[iPlug PWA] Service Worker registration failed:', err);
+                    });
+            });
+        }
     }
 
     loadSavedData() {
@@ -61,7 +85,6 @@ class iPlugPWA {
         this.loadSavedEvents();
         this.showNotification('Event removed from your list', 'info');
 
-        // Also update any card button in the view
         document.querySelectorAll(`.save-btn[data-event-id="${eventId}"]`).forEach(btn => {
             btn.classList.remove('saved');
             btn.innerHTML = `<i class="far fa-heart"></i> <span>Save</span>`;
@@ -97,7 +120,6 @@ class iPlugPWA {
             setAt: new Date().toISOString()
         };
 
-        // If not already in saved events, automatically save it
         if (!this.isEventSaved(event.id)) {
             this.savedEvents.push({
                 ...event,
@@ -333,41 +355,68 @@ class iPlugPWA {
         });
     }
 
+    // ==========================================
+    // PWA INSTALLATION SYSTEM
+    // ==========================================
     setupInstallPrompt() {
-        document.querySelectorAll('#app-install, #feature-install').forEach(btn => {
-            btn.addEventListener('click', () => this.promptInstallation());
+        // If already running as installed PWA app, hide install banners & adjust body
+        if (this.isStandalone) {
+            document.body.classList.add('app-installed');
+            const navInstall = document.getElementById('app-install');
+            if (navInstall) navInstall.style.display = 'none';
+            return;
+        }
+
+        // Attach to all install buttons
+        document.querySelectorAll('#app-install, #feature-install, #install-btn, #mobile-menu-install').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.promptInstallation();
+            });
         });
 
+        // Capture Android / Chrome beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             this.deferredPrompt = e;
+            console.log('[iPlug PWA] Captured beforeinstallprompt event');
 
+            // Show bottom banner after 2 seconds unless dismissed in this session
             setTimeout(() => {
-                if (!this.isInstalled && this.deferredPrompt && !localStorage.getItem('install_dismissed')) {
+                if (!this.isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
                     this.showInstallBanner();
                 }
-            }, 3000);
+            }, 2000);
         });
 
+        // Fallback for iOS & browsers without beforeinstallprompt:
+        // Show banner after 3 seconds on mobile browsers
+        setTimeout(() => {
+            if (!this.isStandalone && !sessionStorage.getItem('install_banner_dismissed')) {
+                this.showInstallBanner();
+            }
+        }, 3000);
+
+        // Listen for successful installation
         window.addEventListener('appinstalled', () => {
-            this.isInstalled = true;
+            this.isStandalone = true;
             this.deferredPrompt = null;
+            document.body.classList.add('app-installed');
             this.hideInstallBanner();
-            this.showNotification('iPlug GQ added to Home Screen!', 'success');
+            this.showNotification('🎉 iPlug GQ installed successfully!', 'success');
+        });
+
+        // Setup dismiss button for banner
+        document.getElementById('dismiss-install')?.addEventListener('click', () => {
+            this.hideInstallBanner();
+            sessionStorage.setItem('install_banner_dismissed', 'true');
         });
     }
 
     showInstallBanner() {
         const banner = document.getElementById('install-banner');
-        if (banner) {
+        if (banner && !this.isStandalone) {
             banner.style.display = 'block';
-            document.getElementById('install-btn')?.addEventListener('click', () => {
-                this.promptInstallation();
-            });
-            document.getElementById('dismiss-install')?.addEventListener('click', () => {
-                banner.style.display = 'none';
-                localStorage.setItem('install_dismissed', 'true');
-            });
         }
     }
 
@@ -376,19 +425,152 @@ class iPlugPWA {
         if (banner) banner.style.display = 'none';
     }
 
-    async promptInstallation() {
-        if (!this.deferredPrompt) {
-            this.showNotification('To install, open browser menu (⋮ or Share) and tap "Add to Home Screen"', 'info');
+    promptInstallation() {
+        // 1. Android / Chrome / Edge with deferred prompt
+        if (this.deferredPrompt) {
+            this.deferredPrompt.prompt();
+            this.deferredPrompt.userChoice.then(({ outcome }) => {
+                if (outcome === 'accepted') {
+                    console.log('[iPlug PWA] User accepted installation prompt');
+                }
+                this.deferredPrompt = null;
+                this.hideInstallBanner();
+            });
             return;
         }
 
-        this.deferredPrompt.prompt();
-        const { outcome } = await this.deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            this.isInstalled = true;
+        // 2. iOS Safari (iPhone / iPad)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+            this.showIOSInstallModal();
+            return;
         }
-        this.deferredPrompt = null;
-        this.hideInstallBanner();
+
+        // 3. Android without deferredPrompt (e.g. Chrome, Samsung Internet)
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        if (isAndroid) {
+            this.showAndroidInstallModal();
+            return;
+        }
+
+        // 4. Desktop Chrome / Edge / Safari fallback
+        this.showDesktopInstallModal();
+    }
+
+    // ==========================================
+    // INSTALL MODAL GUIDES (iOS / Android / Desktop)
+    // ==========================================
+    setupInstallModal() {
+        const modal = document.getElementById('install-modal');
+        if (!modal) return;
+
+        modal.querySelector('.close-install-modal')?.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.querySelector('.install-modal-close-btn')?.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    }
+
+    showIOSInstallModal() {
+        const modal = document.getElementById('install-modal');
+        const container = document.getElementById('install-modal-instructions');
+        if (!modal || !container) return;
+
+        container.innerHTML = `
+            <div class="install-step-list">
+                <div class="install-step-item">
+                    <div class="step-badge">1</div>
+                    <div class="step-text">
+                        <strong>Tap the Share button</strong> in Safari's bottom navigation bar
+                        <span class="step-sub"><i class="fas fa-arrow-up-from-bracket" style="color:var(--primary);"></i> (Square icon with arrow pointing up)</span>
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">2</div>
+                    <div class="step-text">
+                        Scroll down and tap <strong>"Add to Home Screen"</strong>
+                        <span class="step-sub"><i class="far fa-square-plus" style="color:var(--primary);"></i> Adds the iPlug GQ icon to your apps</span>
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">3</div>
+                    <div class="step-text">
+                        Tap <strong>"Add"</strong> in the top-right corner
+                        <span class="step-sub">You're done! Enjoy 1-tap offline access.</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'flex';
+    }
+
+    showAndroidInstallModal() {
+        const modal = document.getElementById('install-modal');
+        const container = document.getElementById('install-modal-instructions');
+        if (!modal || !container) return;
+
+        container.innerHTML = `
+            <div class="install-step-list">
+                <div class="install-step-item">
+                    <div class="step-badge">1</div>
+                    <div class="step-text">
+                        Tap the browser menu button <strong>(⋮ 3 dots)</strong> in the top-right corner
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">2</div>
+                    <div class="step-text">
+                        Select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">3</div>
+                    <div class="step-text">
+                        Tap <strong>"Install"</strong> to confirm
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'flex';
+    }
+
+    showDesktopInstallModal() {
+        const modal = document.getElementById('install-modal');
+        const container = document.getElementById('install-modal-instructions');
+        if (!modal || !container) return;
+
+        container.innerHTML = `
+            <div class="install-step-list">
+                <div class="install-step-item">
+                    <div class="step-badge">1</div>
+                    <div class="step-text">
+                        Look at your browser's address bar at the top
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">2</div>
+                    <div class="step-text">
+                        Click the <strong>Install icon <i class="fas fa-arrow-down-to-bracket" style="color:var(--primary);"></i></strong> on the right side of the address bar
+                    </div>
+                </div>
+                <div class="install-step-item">
+                    <div class="step-badge">3</div>
+                    <div class="step-text">
+                        Click <strong>"Install"</strong> to add iPlug GQ to your desktop apps
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'flex';
     }
 
     escapeHtml(str) {

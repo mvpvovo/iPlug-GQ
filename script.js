@@ -48,7 +48,7 @@ function setupMobileNav() {
             }
         });
 
-        navUl.querySelectorAll('a').forEach(link => {
+        navUl.querySelectorAll('a, button').forEach(link => {
             link.addEventListener('click', () => {
                 closeNavMenu(menuToggle, navUl);
             });
