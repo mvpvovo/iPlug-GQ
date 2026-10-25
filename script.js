@@ -195,15 +195,23 @@ function loadEvents() {
     if (container) container.setAttribute('aria-busy', 'true');
     if (countEl) countEl.textContent = 'Loading gigs…';
 
-    fetch('events.csv')
-        .then(response => {
+    Promise.all([
+        fetch('events.csv').then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status} loading events.csv`);
             }
             return response.text();
+        }),
+        fetch('prime-slots.json').then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} loading prime-slots.json`);
+            }
+            return response.json();
         })
-        .then(parseEventsCsv)
-        .then(events => {
+    ])
+        .then(([csv, primeSlotsData]) => {
+            const events = parseEventsCsv(csv);
+            window.primeSlots = parsePrimeSlots(primeSlotsData, events);
             window.allRawEvents = events;
             window.upcomingEvents = events.filter(e => !isEventPassed(e.date));
             window.pastEvents = events.filter(e => isEventPassed(e.date));
@@ -238,6 +246,41 @@ function loadEvents() {
             }
             if (countEl) countEl.textContent = 'Guide offline';
         });
+}
+
+function parsePrimeSlots(data, events) {
+    if (!Array.isArray(data)) {
+        throw new Error('prime-slots.json must contain an array.');
+    }
+
+    return data.map((slot, index) => {
+        const slotNumber = index + 1;
+        const isValidDate = value => typeof value === 'string' &&
+            /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+            !Number.isNaN(Date.parse(`${value}T00:00:00Z`)) &&
+            new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
+
+        if (!slot || !['event', 'venue'].includes(slot.type) ||
+            typeof slot.target !== 'string' || !slot.target.trim() ||
+            !isValidDate(slot.startDate) || !isValidDate(slot.endDate) ||
+            slot.endDate < slot.startDate) {
+            throw new Error(`Prime slot ${slotNumber} in prime-slots.json is invalid.`);
+        }
+
+        const targetExists = slot.type === 'event'
+            ? events.some(event => String(event.id) === slot.target.trim())
+            : events.some(event => event.venueName.trim().toLowerCase() === slot.target.trim().toLowerCase());
+        if (!targetExists) {
+            throw new Error(`Prime slot ${slotNumber} in prime-slots.json targets an unknown ${slot.type}.`);
+        }
+
+        return {
+            type: slot.type,
+            target: slot.target.trim(),
+            startDate: slot.startDate,
+            endDate: slot.endDate
+        };
+    });
 }
 
 function parseEventsCsv(csv) {
@@ -529,6 +572,19 @@ function applyFilters() {
         }
     }
 
+    const matchesNonDateFilters = event => {
+        if (category !== 'all' && event.category !== category) return false;
+        if (!matchArea(event, area)) return false;
+        if (freeOnly && !event.isFree) return false;
+
+        if (search) {
+            const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
+            if (!haystack.includes(search)) return false;
+        }
+
+        return true;
+    };
+
     const filtered = allEvents.filter(event => {
         // Date filtering
         const isPassed = isEventPassed(event.date);
@@ -563,28 +619,17 @@ function applyFilters() {
             }
         }
 
-        // Category filter
-        if (category !== 'all' && event.category !== category) {
-            return false;
-        }
+        return matchesNonDateFilters(event);
+    });
 
-        // Area filter
-        if (!matchArea(event, area)) {
-            return false;
-        }
-
-        // Free Entry filter
-        if (freeOnly && !event.isFree) {
-            return false;
-        }
-
-        // Search text
-        if (search) {
-            const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
-            if (!haystack.includes(search)) return false;
-        }
-
-        return true;
+    const activePrimeSlots = dateRange === 'past' ? [] : (window.primeSlots || [])
+        .filter(slot => slot.startDate <= todayStr && todayStr <= slot.endDate);
+    const featuredEvents = allEvents.filter(event => {
+        if (isEventPassed(event.date) || !matchesNonDateFilters(event)) return false;
+        return activePrimeSlots.some(slot =>
+            (slot.type === 'event' && slot.target === String(event.id)) ||
+            (slot.type === 'venue' && slot.target.toLowerCase() === event.venueName.trim().toLowerCase())
+        );
     });
 
     const countEl = document.getElementById('events-count');
@@ -592,17 +637,73 @@ function applyFilters() {
         countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'event' : 'events'}`;
     }
 
-    renderGroupedEvents(filtered, dateRange === 'past');
+    renderGroupedEvents(filtered, dateRange === 'past', featuredEvents);
 }
 
 // ==========================================
 // RENDERING
 // ==========================================
-function renderGroupedEvents(events, isArchiveMode = false) {
+function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
+    const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
+    const optimizedFlyer = optimizeImageUrl(event.flyer, 600);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+
+    return `
+        <article class="event-card ${isArchiveMode ? 'past-card' : ''} ${isPrimeSlot ? 'prime-event-card' : ''}" data-id="${event.id}">
+            <div class="event-img-wrap" data-event-id="${event.id}">
+                <img src="${escapeHtml(optimizedFlyer)}"
+                     alt="${escapeHtml(event.title)} flyer"
+                     class="event-img"
+                     loading="lazy"
+                     decoding="async"
+                     onerror="this.src='https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-600,q-75,f-auto'">
+                <span class="event-img-badge">${formatDate(event.date)}</span>
+                <span class="event-category-badge">${escapeHtml(event.categoryLabel)}</span>
+                ${event.isFree ? `<span class="event-tag-free"><i class="fas fa-ticket"></i> Free</span>` : ''}
+                ${isArchiveMode ? `<span class="event-tag-past"><i class="fas fa-clock-rotate-left"></i> Past</span>` : ''}
+                ${isPrimeSlot ? `<span class="event-prime-badge"><i class="fas fa-star"></i> Sponsored</span>` : ''}
+            </div>
+
+            <div class="event-info">
+                <span class="event-date-text"><i class="far fa-calendar"></i> ${formatFullDate(event.date)}</span>
+                <h4 class="event-title" data-event-id="${event.id}">${escapeHtml(event.title)}</h4>
+                <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="event-venue-link" title="Open in Google Maps">
+                    <i class="fas fa-location-dot"></i> ${escapeHtml(event.venueName)}, ${escapeHtml(event.location)}
+                </a>
+                <p class="event-description">${escapeHtml(event.description)}</p>
+
+                <div class="event-actions">
+                    ${event.ticketUrl ? `
+                        <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn">
+                            <i class="fas fa-ticket"></i> Tickets
+                        </a>
+                    ` : ''}
+                    <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}" title="Save to My Events">
+                        <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> <span>${isSaved ? 'Saved' : 'Save'}</span>
+                    </button>
+                    <button class="reminder-btn" data-event-id="${event.id}" title="Set reminder">
+                        <i class="far fa-bell"></i>
+                    </button>
+                    <button class="calendar-btn" data-event-id="${event.id}" title="Add to Calendar">
+                        <i class="far fa-calendar-plus"></i>
+                    </button>
+                    <button class="share-btn" data-event-id="${event.id}" title="Share this gig">
+                        <i class="fas fa-share-nodes"></i>
+                    </button>
+                    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="maps-btn" title="Map directions">
+                        <i class="fas fa-map-location-dot"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+function renderGroupedEvents(events, isArchiveMode = false, featuredEvents = []) {
     const container = document.getElementById('events-container');
     if (!container) return;
 
-    if (events.length === 0) {
+    if (events.length === 0 && featuredEvents.length === 0) {
         const hasAnyEvents = (window.allRawEvents || []).length > 0;
         container.innerHTML = `
             <div class="no-events">
@@ -626,9 +727,36 @@ function renderGroupedEvents(events, isArchiveMode = false) {
         return;
     }
 
+    const featuredIds = new Set(featuredEvents.map(event => event.id));
+    const regularEvents = events.filter(event => !featuredIds.has(event.id));
+
+    let html = '';
+    if (featuredEvents.length > 0) {
+        html += `
+            <section class="prime-events-section" aria-labelledby="prime-events-title">
+                <div class="prime-events-heading">
+                    <div>
+                        <p class="prime-events-eyebrow">PRIME SLOTS</p>
+                        <h3 id="prime-events-title">Featured events</h3>
+                    </div>
+                    <p>Sponsored placements may appear outside your selected date range.</p>
+                </div>
+                <div class="prime-events-grid">
+                    ${featuredEvents.map(event => renderEventCard(event, false, true)).join('')}
+                </div>
+            </section>
+        `;
+    }
+
+    if (regularEvents.length === 0) {
+        container.innerHTML = html;
+        setupEventCardHandlers();
+        return;
+    }
+
     // Group by venueName
     const grouped = {};
-    events.forEach(event => {
+    regularEvents.forEach(event => {
         const key = event.venueName;
         if (!grouped[key]) {
             grouped[key] = {
@@ -647,7 +775,6 @@ function renderGroupedEvents(events, isArchiveMode = false) {
         return isArchiveMode ? new Date(bDate) - new Date(aDate) : new Date(aDate) - new Date(bDate);
     });
 
-    let html = '';
     sortedVenues.forEach(venue => {
         venue.events.sort((a, b) => isArchiveMode ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
 
@@ -661,58 +788,7 @@ function renderGroupedEvents(events, isArchiveMode = false) {
         `;
 
         venue.events.forEach(event => {
-            const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
-            const optimizedFlyer = optimizeImageUrl(event.flyer, 600);
-            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
-
-            html += `
-                <article class="event-card ${isArchiveMode ? 'past-card' : ''}" data-id="${event.id}">
-                    <div class="event-img-wrap" data-event-id="${event.id}">
-                        <img src="${escapeHtml(optimizedFlyer)}" 
-                             alt="${escapeHtml(event.title)} flyer" 
-                             class="event-img" 
-                             loading="lazy" 
-                             decoding="async" 
-                             onerror="this.src='https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-600,q-75,f-auto'">
-                        <span class="event-img-badge">${formatDate(event.date)}</span>
-                        <span class="event-category-badge">${escapeHtml(event.categoryLabel)}</span>
-                        ${event.isFree ? `<span class="event-tag-free"><i class="fas fa-ticket"></i> Free</span>` : ''}
-                        ${isArchiveMode ? `<span class="event-tag-past"><i class="fas fa-clock-rotate-left"></i> Past</span>` : ''}
-                    </div>
-
-                    <div class="event-info">
-                        <span class="event-date-text"><i class="far fa-calendar"></i> ${formatFullDate(event.date)}</span>
-                        <h4 class="event-title" data-event-id="${event.id}">${escapeHtml(event.title)}</h4>
-                        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="event-venue-link" title="Open in Google Maps">
-                            <i class="fas fa-location-dot"></i> ${escapeHtml(event.venueName)}, ${escapeHtml(event.location)}
-                        </a>
-                        <p class="event-description">${escapeHtml(event.description)}</p>
-
-                        <div class="event-actions">
-                            ${event.ticketUrl ? `
-                                <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn">
-                                    <i class="fas fa-ticket"></i> Tickets
-                                </a>
-                            ` : ''}
-                            <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}" title="Save to My Events">
-                                <i class="${isSaved ? 'fas' : 'far'} fa-heart"></i> <span>${isSaved ? 'Saved' : 'Save'}</span>
-                            </button>
-                            <button class="reminder-btn" data-event-id="${event.id}" title="Set reminder">
-                                <i class="far fa-bell"></i>
-                            </button>
-                            <button class="calendar-btn" data-event-id="${event.id}" title="Add to Calendar">
-                                <i class="far fa-calendar-plus"></i>
-                            </button>
-                            <button class="share-btn" data-event-id="${event.id}" title="Share this gig">
-                                <i class="fas fa-share-nodes"></i>
-                            </button>
-                            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="maps-btn" title="Map directions">
-                                <i class="fas fa-map-location-dot"></i>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-            `;
+            html += renderEventCard(event, isArchiveMode);
         });
 
         html += `</div></div>`;

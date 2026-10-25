@@ -759,6 +759,52 @@ nav a.active::after {
     gap: 20px;
 }
 
+/* Sponsored prime placements */
+.prime-events-section {
+    margin-bottom: 36px;
+    padding: clamp(18px, 3vw, 30px);
+    border: 1px solid rgba(245, 255, 88, 0.3);
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at top left, rgba(245, 255, 88, 0.1), transparent 55%),
+        var(--surface);
+}
+
+.prime-events-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.prime-events-eyebrow {
+    margin-bottom: 4px;
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.prime-events-heading h3 {
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+}
+
+.prime-events-heading > p {
+    max-width: 360px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: right;
+}
+
+.prime-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 20px;
+}
+
 /* Event Card */
 .event-card {
     display: flex;
@@ -768,6 +814,11 @@ nav a.active::after {
     border-radius: var(--radius-md);
     overflow: hidden;
     transition: var(--transition);
+}
+
+.event-card.prime-event-card {
+    border-color: rgba(245, 255, 88, 0.55);
+    box-shadow: 0 0 24px rgba(245, 255, 88, 0.08);
 }
 
 .event-card:hover {
@@ -860,6 +911,21 @@ nav a.active::after {
     color: var(--text-muted);
     font-size: 0.68rem;
     font-weight: 600;
+    text-transform: uppercase;
+}
+
+.event-prime-badge {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 4px 9px;
+    border: 1px solid rgba(245, 255, 88, 0.45);
+    border-radius: 4px;
+    background: rgba(14, 15, 12, 0.9);
+    color: var(--primary);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 }
 
@@ -1801,6 +1867,19 @@ footer {
 
     .venue-events-grid {
         grid-template-columns: 1fr;
+    }
+
+    .prime-events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prime-events-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .prime-events-heading > p {
+        text-align: left;
     }
 
     .install-banner {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iplug-gq-v2.0';
+const CACHE_NAME = 'iplug-gq-v2.1';
 const APP_SHELL = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const APP_SHELL = [
   './pwa.js',
   './manifest.json',
   './events.csv',
+  './prime-slots.json',
   'https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'

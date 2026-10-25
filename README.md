@@ -36,6 +36,18 @@ Website: [https://ipluggq.com](https://ipluggq.com)
 3. Export or download the **Events** sheet as a standard CSV file named `events.csv`.
 4. Commit and push `events.csv` to GitHub. The live site at `ipluggq.com` automatically loads and renders the updated list.
 
+## Prime Slots for Featured Events and Venues
+
+Prime placements appear in a clearly labeled **Featured events** section above regular listings and carry a **Sponsored** badge. They are manually managed; the site does not collect payments or automatically book placements.
+
+After approving a placement, add an entry to `prime-slots.json`:
+
+- Use `"type": "event"` and the event ID as `"target"` to feature one event.
+- Use `"type": "venue"` and the exact venue name as `"target"` to feature its upcoming events while the placement is active.
+- Set inclusive `"startDate"` and `"endDate"` values in `YYYY-MM-DD` format. Expired or not-yet-active slots are not displayed.
+
+Featured events remain visible outside the selected date range, but still respect category, area, free-entry, and search filters. The past-gigs archive does not show prime placements. Confirm payment and placement dates manually before adding or extending a paid slot.
+
 ---
 
 ## 📁 Repository Structure
