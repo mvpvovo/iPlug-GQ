@@ -222,6 +222,26 @@ function loadEvents() {
                 if (dateFilter && dateFilter.value !== 'past') {
                     dateFilter.value = 'past';
                 }
+            } else if (dateFilter && dateFilter.value !== 'past') {
+                // If "This weekend" has fewer than 4 events, default to 'all' so desktop is full, balanced and lively
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
+                const satDate = new Date(today);
+                satDate.setDate(satDate.getDate() + daysUntilSat);
+                const sunDate = new Date(satDate);
+                sunDate.setDate(sunDate.getDate() + (today.getDay() === 0 ? 0 : 1));
+                const friDate = new Date(satDate);
+                friDate.setDate(friDate.getDate() - 1);
+
+                const weekendEvents = window.upcomingEvents.filter(e => {
+                    const d = new Date(`${e.date}T00:00:00`);
+                    return d >= friDate && d <= sunDate;
+                });
+
+                if (weekendEvents.length < 4 && window.upcomingEvents.length > weekendEvents.length) {
+                    dateFilter.value = 'all';
+                }
             }
 
             if (container) container.setAttribute('aria-busy', 'false');
@@ -474,7 +494,8 @@ function setupFilters() {
     areaFilter?.addEventListener('change', applyFilters);
     dateFilter?.addEventListener('change', applyFilters);
 
-    freeFilterBtn?.addEventListener('click', () => {
+    freeFilterBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
         const isActive = freeFilterBtn.classList.toggle('active');
         freeFilterBtn.setAttribute('aria-pressed', String(isActive));
         freeFilterBtn.dataset.free = String(isActive);
@@ -482,7 +503,8 @@ function setupFilters() {
     });
 
     document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
             document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(b => {
                 b.classList.remove('active');
                 b.setAttribute('aria-pressed', 'false');
@@ -516,7 +538,7 @@ function resetAllFilters() {
 
     if (searchInput) searchInput.value = '';
     if (areaFilter) areaFilter.value = 'all';
-    if (dateFilter) dateFilter.value = (window.upcomingEvents && window.upcomingEvents.length > 0) ? 'weekend' : 'all';
+    if (dateFilter) dateFilter.value = 'all';
 
     if (freeFilterBtn) {
         freeFilterBtn.classList.remove('active');
@@ -551,9 +573,10 @@ function matchArea(event, areaKey) {
 
 function applyFilters() {
     const allEvents = window.allRawEvents || [];
-    const category = document.querySelector('.filter-btn.active:not(#filter-free)')?.dataset.filter || 'all';
-    const area = document.getElementById('area-filter')?.value || 'all';
-    const dateRange = document.getElementById('date-filter')?.value || 'weekend';
+    const categoryBtn = document.querySelector('.filter-btn.active:not(#filter-free)');
+    let category = categoryBtn?.dataset.filter || 'all';
+    let area = document.getElementById('area-filter')?.value || 'all';
+    let dateRange = document.getElementById('date-filter')?.value || 'all';
     const freeOnly = document.getElementById('filter-free')?.dataset.free === 'true';
     const search = (document.getElementById('event-search')?.value || '').trim().toLowerCase();
 
@@ -568,59 +591,65 @@ function applyFilters() {
         const isArchive = dateRange === 'past';
         archiveBanner.style.display = isArchive ? 'flex' : 'none';
         if (sectionTitle) {
-            sectionTitle.innerHTML = isArchive ? 'Past gigs archive<span class="heading-period">.</span>' : 'This week<span class="heading-period">.</span>';
+            sectionTitle.innerHTML = isArchive ? 'Past gigs archive<span class="heading-period">.</span>' : (dateRange === 'weekend' ? 'This week<span class="heading-period">.</span>' : 'Upcoming gigs<span class="heading-period">.</span>');
         }
     }
 
-    const matchesNonDateFilters = event => {
-        if (category !== 'all' && event.category !== category) return false;
-        if (!matchArea(event, area)) return false;
-        if (freeOnly && !event.isFree) return false;
-
-        if (search) {
-            const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
-            if (!haystack.includes(search)) return false;
-        }
-
-        return true;
+    const matchesCategory = event => (category === 'all' || event.category === category);
+    const matchesArea = event => matchArea(event, area);
+    const matchesFree = event => (!freeOnly || event.isFree);
+    const matchesSearch = event => {
+        if (!search) return true;
+        const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
+        return haystack.includes(search);
     };
 
-    const filtered = allEvents.filter(event => {
-        // Date filtering
+    const matchesNonDateFilters = event => {
+        return matchesCategory(event) && matchesArea(event) && matchesFree(event) && matchesSearch(event);
+    };
+
+    // Filter by date function
+    const filterByDateRange = (event, range) => {
         const isPassed = isEventPassed(event.date);
+        if (range === 'past') return isPassed;
+        if (isPassed) return false;
 
-        if (dateRange === 'past') {
-            if (!isPassed) return false;
-        } else {
-            // For all non-past ranges, ignore past events
-            if (isPassed) return false;
+        if (range === 'today') {
+            return event.date === todayStr;
+        } else if (range === 'weekend') {
+            const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
+            const satDate = new Date(today);
+            satDate.setDate(satDate.getDate() + daysUntilSat);
+            const sunDate = new Date(satDate);
+            sunDate.setDate(sunDate.getDate() + (today.getDay() === 0 ? 0 : 1));
+            const friDate = new Date(satDate);
+            friDate.setDate(friDate.getDate() - 1);
 
-            if (dateRange === 'today') {
-                if (event.date !== todayStr) return false;
-            } else if (dateRange === 'weekend') {
-                // Determine upcoming Saturday and Sunday
-                const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
-                const satDate = new Date(today);
-                satDate.setDate(satDate.getDate() + daysUntilSat);
-                const sunDate = new Date(satDate);
-                sunDate.setDate(sunDate.getDate() + (today.getDay() === 0 ? 0 : 1));
-
-                const eventD = new Date(`${event.date}T00:00:00`);
-                // Also allow Friday events if today is Friday or after
-                const friDate = new Date(satDate);
-                friDate.setDate(friDate.getDate() - 1);
-
-                if (eventD < friDate || eventD > sunDate) return false;
-            } else if (dateRange === '7days') {
-                const limit = new Date(today);
-                limit.setDate(limit.getDate() + 7);
-                const eventD = new Date(`${event.date}T00:00:00`);
-                if (eventD < today || eventD > limit) return false;
-            }
+            const eventD = new Date(`${event.date}T00:00:00`);
+            return eventD >= friDate && eventD <= sunDate;
+        } else if (range === '7days') {
+            const limit = new Date(today);
+            limit.setDate(limit.getDate() + 7);
+            const eventD = new Date(`${event.date}T00:00:00`);
+            return eventD >= today && eventD <= limit;
         }
+        return true; // 'all'
+    };
 
-        return matchesNonDateFilters(event);
-    });
+    let filtered = allEvents.filter(event => filterByDateRange(event, dateRange) && matchesNonDateFilters(event));
+
+    // Smart UX Auto-Recovery:
+    // If user filtered by category (e.g. Night Club or Urban Lifestyle) and the narrow date window (e.g. "weekend") returned 0,
+    // but there ARE upcoming gigs in that category under "All upcoming", auto-expand to 'all' so buttons ALWAYS work!
+    if (filtered.length === 0 && dateRange !== 'all' && dateRange !== 'past' && category !== 'all') {
+        const upcomingInCategory = allEvents.filter(event => !isEventPassed(event.date) && matchesNonDateFilters(event));
+        if (upcomingInCategory.length > 0) {
+            dateRange = 'all';
+            const dateFilterSelect = document.getElementById('date-filter');
+            if (dateFilterSelect) dateFilterSelect.value = 'all';
+            filtered = upcomingInCategory;
+        }
+    }
 
     const activePrimeSlots = dateRange === 'past' ? [] : (window.primeSlots || [])
         .filter(slot => slot.startDate <= todayStr && todayStr <= slot.endDate);
@@ -761,8 +790,9 @@ function renderGroupedEvents(events, isArchiveMode = false, featuredEvents = [])
 
     let html = '';
     if (featuredEvents.length > 0) {
+        const isSinglePrime = featuredEvents.length === 1;
         html += `
-            <section class="prime-events-section" aria-labelledby="prime-events-title">
+            <section class="prime-events-section ${isSinglePrime ? 'single-prime-section' : ''}" aria-labelledby="prime-events-title">
                 <div class="prime-events-heading">
                     <div class="prime-heading-left">
                         <div class="prime-badge-row">
@@ -770,13 +800,13 @@ function renderGroupedEvents(events, isArchiveMode = false, featuredEvents = [])
                                 <span class="prime-pulse-dot"></span>
                                 PRIME SPOTLIGHT
                             </span>
-                            <span class="prime-vip-label"><i class="fas fa-crown"></i> Featured Headliners</span>
+                            <span class="prime-vip-label"><i class="fas fa-crown"></i> Featured Headliner</span>
                         </div>
                         <h3 id="prime-events-title">Must-Attend Events in GQ</h3>
                     </div>
                     <p class="prime-heading-note"><i class="fas fa-fire" style="color:var(--secondary)"></i> Curated headliners & sponsored event placements</p>
                 </div>
-                <div class="prime-events-grid">
+                <div class="prime-events-grid ${isSinglePrime ? 'single-featured' : ''}">
                     ${featuredEvents.map(event => renderEventCard(event, false, true)).join('')}
                 </div>
             </section>
@@ -784,50 +814,28 @@ function renderGroupedEvents(events, isArchiveMode = false, featuredEvents = [])
     }
 
     if (regularEvents.length === 0) {
+        if (featuredEvents.length > 0) {
+            html += `
+                <div class="no-regular-events">
+                    <p><i class="fas fa-circle-info"></i> Showing featured headliners above. No additional regular gigs match your current filter combination.</p>
+                    <button class="btn-small-outline" onclick="resetAllFilters()" type="button"><i class="fas fa-rotate-left"></i> Show All Upcoming Gigs</button>
+                </div>
+            `;
+        }
         container.innerHTML = html;
         setupEventCardHandlers();
         return;
     }
 
-    // Group by venueName
-    const grouped = {};
-    regularEvents.forEach(event => {
-        const key = event.venueName;
-        if (!grouped[key]) {
-            grouped[key] = {
-                venueName: event.venueName,
-                location: event.location,
-                events: []
-            };
-        }
-        grouped[key].events.push(event);
-    });
+    // Sort regular events by date
+    regularEvents.sort((a, b) => isArchiveMode ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
 
-    // Sort venues by earliest event date
-    const sortedVenues = Object.values(grouped).sort((a, b) => {
-        const aDate = a.events[0].date;
-        const bDate = b.events[0].date;
-        return isArchiveMode ? new Date(bDate) - new Date(aDate) : new Date(aDate) - new Date(bDate);
-    });
-
-    sortedVenues.forEach(venue => {
-        venue.events.sort((a, b) => isArchiveMode ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
-
-        html += `
-            <div class="venue-group">
-                <div class="venue-header">
-                    <h3><i class="fas fa-location-dot"></i> ${escapeHtml(venue.venueName)}</h3>
-                    <span class="venue-location"><i class="fas fa-map-pin"></i> ${escapeHtml(venue.location)}</span>
-                </div>
-                <div class="venue-events-grid">
-        `;
-
-        venue.events.forEach(event => {
-            html += renderEventCard(event, isArchiveMode);
-        });
-
-        html += `</div></div>`;
-    });
+    // Full-width balanced grid: fills desktop with 3 balanced columns across 1200px (no empty space on right!)
+    html += `
+        <div class="events-grid">
+            ${regularEvents.map(event => renderEventCard(event, isArchiveMode)).join('')}
+        </div>
+    `;
 
     container.innerHTML = html;
     setupEventCardHandlers();
