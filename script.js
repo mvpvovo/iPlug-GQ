@@ -650,6 +650,12 @@ function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
 
     return `
         <article class="event-card ${isArchiveMode ? 'past-card' : ''} ${isPrimeSlot ? 'prime-event-card' : ''}" data-id="${event.id}">
+            ${isPrimeSlot ? `
+                <div class="prime-card-topbar">
+                    <span class="prime-topbar-tag"><i class="fas fa-crown"></i> FEATURED SPOTLIGHT</span>
+                    <span class="prime-topbar-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                </div>
+            ` : ''}
             <div class="event-img-wrap" data-event-id="${event.id}">
                 <img src="${escapeHtml(optimizedFlyer)}"
                      alt="${escapeHtml(event.title)} flyer"
@@ -661,19 +667,42 @@ function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
                 <span class="event-category-badge">${escapeHtml(event.categoryLabel)}</span>
                 ${event.isFree ? `<span class="event-tag-free"><i class="fas fa-ticket"></i> Free</span>` : ''}
                 ${isArchiveMode ? `<span class="event-tag-past"><i class="fas fa-clock-rotate-left"></i> Past</span>` : ''}
-                ${isPrimeSlot ? `<span class="event-prime-badge"><i class="fas fa-star"></i> Sponsored</span>` : ''}
+                ${isPrimeSlot ? `<span class="event-prime-badge"><i class="fas fa-bolt"></i> SPONSORED</span>` : ''}
             </div>
 
             <div class="event-info">
-                <span class="event-date-text"><i class="far fa-calendar"></i> ${formatFullDate(event.date)}</span>
+                ${isPrimeSlot ? `
+                    <div class="prime-headline-badge">
+                        <span class="prime-verified-pill"><i class="fas fa-certificate"></i> Official Pick</span>
+                        <span class="prime-date-highlight"><i class="far fa-calendar-check"></i> ${formatFullDate(event.date)}</span>
+                    </div>
+                ` : `
+                    <span class="event-date-text"><i class="far fa-calendar"></i> ${formatFullDate(event.date)}</span>
+                `}
                 <h4 class="event-title" data-event-id="${event.id}">${escapeHtml(event.title)}</h4>
                 <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="event-venue-link" title="Open in Google Maps">
                     <i class="fas fa-location-dot"></i> ${escapeHtml(event.venueName)}, ${escapeHtml(event.location)}
                 </a>
                 <p class="event-description">${escapeHtml(event.description)}</p>
 
+                ${isPrimeSlot ? `
+                    <div class="prime-cta-block">
+                        ${event.ticketUrl ? `
+                            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="prime-primary-cta prime-ticket-cta">
+                                <span><i class="fas fa-ticket"></i> Get Tickets / Info</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        ` : `
+                            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="prime-primary-cta prime-venue-cta">
+                                <span><i class="fas fa-map-location-dot"></i> Directions & Venue</span>
+                                <i class="fas fa-arrow-up-right-from-square"></i>
+                            </a>
+                        `}
+                    </div>
+                ` : ''}
+
                 <div class="event-actions">
-                    ${event.ticketUrl ? `
+                    ${event.ticketUrl && !isPrimeSlot ? `
                         <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn">
                             <i class="fas fa-ticket"></i> Tickets
                         </a>
@@ -735,11 +764,17 @@ function renderGroupedEvents(events, isArchiveMode = false, featuredEvents = [])
         html += `
             <section class="prime-events-section" aria-labelledby="prime-events-title">
                 <div class="prime-events-heading">
-                    <div>
-                        <p class="prime-events-eyebrow">PRIME SLOTS</p>
-                        <h3 id="prime-events-title">Featured events</h3>
+                    <div class="prime-heading-left">
+                        <div class="prime-badge-row">
+                            <span class="prime-spotlight-pill">
+                                <span class="prime-pulse-dot"></span>
+                                PRIME SPOTLIGHT
+                            </span>
+                            <span class="prime-vip-label"><i class="fas fa-crown"></i> Featured Headliners</span>
+                        </div>
+                        <h3 id="prime-events-title">Must-Attend Events in GQ</h3>
                     </div>
-                    <p>Sponsored placements may appear outside your selected date range.</p>
+                    <p class="prime-heading-note"><i class="fas fa-fire" style="color:var(--secondary)"></i> Curated headliners & sponsored event placements</p>
                 </div>
                 <div class="prime-events-grid">
                     ${featuredEvents.map(event => renderEventCard(event, false, true)).join('')}

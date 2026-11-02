@@ -931,50 +931,122 @@ nav a.active::after {
     gap: 20px;
 }
 
-/* Sponsored prime placements */
+/* ==========================================
+   SPONSORED PRIME PLACEMENTS (VIP SPOTLIGHT)
+   ========================================== */
 .prime-events-section {
-    margin-bottom: 36px;
-    padding: clamp(18px, 3vw, 30px);
-    border: 1px solid rgba(245, 255, 88, 0.3);
+    position: relative;
+    margin-bottom: 40px;
+    padding: clamp(20px, 3.5vw, 32px);
+    border: 1px solid rgba(245, 255, 88, 0.45);
     border-radius: var(--radius-lg);
     background:
-        radial-gradient(ellipse at top left, rgba(245, 255, 88, 0.1), transparent 55%),
-        var(--surface);
+        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(245, 255, 88, 0.16), transparent 70%),
+        radial-gradient(ellipse 40% 40% at 90% 100%, rgba(255, 107, 74, 0.08), transparent 60%),
+        #141510;
+    box-shadow:
+        0 0 35px rgba(245, 255, 88, 0.08),
+        0 20px 48px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+}
+
+/* Glowing Neon Top Trim */
+.prime-events-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, #f5ff58 30%, #ff8c42 70%, transparent 100%);
+    box-shadow: 0 0 16px rgba(245, 255, 88, 0.8);
 }
 
 .prime-events-heading {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245, 255, 88, 0.15);
 }
 
-.prime-events-eyebrow {
-    margin-bottom: 4px;
+.prime-heading-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prime-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.prime-spotlight-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(245, 255, 88, 0.18);
+    border: 1px solid rgba(245, 255, 88, 0.5);
     color: var(--primary);
     font-size: 0.72rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.prime-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px #f5ff58;
+    animation: primeDotPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes primeDotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+.prime-vip-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #ff9d5c;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .prime-events-heading h3 {
-    color: var(--text);
+    color: #ffffff;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.5rem;
+    font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
 }
 
-.prime-events-heading > p {
-    max-width: 360px;
+.prime-heading-note {
+    max-width: 380px;
     color: var(--text-muted);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
     text-align: right;
+    margin: 0;
 }
 
 .prime-events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 24px;
 }
 
 /* Event Card */
@@ -988,9 +1060,165 @@ nav a.active::after {
     transition: var(--transition);
 }
 
+/* --- PRIME VIP EVENT CARD (IN YOUR FACE STYLING) --- */
 .event-card.prime-event-card {
-    border-color: rgba(245, 255, 88, 0.55);
-    box-shadow: 0 0 24px rgba(245, 255, 88, 0.08);
+    position: relative;
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-md);
+    background: linear-gradient(180deg, #1b1d16 0%, #11120e 100%);
+    box-shadow:
+        0 0 24px rgba(245, 255, 88, 0.22),
+        0 14px 34px rgba(0, 0, 0, 0.7);
+    animation: primeAura 3.5s infinite ease-in-out;
+    transform: translateZ(0);
+}
+
+@keyframes primeAura {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(245, 255, 88, 0.2), 0 12px 32px rgba(0, 0, 0, 0.7);
+        border-color: rgba(245, 255, 88, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 34px rgba(245, 255, 88, 0.45), 0 18px 44px rgba(0, 0, 0, 0.85);
+        border-color: #ffffff;
+    }
+}
+
+.event-card.prime-event-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 0 42px rgba(245, 255, 88, 0.55),
+        0 22px 50px rgba(0, 0, 0, 0.9);
+}
+
+/* Prime Card Top Banner Ribbon */
+.prime-card-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 14px;
+    background: linear-gradient(90deg, #f5ff58 0%, #ff9d5c 100%);
+    color: #10100f;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.prime-topbar-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prime-topbar-stars {
+    display: inline-flex;
+    gap: 3px;
+    font-size: 0.65rem;
+}
+
+/* Prime Badge on the Flyer */
+.event-card.prime-event-card .event-prime-badge {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #f5ff58 0%, #ff8c42 100%);
+    color: #10100f;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    border: none;
+}
+
+/* Prime Card Info Styling */
+.event-card.prime-event-card .event-info {
+    padding: 20px;
+    background: transparent;
+}
+
+.prime-headline-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.prime-verified-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.prime-date-highlight {
+    color: #ff9d5c;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.event-card.prime-event-card .event-title {
+    font-size: 1.32rem;
+    color: #ffffff;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+
+/* High-Converting Prime CTA Block */
+.prime-cta-block {
+    margin: 14px 0 12px;
+}
+
+.prime-primary-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.02em;
+}
+
+.prime-ticket-cta {
+    background: var(--primary);
+    color: #10100f;
+    box-shadow: 0 4px 18px rgba(245, 255, 88, 0.4);
+}
+
+.prime-ticket-cta:hover {
+    background: #ffffff;
+    box-shadow: 0 6px 24px rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    color: #10100f;
+}
+
+.prime-venue-cta {
+    background: linear-gradient(90deg, #f5ff58 0%, #ff9d5c 100%);
+    color: #10100f;
+    box-shadow: 0 4px 16px rgba(245, 255, 88, 0.35);
+}
+
+.prime-venue-cta:hover {
+    background: #ffffff;
+    color: #10100f;
+    box-shadow: 0 6px 22px rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
 }
 
 .event-card:hover {
@@ -2068,6 +2296,33 @@ footer {
         grid-template-columns: 1fr;
         gap: 28px;
     }
+
+    .prime-events-section {
+        padding: 20px 16px;
+        margin-bottom: 28px;
+        border-radius: var(--radius-md);
+    }
+
+    .prime-events-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .prime-heading-note {
+        text-align: left;
+        max-width: none;
+    }
+
+    .event-card.prime-event-card .event-title {
+        font-size: 1.22rem;
+    }
+
+    .prime-primary-cta {
+        padding: 12px 16px;
+        font-size: 0.86rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2088,17 +2343,41 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    .prime-events-section {
+        padding: 16px 12px;
+        margin-bottom: 24px;
+    }
+
     .prime-events-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
 
-    .prime-events-heading {
-        align-items: flex-start;
-        flex-direction: column;
+    .prime-badge-row {
+        gap: 6px;
     }
 
-    .prime-events-heading > p {
-        text-align: left;
+    .prime-spotlight-pill {
+        font-size: 0.68rem;
+        padding: 2px 8px;
+    }
+
+    .prime-vip-label {
+        font-size: 0.7rem;
+    }
+
+    .prime-events-heading h3 {
+        font-size: 1.35rem;
+    }
+
+    .event-card.prime-event-card .event-info {
+        padding: 16px 12px;
+    }
+
+    .prime-primary-cta {
+        min-height: 44px; /* Essential touch target on mobile */
+        padding: 12px 14px;
+        font-size: 0.84rem;
     }
 
     .top-pwa-message {
