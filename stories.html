@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GQ Stories | Gqeberha Events, Venues & Artists | iPlug GQ</title>
+    <meta name="description" content="Event recaps, venue spotlights, and conversations with the people shaping Gqeberha's music and nightlife scene.">
+    <link rel="canonical" href="https://ipluggq.com/stories.html">
+    <meta property="og:title" content="GQ Stories | iPlug GQ">
+    <meta property="og:description" content="The people, places, and moments behind Gqeberha's nightlife.">
+    <meta property="og:url" content="https://ipluggq.com/stories.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="iPlug GQ">
+    <meta property="og:locale" content="en_ZA">
+    <meta name="theme-color" content="#0e0f0c">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stories.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "GQ Stories",
+      "url": "https://ipluggq.com/stories.html",
+      "description": "Event recaps, venue spotlights, and artist conversations from Gqeberha.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "iPlug GQ",
+        "url": "https://ipluggq.com/"
+      },
+      "inLanguage": "en-ZA"
+    }
+    </script>
+</head>
+<body class="stories-page">
+    <header id="site-header">
+        <div class="container header-main-nav">
+            <a href="index.html" class="logo" aria-label="iPlug GQ home">
+                <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ Logo">
+            </a>
+            <nav aria-label="Main navigation">
+                <ul id="stories-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Upcoming Gigs</a></li>
+                    <li><a href="index.html#past-gigs">Past Gigs</a></li>
+                    <li><a href="stories.html" class="active" aria-current="page">Stories</a></li>
+                    <li><a href="index.html#submit">Submit Event</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="stories-nav">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="stories-hero">
+            <div class="container stories-hero-content">
+                <p class="hero-kicker"><span></span> THE PEOPLE. THE PLACES. THE MOMENTS.</p>
+                <h1>GQ <span>Stories.</span></h1>
+                <p>Beyond the flyer: event recaps, venue finds, and real conversations with the artists and people shaping Gqeberha.</p>
+                <a class="btn" href="#latest-stories"><i class="fas fa-arrow-down" aria-hidden="true"></i> Explore the stories</a>
+            </div>
+            <span class="stories-hero-mark" aria-hidden="true">GQ</span>
+        </section>
+
+        <section class="stories-intro section">
+            <div class="container">
+                <div class="stories-heading">
+                    <div>
+                        <p class="section-eyebrow">LOCAL CULTURE, UP CLOSE</p>
+                        <h2>More than a night out<span class="heading-period">.</span></h2>
+                    </div>
+                    <p class="section-subtitle">A home for the memories, the sounds, and the people that make GQ's scene what it is.</p>
+                </div>
+                <div class="stories-pillars">
+                    <article class="story-pillar">
+                        <span class="story-pillar-icon"><i class="fas fa-camera-retro" aria-hidden="true"></i></span>
+                        <p class="section-eyebrow">01 / AFTER THE LAST TRACK</p>
+                        <h3>Event recaps</h3>
+                        <p>Photo and video moments from the gigs and gatherings that brought the city together.</p>
+                    </article>
+                    <article class="story-pillar">
+                        <span class="story-pillar-icon"><i class="fas fa-location-dot" aria-hidden="true"></i></span>
+                        <p class="section-eyebrow">02 / KNOW THE SPOT</p>
+                        <h3>Venue spotlights</h3>
+                        <p>Get to know the spaces, sounds, and people behind Gqeberha's local favourites.</p>
+                    </article>
+                    <article class="story-pillar">
+                        <span class="story-pillar-icon"><i class="fas fa-microphone-lines" aria-hidden="true"></i></span>
+                        <p class="section-eyebrow">03 / IN THEIR WORDS</p>
+                        <h3>Artist conversations</h3>
+                        <p>Meet the DJs, performers, organisers, and community voices building the culture.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="stories-feed section" id="latest-stories">
+            <div class="container">
+                <div class="stories-heading">
+                    <div>
+                        <p class="section-eyebrow">FRESH FROM GQ</p>
+                        <h2>Latest stories<span class="heading-period">.</span></h2>
+                    </div>
+                    <span class="stories-count" id="stories-count" aria-live="polite">Loading stories…</span>
+                </div>
+                <div class="stories-grid" id="stories-grid" aria-live="polite" aria-busy="true">
+                    <p class="stories-loading">Loading the latest from GQ…</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stories-callout section">
+            <div class="container">
+                <div class="stories-callout-card">
+                    <div>
+                        <p class="section-eyebrow">YOUR MOMENT BELONGS HERE</p>
+                        <h2>Got a story to tell?</h2>
+                        <p>Were you part of a night worth remembering? Are you an artist, organiser, or venue with a story to share? Get in touch with the iPlug GQ team.</p>
+                    </div>
+                    <a class="btn" href="https://wa.me/27815294035?text=Hi%20iPlug%20GQ%2C%20I%20have%20a%20story%20idea%20to%20share." target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i> Pitch a story
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="stories-footer">
+        <div class="container">
+            <div class="stories-footer-inner">
+                <a href="index.html" class="footer-logo" aria-label="iPlug GQ home">
+                    <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ" height="42">
+                </a>
+                <p>Stories from the people and places of Gqeberha.</p>
+                <div class="stories-footer-links">
+                    <a href="index.html">Gig guide</a>
+                    <a href="index.html#submit">Submit an event</a>
+                    <a href="https://www.instagram.com/ipluggq?igsh=MTZ3eThoc2dxZGszNg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="iPlug GQ on Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://www.tiktok.com/@iplug.gq?_r=1&_t=ZS-93GYaRhlpEH" target="_blank" rel="noopener noreferrer" aria-label="iPlug GQ on TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <p class="stories-copyright">&copy; <span id="current-year">2026</span> iPlug GQ. Built for Gqeberha.</p>
+        </div>
+    </footer>
+    <script src="stories.js"></script>
+</body>
+</html>

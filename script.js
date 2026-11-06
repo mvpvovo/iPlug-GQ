@@ -84,7 +84,7 @@ function setupNavigation() {
             showMainView();
             const dateFilter = document.getElementById('date-filter');
             if (dateFilter && dateFilter.value === 'past') {
-                dateFilter.value = 'weekend';
+                dateFilter.value = 'all';
                 applyFilters();
             }
             document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
@@ -117,7 +117,7 @@ function setupNavigation() {
     document.getElementById('switch-upcoming-btn')?.addEventListener('click', () => {
         const dateFilter = document.getElementById('date-filter');
         if (dateFilter) {
-            dateFilter.value = (window.upcomingEvents && window.upcomingEvents.length > 0) ? 'weekend' : 'all';
+            dateFilter.value = 'all';
             applyFilters();
         }
     });
@@ -215,34 +215,6 @@ function loadEvents() {
             window.allRawEvents = events;
             window.upcomingEvents = events.filter(e => !isEventPassed(e.date));
             window.pastEvents = events.filter(e => isEventPassed(e.date));
-
-            // Smart UX: If no upcoming events in CSV (e.g. gap between weekly updates), default to archive mode
-            const dateFilter = document.getElementById('date-filter');
-            if (window.upcomingEvents.length === 0 && window.pastEvents.length > 0) {
-                if (dateFilter && dateFilter.value !== 'past') {
-                    dateFilter.value = 'past';
-                }
-            } else if (dateFilter && dateFilter.value !== 'past') {
-                // If "This weekend" has fewer than 4 events, default to 'all' so desktop is full, balanced and lively
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
-                const satDate = new Date(today);
-                satDate.setDate(satDate.getDate() + daysUntilSat);
-                const sunDate = new Date(satDate);
-                sunDate.setDate(sunDate.getDate() + (today.getDay() === 0 ? 0 : 1));
-                const friDate = new Date(satDate);
-                friDate.setDate(friDate.getDate() - 1);
-
-                const weekendEvents = window.upcomingEvents.filter(e => {
-                    const d = new Date(`${e.date}T00:00:00`);
-                    return d >= friDate && d <= sunDate;
-                });
-
-                if (weekendEvents.length < 4 && window.upcomingEvents.length > weekendEvents.length) {
-                    dateFilter.value = 'all';
-                }
-            }
 
             if (container) container.setAttribute('aria-busy', 'false');
             applyFilters();
@@ -573,10 +545,9 @@ function matchArea(event, areaKey) {
 
 function applyFilters() {
     const allEvents = window.allRawEvents || [];
-    const categoryBtn = document.querySelector('.filter-btn.active:not(#filter-free)');
-    let category = categoryBtn?.dataset.filter || 'all';
-    let area = document.getElementById('area-filter')?.value || 'all';
-    let dateRange = document.getElementById('date-filter')?.value || 'all';
+    const category = document.querySelector('.filter-btn.active:not(#filter-free)')?.dataset.filter || 'all';
+    const area = document.getElementById('area-filter')?.value || 'all';
+    const dateRange = document.getElementById('date-filter')?.value || 'all';
     const freeOnly = document.getElementById('filter-free')?.dataset.free === 'true';
     const search = (document.getElementById('event-search')?.value || '').trim().toLowerCase();
 
@@ -590,8 +561,16 @@ function applyFilters() {
     if (archiveBanner) {
         const isArchive = dateRange === 'past';
         archiveBanner.style.display = isArchive ? 'flex' : 'none';
+        const titles = {
+            all: 'Upcoming gigs',
+            week: 'This week',
+            weekend: 'This weekend',
+            today: 'Today’s gigs',
+            '7days': 'Next 7 days',
+            past: 'Past gigs archive'
+        };
         if (sectionTitle) {
-            sectionTitle.innerHTML = isArchive ? 'Past gigs archive<span class="heading-period">.</span>' : (dateRange === 'weekend' ? 'This week<span class="heading-period">.</span>' : 'Upcoming gigs<span class="heading-period">.</span>');
+            sectionTitle.innerHTML = `${titles[dateRange] || titles.all}<span class="heading-period">.</span>`;
         }
     }
 
@@ -616,6 +595,14 @@ function applyFilters() {
 
         if (range === 'today') {
             return event.date === todayStr;
+        } else if (range === 'week') {
+            const weekStart = new Date(today);
+            const daysSinceMonday = (today.getDay() + 6) % 7;
+            weekStart.setDate(weekStart.getDate() - daysSinceMonday);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            const eventD = new Date(`${event.date}T00:00:00`);
+            return eventD >= weekStart && eventD <= weekEnd;
         } else if (range === 'weekend') {
             const daysUntilSat = today.getDay() === 0 ? 0 : (6 - today.getDay() + 7) % 7;
             const satDate = new Date(today);
@@ -636,20 +623,7 @@ function applyFilters() {
         return true; // 'all'
     };
 
-    let filtered = allEvents.filter(event => filterByDateRange(event, dateRange) && matchesNonDateFilters(event));
-
-    // Smart UX Auto-Recovery:
-    // If user filtered by category (e.g. Night Club or Urban Lifestyle) and the narrow date window (e.g. "weekend") returned 0,
-    // but there ARE upcoming gigs in that category under "All upcoming", auto-expand to 'all' so buttons ALWAYS work!
-    if (filtered.length === 0 && dateRange !== 'all' && dateRange !== 'past' && category !== 'all') {
-        const upcomingInCategory = allEvents.filter(event => !isEventPassed(event.date) && matchesNonDateFilters(event));
-        if (upcomingInCategory.length > 0) {
-            dateRange = 'all';
-            const dateFilterSelect = document.getElementById('date-filter');
-            if (dateFilterSelect) dateFilterSelect.value = 'all';
-            filtered = upcomingInCategory;
-        }
-    }
+    const filtered = allEvents.filter(event => filterByDateRange(event, dateRange) && matchesNonDateFilters(event));
 
     const activePrimeSlots = dateRange === 'past' ? [] : (window.primeSlots || [])
         .filter(slot => slot.startDate <= todayStr && todayStr <= slot.endDate);

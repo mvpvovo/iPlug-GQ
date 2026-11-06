@@ -93,8 +93,9 @@
             <nav>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#events">This Week</a></li>
+                    <li><a href="#events">Upcoming Gigs</a></li>
                     <li><a href="#past-gigs" id="past-gigs-link">Past Gigs</a></li>
+                    <li><a href="stories.html">Stories</a></li>
                     <li><a href="#saved" id="saved-link">My Events <span id="nav-saved-badge" class="nav-badge" style="display:none;">0</span></a></li>
                     <li><a href="#submit">Submit Event</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -141,7 +142,7 @@
             <div class="events-heading">
                 <div>
                     <p class="section-eyebrow">THE CITY'S ON</p>
-                    <h2 id="events-section-title">This week<span class="heading-period">.</span></h2>
+                    <h2 id="events-section-title">Upcoming gigs<span class="heading-period">.</span></h2>
                     <p class="section-subtitle">Good people. Good music. Your next favourite night.</p>
                 </div>
                 <span class="events-count" id="events-count" aria-live="polite">Loading events…</span>
@@ -153,7 +154,7 @@
                     <i class="fas fa-clock-rotate-left"></i>
                     <div>
                         <strong>Viewing Past Gigs Archive</strong>
-                        <span>These are previous events from past weeks. Explore venues and lineups while this week's drop is finalized.</span>
+                        <span>These events have already taken place. Explore past lineups and venues.</span>
                     </div>
                 </div>
                 <button id="switch-upcoming-btn" class="btn-small-outline" type="button">Back to Upcoming</button>
@@ -186,10 +187,11 @@
                     <i class="far fa-calendar" aria-hidden="true"></i>
                     <span class="visually-hidden">Choose a date range</span>
                     <select id="date-filter">
+                        <option value="all" selected>All upcoming</option>
+                        <option value="week">This week</option>
                         <option value="weekend">This weekend</option>
                         <option value="today">Tonight / Today</option>
                         <option value="7days">Next 7 days</option>
-                        <option value="all">All upcoming</option>
                         <option value="past">Past gigs archive</option>
                     </select>
                     <i class="fas fa-chevron-down select-chevron" aria-hidden="true"></i>
@@ -382,8 +384,9 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#home">Home</a></li>
-                        <li><a href="#events">This Week's Gigs</a></li>
+                        <li><a href="#events">Upcoming Gigs</a></li>
                         <li><a href="#past-gigs">Past Gigs Archive</a></li>
+                        <li><a href="stories.html">Stories</a></li>
                         <li><a href="#saved">My Saved Events</a></li>
                         <li><a href="#submit">Submit an Event</a></li>
                     </ul>
