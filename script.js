@@ -188,6 +188,13 @@ function optimizeImageUrl(url, width = 600) {
     return url;
 }
 
+function buildMapUrl(event) {
+    if (event.latitude && event.longitude) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.latitude)},${encodeURIComponent(event.longitude)}`;
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+}
+
 function loadEvents() {
     const container = document.getElementById('events-container');
     const countEl = document.getElementById('events-count');
@@ -323,7 +330,9 @@ function parseEventsCsv(csv) {
         location: headers.indexOf('venue location'),
         flyer: headers.indexOf('flyer image url'),
         description: headers.indexOf('event description'),
-        category: headers.indexOf('category')
+        category: headers.indexOf('category'),
+        latitude: headers.indexOf('latitude'),
+        longitude: headers.indexOf('longitude')
     };
 
     const categoryLabels = {
@@ -347,6 +356,8 @@ function parseEventsCsv(csv) {
         const flyer = getVal('flyer');
         const description = getVal('description');
         const rawCategory = getVal('category').toLowerCase().replace(/\s+/g, '');
+        const latitude = getVal('latitude');
+        const longitude = getVal('longitude');
 
         if (!title || !rawDate || !venueName) {
             console.warn(`Row ${index + 2} skipped due to missing essential fields`);
@@ -391,7 +402,9 @@ function parseEventsCsv(csv) {
             category,
             categoryLabel: categoryLabels[category] || 'Other',
             isFree,
-            ticketUrl
+            ticketUrl,
+            latitude,
+            longitude
         });
     });
 
@@ -649,7 +662,7 @@ function applyFilters() {
 function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
     const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
     const optimizedFlyer = optimizeImageUrl(event.flyer, 600);
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+    const mapsUrl = buildMapUrl(event);
 
     return `
         <article class="event-card ${isArchiveMode ? 'past-card' : ''} ${isPrimeSlot ? 'prime-event-card' : ''}" data-id="${event.id}">
@@ -1078,7 +1091,7 @@ function openLightbox(event) {
     img.src = optimizeImageUrl(event.flyer, 1000);
     title.textContent = event.title;
 
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`)}`;
+    const mapsUrl = buildMapUrl(event);
 
     details.innerHTML = `
         <p><i class="far fa-calendar"></i> <strong>${formatFullDate(event.date)}</strong></p>
