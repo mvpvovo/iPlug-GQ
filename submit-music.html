@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your New Music | iPlug GQ New Music Friday</title>
+    <meta name="description" content="Submit your new single, EP, or album for consideration on iPlug GQ's New Music Friday. Free to submit for all South African artists, DJs, and record labels.">
+    <link rel="canonical" href="https://ipluggq.com/submit-music.html">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:title" content="Submit Your New Music | iPlug GQ New Music Friday">
+    <meta property="og:description" content="Submit your track for consideration on New Music Friday. Supporting Eastern Cape talent and South African music makers.">
+    <meta property="og:image" content="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
+    <meta property="og:url" content="https://ipluggq.com/submit-music.html">
+    <meta property="og:type" content="website">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0e0f0c">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="iPlug GQ">
+    <link rel="apple-touch-icon" href="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png">
+
+    <script>
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            document.documentElement.classList.add('app-installed');
+        }
+    </script>
+
+    <!-- Styles & Fonts -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="music-friday.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="nmf-page">
+    <!-- Header with Logo & One-Button Top PWA Installer -->
+    <header id="site-header">
+        <div id="top-pwa-bar" class="top-pwa-bar" role="region" aria-label="Install iPlug GQ App">
+            <div class="container top-pwa-container">
+                <div class="top-pwa-message">
+                    <span class="top-pwa-badge"><i class="fas fa-bolt"></i> GET APP</span>
+                    <span class="top-pwa-text">Install iPlug GQ for offline gig guides & weekly music drops</span>
+                </div>
+                <div class="top-pwa-actions">
+                    <button id="top-pwa-install-btn" class="top-pwa-install-btn" type="button" aria-label="Install iPlug GQ App">
+                        <i class="fas fa-arrow-down-to-bracket"></i> <span>Install App</span>
+                    </button>
+                    <button id="top-pwa-dismiss" class="top-pwa-dismiss-btn" type="button" aria-label="Dismiss top installer bar">&times;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container header-main-nav">
+            <a href="index.html" class="logo" aria-label="iPlug GQ home">
+                <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ Logo">
+            </a>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#events">Upcoming Gigs</a></li>
+                    <li><a href="index.html#past-gigs">Past Gigs</a></li>
+                    <li><a href="stories.html">Stories</a></li>
+                    <li><a href="music-friday.html"><i class="fas fa-music" style="color:var(--primary); font-size:0.8em; margin-right:3px;"></i> New Music Friday</a></li>
+                    <li><a href="submit-music.html" class="active" aria-current="page">Submit Music</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Compact Hero -->
+        <section class="nmf-hero nmf-hero--compact">
+            <div class="container nmf-hero-content">
+                <p class="hero-kicker"><span></span> 100% FREE SUBMISSIONS</p>
+                <h1>Submit Your <span>New Music.</span></h1>
+                <p>Are you an artist, DJ, producer, or independent label? Submit your upcoming or fresh release for consideration on iPlug GQ's weekly New Music Friday feature.</p>
+            </div>
+            <span class="nmf-hero-mark" aria-hidden="true">NMF</span>
+        </section>
+
+        <!-- Form Section -->
+        <section class="container nmf-form-container">
+            <div id="nmf-success-banner" class="nmf-success-banner" role="status" aria-live="polite">
+                <i class="fas fa-circle-check"></i>
+                <h3>Thank You! Submission Received</h3>
+                <p>Your release details have been forwarded to our editorial team and placed in the <strong>Pending Approval</strong> queue. We review all submissions ahead of each Friday drop.</p>
+            </div>
+
+            <div class="nmf-form-card">
+                <form id="nmf-submit-form" novalidate>
+                    <!-- Row 1: Artist Name & Song Title -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-artist">Artist Name <span class="req">*</span></label>
+                            <input type="text" id="sub-artist" name="artistName" placeholder="e.g. Ami Faku" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-title">Song or Album Title <span class="req">*</span></label>
+                            <input type="text" id="sub-title" name="title" placeholder="e.g. Imvula" required>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Genre & Release Type -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-genre">Music Genre <span class="req">*</span></label>
+                            <select id="sub-genre" name="genre" required>
+                                <option value="">Select a genre...</option>
+                                <option value="amapiano">Amapiano</option>
+                                <option value="afrohouse">Afro House</option>
+                                <option value="threestep">3-Step</option>
+                                <option value="deephouse">Deep House</option>
+                                <option value="hiphop">Hip-hop</option>
+                                <option value="gqom">Gqom</option>
+                                <option value="maskandi">Maskandi</option>
+                                <option value="gospel">Gospel</option>
+                                <option value="afropop">Afro-pop</option>
+                                <option value="rnb">R&B</option>
+                                <option value="kwaito">Kwaito</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-type">Release Type <span class="req">*</span></label>
+                            <select id="sub-type" name="releaseType" required>
+                                <option value="single">Single</option>
+                                <option value="ep">EP</option>
+                                <option value="album">Album</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Release Date & Contact -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-date">Official Release Date <span class="req">*</span></label>
+                            <input type="date" id="sub-date" name="releaseDate" required>
+                            <small class="nmf-form-help">When did or will the song officially drop?</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-contact">Contact Email or Phone <span class="req">*</span></label>
+                            <input type="text" id="sub-contact" name="contact" placeholder="Email or WhatsApp number" required>
+                            <small class="nmf-form-help">For editorial verification only (kept private)</small>
+                        </div>
+                    </div>
+
+                    <!-- Primary Listening Link (Required) -->
+                    <div class="form-group">
+                        <label for="sub-link">Primary Listening Link <span class="req">*</span></label>
+                        <input type="url" id="sub-link" name="primaryLink" placeholder="https://spotify.com/... or https://youtube.com/... or https://apple.com/..." required>
+                        <small class="nmf-form-help">At least one valid link where the music or video can be streamed</small>
+                    </div>
+
+                    <!-- Optional Section Divider -->
+                    <div style="margin: 28px 0 16px; border-top: 1px solid var(--line); padding-top: 18px;">
+                        <h4 style="font-family:'Space Grotesk',sans-serif; color:var(--text); font-size:1.05rem; margin-bottom:4px;">
+                            <i class="fas fa-sliders" style="color:var(--primary); margin-right:6px;"></i> Additional Details & Links (Optional)
+                        </h4>
+                        <p style="color:var(--text-dim); font-size:0.8rem; margin:0;">Provide extra streaming links and artwork to make your music card stand out.</p>
+                    </div>
+
+                    <!-- Featured Artists & Record Label -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-feat">Featured Artists</label>
+                            <input type="text" id="sub-feat" name="featuredArtists" placeholder="e.g. ft. Sun-El Musician">
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-label">Record Label / Distributor</label>
+                            <input type="text" id="sub-label" name="recordLabel" placeholder="e.g. Independent, Kalawa Jazmee, etc.">
+                        </div>
+                    </div>
+
+                    <!-- Province & Artwork Link -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-province">Artist Province / Location</label>
+                            <select id="sub-province" name="province">
+                                <option value="Eastern Cape" selected>Eastern Cape (GQ / East London / Kariega)</option>
+                                <option value="Gauteng">Gauteng (Joburg / Pretoria)</option>
+                                <option value="KwaZulu-Natal">KwaZulu-Natal (Durban / Pietermaritzburg)</option>
+                                <option value="Western Cape">Western Cape (Cape Town)</option>
+                                <option value="Free State">Free State</option>
+                                <option value="Mpumalanga">Mpumalanga</option>
+                                <option value="Limpopo">Limpopo</option>
+                                <option value="North West">North West</option>
+                                <option value="Northern Cape">Northern Cape</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-art">Cover Artwork URL</label>
+                            <input type="url" id="sub-art" name="coverArt" placeholder="https://... direct image link">
+                            <small class="nmf-form-help">Square artwork recommended (JPG/PNG). Or attach directly in WhatsApp!</small>
+                        </div>
+                    </div>
+
+                    <!-- Specific Platform Links -->
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-spotify"><i class="fab fa-spotify" style="color:#1DB954;"></i> Spotify Link</label>
+                            <input type="url" id="sub-spotify" name="spotify" placeholder="https://open.spotify.com/track/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-apple"><i class="fab fa-apple" style="color:#FC3C44;"></i> Apple Music Link</label>
+                            <input type="url" id="sub-apple" name="apple" placeholder="https://music.apple.com/...">
+                        </div>
+                    </div>
+
+                    <div class="nmf-form-row">
+                        <div class="form-group">
+                            <label for="sub-youtube"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube / Video Link</label>
+                            <input type="url" id="sub-youtube" name="youtube" placeholder="https://youtube.com/watch?v=...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sub-soundcloud"><i class="fab fa-soundcloud" style="color:#FF5500;"></i> SoundCloud Link</label>
+                            <input type="url" id="sub-soundcloud" name="soundcloud" placeholder="https://soundcloud.com/...">
+                        </div>
+                    </div>
+
+                    <!-- Short Description -->
+                    <div class="form-group">
+                        <label for="sub-desc">Short Song / Release Description</label>
+                        <textarea id="sub-desc" name="description" rows="3" placeholder="Tell our listeners what inspired this release, the producers involved, or the story behind it (under 150 characters)..." maxlength="250"></textarea>
+                    </div>
+
+                    <!-- Consent Checkbox (POPIA & Rights Confirmation) -->
+                    <div class="nmf-consent-wrap">
+                        <input type="checkbox" id="sub-consent" name="consent" required>
+                        <label for="sub-consent">
+                            <strong>Permission & Rights Confirmation:</strong> I confirm that I am the authorized artist, producer, manager, or label representative, and I have the rights to submit this release, promotional artwork, and links for publication on iPlug GQ's New Music Friday.
+                        </label>
+                    </div>
+
+                    <!-- Submit Actions -->
+                    <div class="nmf-submit-actions">
+                        <button type="submit" class="nmf-submit-btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Submit via WhatsApp Editorial Desk
+                        </button>
+                        <p style="text-align:center; color:var(--text-dim); font-size:0.8rem; margin: 4px 0;">
+                            <i class="fas fa-shield-halved"></i> 100% Free · Editorial Review · No Copyrighted Audio Stored
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col brand-col">
+                    <a href="index.html" class="footer-logo">
+                        <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ Logo" height="42">
+                    </a>
+                    <p>The definitive gig guide and music discovery hub for Gqeberha (Port Elizabeth). Promoting Eastern Cape culture, events, and newly released music every week.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#events">Upcoming Gigs</a></li>
+                        <li><a href="music-friday.html">New Music Friday</a></li>
+                        <li><a href="stories.html">GQ Stories</a></li>
+                        <li><a href="submit-music.html">Submit Music</a></li>
+                        <li><a href="index.html#submit">Submit an Event</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Direct Contact</h4>
+                    <ul class="contact-info">
+                        <li><a href="mailto:iPlugGQ@hotmail.com"><i class="fas fa-envelope"></i> iPlugGQ@hotmail.com</a></li>
+                        <li><a href="https://wa.me/27815294035" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> +27 81 529 4035</a></li>
+                        <li><i class="fas fa-location-dot"></i> Gqeberha, Eastern Cape</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year">2026</span> iPlug GQ. All rights reserved. | Built for South African artists</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="music-friday.js"></script>
+    <script src="pwa.js"></script>
+</body>
+</html>

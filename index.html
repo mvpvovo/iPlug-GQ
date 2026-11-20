@@ -62,6 +62,7 @@
     
     <!-- Styles & Fonts -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="music-friday.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -96,6 +97,7 @@
                     <li><a href="#events">Upcoming Gigs</a></li>
                     <li><a href="#past-gigs" id="past-gigs-link">Past Gigs</a></li>
                     <li><a href="stories.html">Stories</a></li>
+                    <li><a href="music-friday.html"><i class="fas fa-music" style="color:var(--primary); font-size:0.8em; margin-right:3px;"></i> New Music Friday</a></li>
                     <li><a href="#saved" id="saved-link">My Events <span id="nav-saved-badge" class="nav-badge" style="display:none;">0</span></a></li>
                     <li><a href="#submit">Submit Event</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -180,7 +182,6 @@
                         <option value="motherwell">Motherwell & Wells Estate</option>
                         <option value="addo">Addo & Surroundings</option>
                     </select>
-                    <i class="fas fa-chevron-down select-chevron" aria-hidden="true"></i>
                 </label>
 
                 <label class="date-filter">
@@ -194,7 +195,6 @@
                         <option value="7days">Next 7 days</option>
                         <option value="past">Past gigs archive</option>
                     </select>
-                    <i class="fas fa-chevron-down select-chevron" aria-hidden="true"></i>
                 </label>
             </div>
 
@@ -217,6 +217,26 @@
 
             <div class="update-note">
                 <p><i class="fas fa-sparkles"></i> Fresh plans drop every Wednesday at 18:00. <a href="#submit">Promoting an event? Put it on the map <i class="fas fa-arrow-right"></i></a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Music Friday Teaser Section -->
+    <section class="nmf-teaser" id="nmf-teaser" aria-label="New Music Friday">
+        <div class="container">
+            <div class="nmf-teaser-heading">
+                <div>
+                    <p class="section-eyebrow nmf-teaser-eyebrow"><i class="fas fa-music" aria-hidden="true"></i> NEW MUSIC FRIDAY</p>
+                    <h2>Fresh SA sounds<span class="heading-period">.</span></h2>
+                    <p class="section-subtitle">The latest releases from South African artists, dropping every Friday.</p>
+                </div>
+                <a href="music-friday.html" class="btn-secondary" aria-label="Explore all new music releases">Explore All <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+            <div class="nmf-teaser-scroll" id="nmf-teaser-grid" aria-live="polite" aria-label="Latest music releases">
+                <!-- Populated by music-friday.js -->
+            </div>
+            <div class="nmf-teaser-cta-row">
+                <a href="music-friday.html" class="btn"><i class="fas fa-headphones"></i> Explore All New Releases</a>
             </div>
         </div>
     </section>
@@ -387,6 +407,8 @@
                         <li><a href="#events">Upcoming Gigs</a></li>
                         <li><a href="#past-gigs">Past Gigs Archive</a></li>
                         <li><a href="stories.html">Stories</a></li>
+                        <li><a href="music-friday.html">New Music Friday</a></li>
+                        <li><a href="submit-music.html">Submit Your Music</a></li>
                         <li><a href="#saved">My Saved Events</a></li>
                         <li><a href="#submit">Submit an Event</a></li>
                     </ul>
@@ -436,21 +458,7 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <script src="music-friday.js"></script>
     <script src="pwa.js"></script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./service-worker.js')
-                .then(function(registration) {
-                    console.log('iPlug GQ Service Worker registered with scope:', registration.scope);
-                })
-                .catch(function(error) {
-                    console.log('Service Worker registration failed:', error);
-                });
-        });
-    }
-    </script>
 </body>
 </html>

@@ -1,19 +1,24 @@
-const CACHE_NAME = 'iplug-gq-v2.4';
+const CACHE_NAME = 'iplug-gq-v3.1';
 const APP_SHELL = [
   './',
   './index.html',
   './stories.html',
+  './music-friday.html',
+  './submit-music.html',
   './style.css',
   './stories.css',
+  './music-friday.css',
   './script.js',
   './stories.js',
+  './music-friday.js',
   './pwa.js',
   './manifest.json',
   './events.csv',
   './stories.json',
+  './music-releases.json',
   './prime-slots.json',
   'https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png',
-  'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap',
+  'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
@@ -65,8 +70,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Stale-While-Revalidate for events.csv
-  if (url.pathname.endsWith('events.csv')) {
+  // Stale-While-Revalidate for site data that changes without a deploy
+  const isDataUrl = ['events.csv', 'prime-slots.json', 'stories.json']
+    .some(name => url.pathname.endsWith(`/${name}`));
+
+  if (isDataUrl) {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache => {
         return cache.match(request).then(cachedResponse => {
@@ -86,18 +94,37 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first for images, fonts, stylesheets, scripts
-  const isStaticAsset =
+  // Network-first for same-origin app assets so deploys reach returning users
+  const isLocalAsset = url.origin === self.location.origin &&
+    (['image', 'font', 'style', 'script', 'manifest'].includes(request.destination) ||
+      /\.(?:js|css|json|png|jpe?g|webp|gif|svg|ico|woff2?)$/i.test(url.pathname));
+
+  if (isLocalAsset) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then(cached => cached || Response.error()))
+    );
+    return;
+  }
+
+  // Cache-first for third-party images, fonts and stylesheets
+  const isRemoteAsset =
     url.hostname.includes('imagekit.io') ||
     url.hostname.includes('fonts.googleapis.com') ||
     url.hostname.includes('fonts.gstatic.com') ||
     url.hostname.includes('cdnjs.cloudflare.com') ||
     request.destination === 'image' ||
     request.destination === 'font' ||
-    request.destination === 'style' ||
-    request.destination === 'script';
+    request.destination === 'style';
 
-  if (isStaticAsset) {
+  if (isRemoteAsset) {
     event.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
@@ -109,10 +136,7 @@ self.addEventListener('fetch', event => {
             }
             return response;
           })
-          .catch(() => {
-            // If image fails, return nothing or cached fallback
-            return cached;
-          });
+          .catch(() => cached || Response.error());
       })
     );
     return;

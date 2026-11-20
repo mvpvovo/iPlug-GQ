@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPlug GQ – New Music Friday Administrator Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f5ff58;
+            --secondary: #ff6b4a;
+            --dark: #0e0f0c;
+            --surface: #191a17;
+            --surface-hover: #22231e;
+            --surface-card: #20211d;
+            --text: #f7f7f2;
+            --text-muted: #a6a89c;
+            --text-dim: #797b71;
+            --line: rgba(255, 255, 255, 0.08);
+            --line-light: rgba(255, 255, 255, 0.14);
+            --status-published: #2ecc71;
+            --status-pending: #f39c12;
+            --status-scheduled: #3498db;
+            --status-rejected: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-title { display: flex; align-items: center; gap: 14px; }
+        .header-title img { height: 42px; }
+        .header-title h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: #fff; }
+        .header-title span { color: var(--primary); }
+
+        .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .btn {
+            background: var(--primary);
+            color: #10100f;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { background: #e3ed45; transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--line-light);
+        }
+        .btn-outline:hover { background: var(--surface-hover); border-color: var(--primary); color: var(--primary); }
+
+        .btn-danger { background: var(--status-rejected); color: #fff; }
+        .btn-danger:hover { background: #c0392b; }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .stat-card h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
+        .stat-card .val { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #fff; }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1 1 300px;
+            max-width: 450px;
+        }
+        .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            padding: 0 16px 0 40px;
+            background: var(--surface);
+            border: 1px solid var(--line-light);
+            border-radius: 999px;
+            color: #fff;
+            outline: none;
+            font-family: inherit;
+        }
+        .search-box input:focus { border-color: var(--primary); }
+
+        .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            color: var(--text-muted);
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .filter-btn.active { background: var(--primary); color: #10100f; font-weight: 700; border-color: var(--primary); }
+
+        /* Table */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th {
+            background: rgba(0,0,0,0.3);
+            color: var(--text-dim);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+        }
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.88rem;
+            vertical-align: middle;
+        }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .art-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .badge-published { background: rgba(46, 204, 113, 0.18); color: var(--status-published); border: 1px solid rgba(46, 204, 113, 0.4); }
+        .badge-pending { background: rgba(243, 156, 18, 0.18); color: var(--status-pending); border: 1px solid rgba(243, 156, 18, 0.4); }
+        .badge-scheduled { background: rgba(52, 152, 219, 0.18); color: var(--status-scheduled); border: 1px solid rgba(52, 152, 219, 0.4); }
+        .badge-rejected { background: rgba(231, 76, 60, 0.18); color: var(--status-rejected); border: 1px solid rgba(231, 76, 60, 0.4); }
+
+        .action-btns { display: flex; gap: 6px; }
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--surface-card);
+            border: 1px solid var(--line-light);
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .btn-icon:hover { color: var(--primary); border-color: var(--primary); }
+        .btn-icon.del:hover { color: var(--status-rejected); border-color: var(--status-rejected); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: var(--surface);
+            border: 1px solid var(--line-light);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 760px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
+        .modal-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; color: #fff; }
+        .close-modal { background: none; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer; }
+        .close-modal:hover { color: #fff; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-col-full { grid-column: 1 / -1; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--dark);
+            border: 1px solid var(--line-light);
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
+
+        /* Login Screen */
+        #login-screen {
+            max-width: 420px;
+            margin: 100px auto;
+            background: var(--surface);
+            border: 1px solid var(--line-light);
+            border-radius: 16px;
+            padding: 36px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        #login-screen img { height: 50px; margin-bottom: 16px; }
+        #login-screen h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin-bottom: 8px; }
+        #login-screen p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Simple Authentication Overlay -->
+    <div id="login-screen">
+        <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ">
+        <h2>Administrator Login</h2>
+        <p>New Music Friday Curation Desk</p>
+        <div class="form-group">
+            <input type="password" id="admin-pass" placeholder="Enter Admin Passcode" onkeydown="if(event.key==='Enter') verifyLogin()">
+        </div>
+        <button class="btn" style="width:100%; justify-content:center;" onclick="verifyLogin()">
+            <i class="fas fa-lock-open"></i> Unlock Dashboard
+        </button>
+        <p id="login-err" style="color:var(--status-rejected); font-size:0.8rem; margin-top:12px; display:none;">Incorrect passcode. Try again.</p>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="container" id="admin-dashboard" style="display:none;">
+        <header>
+            <div class="header-title">
+                <img src="https://ik.imagekit.io/vurvay/iPlug%20GQ%20logo1.png?tr=h-64,f-auto" alt="iPlug GQ Logo">
+                <div>
+                    <h1>NEW MUSIC FRIDAY <span>ADMIN</span></h1>
+                    <p style="color:var(--text-dim); font-size:0.8rem;"><i class="fas fa-circle-check" style="color:var(--status-published)"></i> Static File Manager · iPlug GQ</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="music-friday.html" target="_blank" class="btn btn-outline"><i class="fas fa-arrow-up-right-from-square"></i> View Live Page</a>
+                <button class="btn btn-outline" onclick="document.getElementById('import-file').click()"><i class="fas fa-file-import"></i> Load JSON</button>
+                <input type="file" id="import-file" style="display:none;" accept=".json" onchange="importJsonFile(event)">
+                <button class="btn" onclick="openAddModal()"><i class="fas fa-plus"></i> Add Release</button>
+                <button class="btn" style="background:#2ecc71; color:#fff;" onclick="exportJsonFile()"><i class="fas fa-download"></i> Save & Export JSON</button>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <h3>Total Releases</h3>
+                    <div class="val" id="stat-total">0</div>
+                </div>
+                <i class="fas fa-compact-disc" style="font-size:2rem; color:var(--text-dim);"></i>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <h3>Published (Live)</h3>
+                    <div class="val" id="stat-published" style="color:var(--status-published);">0</div>
+                </div>
+                <i class="fas fa-circle-check" style="font-size:2rem; color:var(--status-published);"></i>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <h3>Pending Review</h3>
+                    <div class="val" id="stat-pending" style="color:var(--status-pending);">0</div>
+                </div>
+                <i class="fas fa-clock" style="font-size:2rem; color:var(--status-pending);"></i>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <h3>Scheduled</h3>
+                    <div class="val" id="stat-scheduled" style="color:var(--status-scheduled);">0</div>
+                </div>
+                <i class="fas fa-calendar-days" style="font-size:2rem; color:var(--status-scheduled);"></i>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="admin-search" placeholder="Search by artist, song, or label..." oninput="filterTable()">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" data-status="all" onclick="setStatusFilter('all')">All</button>
+                <button class="filter-btn" data-status="pending" onclick="setStatusFilter('pending')"><i class="fas fa-clock"></i> Pending</button>
+                <button class="filter-btn" data-status="published" onclick="setStatusFilter('published')"><i class="fas fa-check"></i> Published</button>
+                <button class="filter-btn" data-status="scheduled" onclick="setStatusFilter('scheduled')"><i class="fas fa-calendar"></i> Scheduled</button>
+                <button class="filter-btn" data-status="rejected" onclick="setStatusFilter('rejected')"><i class="fas fa-times"></i> Rejected</button>
+            </div>
+        </div>
+
+        <!-- Releases Table -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Song / Release</th>
+                        <th>Artist</th>
+                        <th>Genre</th>
+                        <th>Type</th>
+                        <th>Release Date</th>
+                        <th>Status</th>
+                        <th>Pick</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="releases-table-body">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Edit/Add Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Music Release</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="release-form" onsubmit="saveRelease(event)">
+                <input type="hidden" id="form-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Artist Name *</label>
+                        <input type="text" id="form-artist" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Song / Album Title *</label>
+                        <input type="text" id="form-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured Artists</label>
+                        <input type="text" id="form-feat" placeholder="e.g. ft. Sun-El Musician">
+                    </div>
+                    <div class="form-group">
+                        <label>Record Label</label>
+                        <input type="text" id="form-label" placeholder="e.g. Independent">
+                    </div>
+                    <div class="form-group">
+                        <label>Music Genre *</label>
+                        <select id="form-genre" required>
+                            <option value="amapiano">Amapiano</option>
+                            <option value="afrohouse">Afro House</option>
+                            <option value="threestep">3-Step</option>
+                            <option value="deephouse">Deep House</option>
+                            <option value="hiphop">Hip-hop</option>
+                            <option value="gqom">Gqom</option>
+                            <option value="maskandi">Maskandi</option>
+                            <option value="gospel">Gospel</option>
+                            <option value="afropop">Afro-pop</option>
+                            <option value="rnb">R&B</option>
+                            <option value="kwaito">Kwaito</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Release Type *</label>
+                        <select id="form-type" required>
+                            <option value="single">Single</option>
+                            <option value="ep">EP</option>
+                            <option value="album">Album</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Official Release Date *</label>
+                        <input type="date" id="form-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Publication Date (Friday)</label>
+                        <input type="date" id="form-publish-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="form-status">
+                            <option value="pending">Pending Approval</option>
+                            <option value="published">Published</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Artist Province</label>
+                        <select id="form-province">
+                            <option value="Eastern Cape">Eastern Cape</option>
+                            <option value="Gauteng">Gauteng</option>
+                            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                            <option value="Western Cape">Western Cape</option>
+                            <option value="Free State">Free State</option>
+                            <option value="Mpumalanga">Mpumalanga</option>
+                            <option value="Limpopo">Limpopo</option>
+                            <option value="North West">North West</option>
+                            <option value="Northern Cape">Northern Cape</option>
+                        </select>
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>Cover Artwork Image URL</label>
+                        <input type="url" id="form-art" placeholder="https://ik.imagekit.io/vurvay/... or web image URL">
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>Spotify Link</label>
+                        <input type="url" id="form-spotify" placeholder="https://open.spotify.com/...">
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>Apple Music Link</label>
+                        <input type="url" id="form-apple" placeholder="https://music.apple.com/...">
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>YouTube Link</label>
+                        <input type="url" id="form-youtube" placeholder="https://youtube.com/...">
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>SoundCloud Link</label>
+                        <input type="url" id="form-soundcloud" placeholder="https://soundcloud.com/...">
+                    </div>
+                    <div class="form-col-full form-group">
+                        <label>Short Description</label>
+                        <textarea id="form-desc" rows="2" placeholder="Brief editorial note about the track..."></textarea>
+                    </div>
+                    <div class="form-col-full" style="margin-top:6px;">
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                            <input type="checkbox" id="form-featured" style="width:auto;">
+                            <strong>⭐ Mark as Editor's Pick (Featured Hero Card)</strong>
+                        </label>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--line);">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn">Save Release</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default passcode: ipluggq2026
+        const AUTH_HASH = "ipluggq2026";
+        let releasesData = [];
+        let activeStatus = 'all';
+
+        function verifyLogin() {
+            const val = document.getElementById('admin-pass').value;
+            if (val === AUTH_HASH) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-dashboard').style.display = 'block';
+                loadInitialData();
+            } else {
+                document.getElementById('login-err').style.display = 'block';
+            }
+        }
+
+        async function loadInitialData() {
+            try {
+                const res = await fetch('./music-releases.json');
+                if (res.ok) {
+                    releasesData = await res.json();
+                }
+            } catch (e) {
+                console.warn('Could not load music-releases.json, checking localStorage');
+            }
+
+            // Also merge any submissions from public form saved in localStorage
+            try {
+                const pending = JSON.parse(localStorage.getItem('iPlug_NMF_PendingSubmissions') || '[]');
+                pending.forEach(item => {
+                    if (!releasesData.some(r => r.id === item.id)) {
+                        releasesData.unshift(item);
+                    }
+                });
+            } catch (e) {}
+
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            updateStats();
+            renderTable();
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total').textContent = releasesData.length;
+            document.getElementById('stat-published').textContent = releasesData.filter(r => r.status === 'published').length;
+            document.getElementById('stat-pending').textContent = releasesData.filter(r => r.status === 'pending').length;
+            document.getElementById('stat-scheduled').textContent = releasesData.filter(r => r.status === 'scheduled').length;
+        }
+
+        function setStatusFilter(status) {
+            activeStatus = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-status') === status);
+            });
+            renderTable();
+        }
+
+        function filterTable() {
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('releases-table-body');
+            const search = document.getElementById('admin-search').value.toLowerCase().trim();
+
+            const filtered = releasesData.filter(r => {
+                if (activeStatus !== 'all' && r.status !== activeStatus) return false;
+                if (search) {
+                    const text = `${r.title} ${r.artistName} ${r.featuredArtists || ''} ${r.genre || ''} ${r.recordLabel || ''}`.toLowerCase();
+                    if (!text.includes(search)) return false;
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--text-dim);"><i class="fas fa-inbox"></i> No releases matching criteria</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(r => `
+                <tr>
+                    <td>
+                        <img class="art-thumb" src="${r.coverArt || 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-80,h-80'}" alt="" onerror="this.src='https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-80,h-80'">
+                    </td>
+                    <td>
+                        <strong>${escapeHtml(r.title)}</strong>
+                        ${r.featuredArtists ? `<br><small style="color:var(--text-dim);">${escapeHtml(r.featuredArtists)}</small>` : ''}
+                    </td>
+                    <td>${escapeHtml(r.artistName)}</td>
+                    <td><span style="color:var(--primary); font-size:0.78rem; text-transform:uppercase; font-weight:700;">${r.genre || 'Other'}</span></td>
+                    <td><small style="text-transform:uppercase; color:var(--text-muted);">${r.releaseType || 'Single'}</small></td>
+                    <td>${r.releaseDate || ''}</td>
+                    <td><span class="badge badge-${r.status || 'pending'}">${r.status || 'pending'}</span></td>
+                    <td style="text-align:center;">${r.featured ? '⭐' : '—'}</td>
+                    <td style="text-align:right;">
+                        <div class="action-btns" style="justify-content:flex-end;">
+                            ${r.status !== 'published' ? `
+                                <button class="btn-icon" style="color:var(--status-published);" title="Approve & Publish" onclick="quickPublish('${r.id}')"><i class="fas fa-check"></i></button>
+                            ` : ''}
+                            <button class="btn-icon" title="Edit" onclick="openEditModal('${r.id}')"><i class="fas fa-pen"></i></button>
+                            <button class="btn-icon del" title="Delete" onclick="deleteRelease('${r.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function quickPublish(id) {
+            const rel = releasesData.find(r => r.id === id);
+            if (rel) {
+                rel.status = 'published';
+                rel.approvedAt = new Date().toISOString();
+                renderDashboard();
+            }
+        }
+
+        function deleteRelease(id) {
+            if (confirm('Are you sure you want to delete this release?')) {
+                releasesData = releasesData.filter(r => r.id !== id);
+                renderDashboard();
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById('modal-title').textContent = 'Add New Music Release';
+            document.getElementById('release-form').reset();
+            document.getElementById('form-id').value = '';
+            document.getElementById('form-status').value = 'published';
+            document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function openEditModal(id) {
+            const r = releasesData.find(item => item.id === id);
+            if (!r) return;
+
+            document.getElementById('modal-title').textContent = 'Edit Music Release';
+            document.getElementById('form-id').value = r.id;
+            document.getElementById('form-artist').value = r.artistName || '';
+            document.getElementById('form-title').value = r.title || '';
+            document.getElementById('form-feat').value = r.featuredArtists || '';
+            document.getElementById('form-label').value = r.recordLabel || '';
+            document.getElementById('form-genre').value = r.genre || 'amapiano';
+            document.getElementById('form-type').value = r.releaseType || 'single';
+            document.getElementById('form-date').value = r.releaseDate || '';
+            document.getElementById('form-publish-date').value = r.publishDate || '';
+            document.getElementById('form-status').value = r.status || 'published';
+            document.getElementById('form-province').value = r.province || 'Eastern Cape';
+            document.getElementById('form-art').value = r.coverArt || '';
+            document.getElementById('form-spotify').value = r.links?.spotify || '';
+            document.getElementById('form-apple').value = r.links?.apple || '';
+            document.getElementById('form-youtube').value = r.links?.youtube || '';
+            document.getElementById('form-soundcloud').value = r.links?.soundcloud || '';
+            document.getElementById('form-desc').value = r.description || '';
+            document.getElementById('form-featured').checked = !!r.featured;
+
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function saveRelease(e) {
+            e.preventDefault();
+            const id = document.getElementById('form-id').value || `release-${Date.now()}`;
+            const artistName = document.getElementById('form-artist').value.trim();
+            const title = document.getElementById('form-title').value.trim();
+
+            const existingIndex = releasesData.findIndex(r => r.id === id);
+
+            const releaseObj = {
+                id,
+                artistName,
+                title,
+                featuredArtists: document.getElementById('form-feat').value.trim(),
+                recordLabel: document.getElementById('form-label').value.trim(),
+                genre: document.getElementById('form-genre').value,
+                releaseType: document.getElementById('form-type').value,
+                releaseDate: document.getElementById('form-date').value,
+                publishDate: document.getElementById('form-publish-date').value || document.getElementById('form-date').value,
+                status: document.getElementById('form-status').value,
+                province: document.getElementById('form-province').value,
+                coverArt: document.getElementById('form-art').value.trim() || 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-400,h-400,fo-auto',
+                description: document.getElementById('form-desc').value.trim(),
+                featured: document.getElementById('form-featured').checked,
+                links: {
+                    spotify: document.getElementById('form-spotify').value.trim(),
+                    apple: document.getElementById('form-apple').value.trim(),
+                    youtube: document.getElementById('form-youtube').value.trim(),
+                    soundcloud: document.getElementById('form-soundcloud').value.trim(),
+                    other: ''
+                },
+                submittedAt: existingIndex >= 0 ? releasesData[existingIndex].submittedAt : new Date().toISOString(),
+                approvedAt: document.getElementById('form-status').value === 'published' ? new Date().toISOString() : null
+            };
+
+            if (existingIndex >= 0) {
+                releasesData[existingIndex] = releaseObj;
+            } else {
+                releasesData.unshift(releaseObj);
+            }
+
+            closeModal();
+            renderDashboard();
+        }
+
+        function exportJsonFile() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(releasesData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "music-releases.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+
+            alert('music-releases.json has been downloaded! Replace the file in your iPlug-GQ project folder and commit to publish.');
+        }
+
+        function importJsonFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (Array.isArray(parsed)) {
+                        releasesData = parsed;
+                        renderDashboard();
+                        alert(`Successfully loaded ${releasesData.length} releases!`);
+                    }
+                } catch (err) {
+                    alert('Invalid JSON file format.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
