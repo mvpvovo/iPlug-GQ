@@ -772,14 +772,26 @@ function setupPreviewAndShare() {
     window.addEventListener('hashchange', openReleaseFromHash);
 }
 
+function resetFilters() {
+    activeGenre = 'all'; activeType = 'all'; searchQuery = ''; activeLocal = false;
+    document.querySelectorAll('.nmf-genre-btn').forEach(b =>
+        b.classList.toggle('active', b.getAttribute('data-genre') === 'all'));
+    const localBtn = document.querySelector('.nmf-local-btn');
+    if (localBtn) localBtn.setAttribute('aria-pressed', 'false');
+    const typeSelect = document.getElementById('nmf-type-filter');
+    if (typeSelect) typeSelect.value = 'all';
+    const searchInput = document.getElementById('nmf-search');
+    if (searchInput) searchInput.value = '';
+    renderMainGrid();
+}
+
 function openReleaseFromHash() {
     const hash = decodeURIComponent(window.location.hash || '');
     if (!hash.startsWith('#r-')) return;
     let el = document.getElementById(hash.slice(1));
     if (!el) {
         // Not in this week's grid – maybe in a filtered-out state; reset filters and retry
-        activeGenre = 'all'; activeType = 'all'; searchQuery = ''; activeLocal = false;
-        renderMainGrid();
+        resetFilters();
         el = document.getElementById(hash.slice(1));
     }
     if (!el) return;
