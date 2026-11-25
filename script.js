@@ -225,7 +225,7 @@ function loadEvents() {
 
             if (container) container.setAttribute('aria-busy', 'false');
             applyFilters();
-            injectSchemaStructuredData(events);
+            // Event structured data now lives on the static /events/ pages (one event per URL).
         })
         .catch(error => {
             console.error('Error loading events:', error);
@@ -894,7 +894,7 @@ function createGoogleCalendarLink(event) {
     const start = `${cleanDate}T160000Z`;
     const end = `${cleanDate}T235959Z`;
     const title = encodeURIComponent(event.title);
-    const details = encodeURIComponent(`${event.description}\n\nVenue: ${event.venueName}, ${event.location}\nDiscover more on iPlug GQ: https://ipluggq.com/?event=${event.id}`);
+    const details = encodeURIComponent(`${event.description}\n\nVenue: ${event.venueName}, ${event.location}\nDiscover more on iPlug GQ: ${iplugEventUrl(event)}`);
     const location = encodeURIComponent(`${event.venueName}, ${event.location}, Gqeberha`);
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
 }
@@ -923,7 +923,7 @@ function downloadEventIcs(eventId) {
         `SUMMARY:${escapeCalendarText(event.title)}`,
         `LOCATION:${escapeCalendarText(`${event.venueName}, ${event.location}, Gqeberha`)}`,
         `DESCRIPTION:${escapeCalendarText(event.description)}`,
-        `URL:https://ipluggq.com/?event=${event.id}`,
+        `URL:${iplugEventUrl(event)}`,
         'END:VEVENT',
         'END:VCALENDAR'
     ].join('\r\n');
@@ -979,13 +979,28 @@ function showCalendarMenu(eventId) {
 }
 
 // ==========================================
+// EVENT PAGE URLS (static pages built by build_pages.py)
+// Must stay identical to slugify()/event_slug() in build_pages.py
+// ==========================================
+function iplugSlugify(text) {
+    return String(text || '').toLowerCase().replace(/&/g, ' and ').replace(/'/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+        .slice(0, 70).replace(/^-+|-+$/g, '');
+}
+function iplugEventUrl(event) {
+    const title = String(event.title || '').trim();
+    const venue = String(event.venueName || '').trim();
+    return `https://ipluggq.com/events/${String(event.id).trim()}-${iplugSlugify(title + ' ' + venue)}.html`;
+}
+
+// ==========================================
 // SOCIAL SHARING
 // ==========================================
 function shareEvent(eventId, platform) {
     const event = (window.allRawEvents || []).find(e => e.id == eventId);
     if (!event) return;
 
-    const eventUrl = `https://ipluggq.com/?event=${eventId}`;
+    const eventUrl = iplugEventUrl(event);
     const text = `Check out ${event.title} happening on ${formatDate(event.date)} at ${event.venueName} (Gqeberha)!`;
 
     let shareUrl = '';
@@ -1120,6 +1135,9 @@ function openLightbox(event) {
         </button>
         <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="maps-btn">
             <i class="fas fa-map-location-dot"></i> Directions
+        </a>
+        <a href="${iplugEventUrl(event)}" class="maps-btn">
+            <i class="fas fa-arrow-up-right-from-square"></i> Event Page
         </a>
     `;
 
