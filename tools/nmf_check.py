@@ -8,7 +8,9 @@ iTunes catalogue (free, no API key) and:
   • adds a 30-second `previewUrl`, which powers the ▶ play buttons on the page
   • fills in a missing Apple Music link and cover art (searches by artist + title)
   • WARNS when the real release date doesn't match the date you entered,
-    so old songs don't get published as "new this Friday"
+    so old songs don't get published as "new this Friday".
+    With --fix-dates the real date is saved; tracks more than a year old then
+    show in the page's "Throwbacks" section instead of this week's drop.
 
 Usage (from the repo root):
     python3 tools/nmf_check.py               # check + add previews, report problems
@@ -68,8 +70,7 @@ def main():
             problems += 1
             print(f"  ⚠  {label}: listed {r.get('releaseDate')} but Apple says {real}")
             if a.fix_dates:
-                r["releaseDate"] = real
-                r["publishDate"] = real
+                r["releaseDate"] = real   # publishDate (the NMF week it was added) stays the same
                 if r.get("description", "").startswith("New 2026 release"):
                     r["description"] = r["description"].replace("New 2026 release", f"Released {real[:4]}", 1)
         else:

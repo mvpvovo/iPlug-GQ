@@ -259,8 +259,9 @@ function renderMainGrid() {
     const isBrowsing = activeGenre === 'all' && activeType === 'all' && !searchQuery && !activeLocal;
 
     let filtered = allReleases.filter(r => {
-        // Default view: only this week's drop (older weeks live in the archive below)
-        if (isBrowsing && latestWeek && getFridayOfWeek(r.publishDate || r.releaseDate) !== latestWeek) {
+        // Default view: only this week's new drop (older weeks + throwbacks live in the archive)
+        if (isBrowsing && latestWeek &&
+            (getFridayOfWeek(r.publishDate || r.releaseDate) !== latestWeek || isThrowback(r))) {
             return false;
         }
         // Eastern Cape filter
@@ -413,7 +414,10 @@ function renderArchive() {
     // Group releases by Friday / Week
     const weekGroups = {};
 
+    const throwbacks = allReleases.filter(isThrowback);
+
     allReleases.forEach(release => {
+        if (isThrowback(release)) return;
         const dateStr = release.publishDate || release.releaseDate;
         if (!dateStr) return;
         const friday = getFridayOfWeek(dateStr);
@@ -425,7 +429,7 @@ function renderArchive() {
 
     const sortedWeeks = Object.keys(weekGroups).sort((a, b) => new Date(b) - new Date(a));
 
-    if (sortedWeeks.length <= 1) {
+    if (sortedWeeks.length <= 1 && throwbacks.length === 0) {
         archiveContainer.innerHTML = `
             <p style="color:var(--text-muted); font-size:0.95rem; text-align:center; padding: 30px 0;">
                 <i class="fas fa-clock-rotate-left"></i> Previous drops from past weeks will archive here automatically each Friday.
@@ -436,6 +440,22 @@ function renderArchive() {
 
     // Show past weeks (the newest week is displayed in the main grid)
     const pastWeeks = sortedWeeks.filter(w => w !== latestWeek);
+
+    const throwbackHtml = throwbacks.length ? `
+            <div class="nmf-week-group">
+                <button type="button" class="nmf-week-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span><i class="fas fa-clock-rotate-left" style="color:var(--secondary); margin-right:8px;"></i> Throwbacks: older tracks worth a replay</span>
+                    <span>
+                        <span class="nmf-count-chip" style="margin-right:12px;">${throwbacks.length} Release${throwbacks.length === 1 ? '' : 's'}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </button>
+                <div class="nmf-week-body">
+                    <div class="nmf-archive-grid">
+                        ${throwbacks.map(r => createMusicCardHtml(r)).join('')}
+                    </div>
+                </div>
+            </div>` : '';
 
     archiveContainer.innerHTML = pastWeeks.map((weekDate, index) => {
         const count = weekGroups[weekDate].length;
@@ -457,7 +477,7 @@ function renderArchive() {
                 </div>
             </div>
         `;
-    }).join('');
+    }).join('') + throwbackHtml;
 }
 
 // ==========================================================================
@@ -479,7 +499,7 @@ async function setupNMFTeaser() {
         releases.sort((a, b) => new Date(b.releaseDate || b.publishDate) - new Date(a.releaseDate || a.publishDate));
 
         // Display latest 4–6 releases
-        const latest = releases.slice(0, 6);
+        const latest = releases.filter(r => !isThrowback(r)).slice(0, 6);
 
         if (latest.length === 0) {
             const section = document.getElementById('nmf-teaser');
@@ -666,6 +686,13 @@ function getFridayOfWeek(dateInput) {
 function todayIso() {
     // Today's date in South Africa (SAST), YYYY-MM-DD
     return new Date(Date.now() + 2 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function isThrowback(r) {
+    // Released more than a year before the week it was added to NMF
+    const rel = r.releaseDate, pub = r.publishDate || r.releaseDate;
+    if (!rel || !pub) return false;
+    return (new Date(pub) - new Date(rel)) > 365 * 24 * 3600 * 1000;
 }
 
 function isEasternCape(r) {
