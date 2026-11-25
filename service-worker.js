@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iplug-gq-v3.3';
+const CACHE_NAME = 'iplug-gq-v3.4';
 const APP_SHELL = [
   './',
   './index.html',
