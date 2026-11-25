@@ -327,6 +327,7 @@ function parseEventsCsv(csv) {
         title: headers.indexOf('event name'),
         date: headers.indexOf('date'),
         venueName: headers.indexOf('venue'),
+        ticketUrl: headers.indexOf('ticket url'),
         location: headers.indexOf('venue location'),
         flyer: headers.indexOf('flyer image url'),
         description: headers.indexOf('event description'),
@@ -388,8 +389,10 @@ function parseEventsCsv(csv) {
         const isFree = /(free entry|free entrance|free before|no cover)/i.test(description);
 
         // Detect ticket links if present (Quicket, Howler, Computicket)
-        const ticketMatch = description.match(/(https?:\/\/[^\s]+(?:quicket|howler|computicket|ticket)[^\s]*)/i);
-        const ticketUrl = ticketMatch ? ticketMatch[0] : null;
+        // Ticket link: the "Ticket URL" column wins; otherwise detect a link in the description
+        const csvTicketUrl = getVal('ticketUrl');
+        const ticketMatch = description.match(/(https?:\/\/[^\s]+(?:quicket|qkt\.io|howler|computicket|webtickets|ticketpro|itickets|ticket)[^\s]*)/i);
+        const ticketUrl = /^https?:\/\//i.test(csvTicketUrl) ? csvTicketUrl : (ticketMatch ? ticketMatch[0] : null);
 
         parsedEvents.push({
             id,
@@ -479,6 +482,15 @@ function setupFilters() {
     areaFilter?.addEventListener('change', applyFilters);
     dateFilter?.addEventListener('change', applyFilters);
 
+    const ticketsFilterBtn = document.getElementById('filter-tickets');
+    ticketsFilterBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isActive = ticketsFilterBtn.classList.toggle('active');
+        ticketsFilterBtn.setAttribute('aria-pressed', String(isActive));
+        ticketsFilterBtn.dataset.tickets = String(isActive);
+        applyFilters();
+    });
+
     freeFilterBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         const isActive = freeFilterBtn.classList.toggle('active');
@@ -487,10 +499,10 @@ function setupFilters() {
         applyFilters();
     });
 
-    document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(button => {
+    document.querySelectorAll('.filter-btn:not(#filter-free):not(#filter-tickets)').forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelectorAll('.filter-btn:not(#filter-free)').forEach(b => {
+            document.querySelectorAll('.filter-btn:not(#filter-free):not(#filter-tickets)').forEach(b => {
                 b.classList.remove('active');
                 b.setAttribute('aria-pressed', 'false');
             });
@@ -525,13 +537,20 @@ function resetAllFilters() {
     if (areaFilter) areaFilter.value = 'all';
     if (dateFilter) dateFilter.value = 'all';
 
+    const ticketsFilterBtn = document.getElementById('filter-tickets');
+    if (ticketsFilterBtn) {
+        ticketsFilterBtn.classList.remove('active');
+        ticketsFilterBtn.dataset.tickets = 'false';
+        ticketsFilterBtn.setAttribute('aria-pressed', 'false');
+    }
+
     if (freeFilterBtn) {
         freeFilterBtn.classList.remove('active');
         freeFilterBtn.dataset.free = 'false';
         freeFilterBtn.setAttribute('aria-pressed', 'false');
     }
 
-    document.querySelectorAll('.filter-btn:not(#filter-free)').forEach((btn, idx) => {
+    document.querySelectorAll('.filter-btn:not(#filter-free):not(#filter-tickets)').forEach((btn, idx) => {
         btn.classList.toggle('active', idx === 0);
         btn.setAttribute('aria-pressed', idx === 0 ? 'true' : 'false');
     });
@@ -562,6 +581,7 @@ function applyFilters() {
     const area = document.getElementById('area-filter')?.value || 'all';
     const dateRange = document.getElementById('date-filter')?.value || 'all';
     const freeOnly = document.getElementById('filter-free')?.dataset.free === 'true';
+    const ticketsOnly = document.getElementById('filter-tickets')?.dataset.tickets === 'true';
     const search = (document.getElementById('event-search')?.value || '').trim().toLowerCase();
 
     const today = new Date();
@@ -589,7 +609,7 @@ function applyFilters() {
 
     const matchesCategory = event => (category === 'all' || event.category === category);
     const matchesArea = event => matchArea(event, area);
-    const matchesFree = event => (!freeOnly || event.isFree);
+    const matchesFree = event => (!freeOnly || event.isFree) && (!ticketsOnly || !!event.ticketUrl);
     const matchesSearch = event => {
         if (!search) return true;
         const haystack = `${event.title} ${event.venueName} ${event.location} ${event.description} ${event.categoryLabel}`.toLowerCase();
@@ -682,6 +702,7 @@ function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
                 <span class="event-img-badge">${formatDate(event.date)}</span>
                 <span class="event-category-badge">${escapeHtml(event.categoryLabel)}</span>
                 ${event.isFree ? `<span class="event-tag-free"><i class="fas fa-ticket"></i> Free</span>` : ''}
+                ${event.ticketUrl && !event.isFree && !isArchiveMode ? `<span class="event-tag-tickets"><i class="fas fa-ticket"></i> Tickets</span>` : ''}
                 ${isArchiveMode ? `<span class="event-tag-past"><i class="fas fa-clock-rotate-left"></i> Past</span>` : ''}
                 ${isPrimeSlot ? `<span class="event-prime-badge"><i class="fas fa-bolt"></i> SPONSORED</span>` : ''}
             </div>
@@ -703,9 +724,9 @@ function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
 
                 ${isPrimeSlot ? `
                     <div class="prime-cta-block">
-                        ${event.ticketUrl ? `
-                            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="prime-primary-cta prime-ticket-cta">
-                                <span><i class="fas fa-ticket"></i> Get Tickets / Info</span>
+                        ${event.ticketUrl && !isArchiveMode ? `
+                            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="prime-primary-cta prime-ticket-cta" data-ticket-event-id="${event.id}">
+                                <span><i class="fas fa-ticket"></i> Get Tickets</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                         ` : `
@@ -718,9 +739,9 @@ function renderEventCard(event, isArchiveMode = false, isPrimeSlot = false) {
                 ` : ''}
 
                 <div class="event-actions">
-                    ${event.ticketUrl && !isPrimeSlot ? `
-                        <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn">
-                            <i class="fas fa-ticket"></i> Tickets
+                    ${event.ticketUrl && !isPrimeSlot && !isArchiveMode ? `
+                        <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="ticket-btn" data-ticket-event-id="${event.id}" title="Buy tickets${getTicketInfo(event.ticketUrl).provider ? ' on ' + getTicketInfo(event.ticketUrl).provider : ''}">
+                            <i class="fas fa-ticket"></i> Get Tickets
                         </a>
                     ` : ''}
                     <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}" title="Save to My Events">
@@ -1116,9 +1137,9 @@ function openLightbox(event) {
 
     const isSaved = window.iplugPWA?.isEventSaved(event.id) || false;
     actions.innerHTML = `
-        ${event.ticketUrl ? `
-            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="btn-small">
-                <i class="fas fa-ticket"></i> Buy Tickets
+        ${event.ticketUrl && !isEventPassed(event.date) ? `
+            <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer" class="btn-small ticket-btn" data-ticket-event-id="${event.id}">
+                <i class="fas fa-ticket"></i> Get Tickets
             </a>
         ` : ''}
         <button class="save-btn ${isSaved ? 'saved' : ''}" data-event-id="${event.id}">
@@ -1206,6 +1227,7 @@ function setupForm() {
         const flyer = formData.get('flyer-url') || 'Flyer image will be attached directly in chat';
         const contact = formData.get('contact-email');
         const desc = formData.get('description');
+        const ticketLink = (formData.get('ticket-url') || '').trim();
 
         const messageLines = [
             '🔥 *iPlug GQ Event Submission*',
@@ -1215,6 +1237,7 @@ function setupForm() {
             `*Venue:* ${venue}`,
             `*Category:* ${category}`,
             `*Flyer Link / Note:* ${flyer}`,
+            `*Ticket Link:* ${ticketLink || 'None (free entry / pay at the door)'}`,
             `*Contact:* ${contact}`,
             '',
             `*Details / Lineup:*`,
@@ -1301,3 +1324,112 @@ function injectSchemaStructuredData(events) {
     script.textContent = JSON.stringify(schemaData);
     document.head.appendChild(script);
 }
+
+
+// ==========================================
+// TICKETS
+// Quicket event links open the Quicket checkout in a pop-up on iPlug GQ.
+// Links that carry tracking (promoter / link-campaign codes, qkt.io short links)
+// always open on the ticket site itself so the sale is credited correctly.
+// Any other ticket site (Howler, Computicket, Webtickets…) opens in a new tab.
+// ==========================================
+function getTicketInfo(url) {
+    const info = { url, provider: '', mode: 'external', embedUrl: null };
+    let u;
+    try { u = new URL(url); } catch (_) { return info; }
+    const host = u.hostname.replace(/^www\./, '').toLowerCase();
+    const providers = {
+        'quicket.co.za': 'Quicket', 'qkt.io': 'Quicket', 'howler.co.za': 'Howler',
+        'computicket.com': 'Computicket', 'webtickets.co.za': 'Webtickets',
+        'ticketpro.co.za': 'TicketPro', 'itickets.co.za': 'iTickets', 'plankton.mobi': 'Plankton'
+    };
+    info.provider = Object.entries(providers).find(([h]) => host === h || host.endsWith('.' + h))?.[1] || host;
+
+    if (host === 'quicket.co.za') {
+        // Already a widget URL (copied from Quicket's Settings → Integrations → Widget)
+        if (/\/embed\.aspx$/i.test(u.pathname) && u.searchParams.get('productid')) {
+            u.searchParams.set('embed', 'true');
+            info.mode = 'embed';
+            info.embedUrl = u.toString();
+            return info;
+        }
+        const m = u.pathname.match(/^\/events\/(\d+)-([a-z0-9-]+)/i);
+        const hasTracking = [...u.searchParams.keys()].length > 0 || u.hash.length > 2;
+        if (m && !hasTracking) {
+            info.mode = 'embed';
+            info.embedUrl = `https://www.quicket.co.za/embed.aspx?productid=${m[1]}&productname=${encodeURIComponent(m[2])}&embed=true&v=2`;
+        }
+    }
+    return info;
+}
+
+function trackTicketClick(event, info) {
+    if (typeof window.gtag === 'function') {
+        window.gtag('event', 'ticket_click', {
+            event_title: event.title,
+            event_venue: event.venueName,
+            event_date: event.date,
+            ticket_provider: info.provider,
+            ticket_mode: info.mode
+        });
+    }
+}
+
+function openTicketModal(event, info) {
+    closeTicketModal();
+    const overlay = document.createElement('div');
+    overlay.className = 'ticket-modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', `Tickets for ${event.title}`);
+    overlay.innerHTML = `
+        <div class="ticket-modal">
+            <div class="ticket-modal-head">
+                <div>
+                    <p class="ticket-modal-kicker"><i class="fas fa-ticket"></i> Tickets · ${escapeHtml(formatFullDate(event.date))}</p>
+                    <h3>${escapeHtml(event.title)}</h3>
+                    <p class="ticket-modal-venue"><i class="fas fa-location-dot"></i> ${escapeHtml(event.venueName)}</p>
+                </div>
+                <button type="button" class="ticket-modal-close" aria-label="Close tickets">&times;</button>
+            </div>
+            <div class="ticket-modal-body">
+                <div class="ticket-modal-loading"><i class="fas fa-circle-notch fa-spin"></i> Loading secure checkout…</div>
+                <iframe src="${escapeHtml(info.embedUrl)}" title="Buy tickets for ${escapeHtml(event.title)}"
+                        loading="eager" allow="payment" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+            <div class="ticket-modal-foot">
+                <span><i class="fas fa-lock"></i> Secure checkout by ${escapeHtml(info.provider || 'our ticket partner')}</span>
+                <a href="${escapeHtml(event.ticketUrl)}" target="_blank" rel="noopener noreferrer">Open on ${escapeHtml(info.provider || 'ticket site')} <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    document.body.classList.add('ticket-modal-open');
+
+    const iframe = overlay.querySelector('iframe');
+    iframe.addEventListener('load', () => overlay.querySelector('.ticket-modal-loading')?.remove());
+    overlay.querySelector('.ticket-modal-close').addEventListener('click', closeTicketModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeTicketModal(); });
+    overlay.querySelector('.ticket-modal-close').focus();
+}
+
+function closeTicketModal() {
+    document.querySelector('.ticket-modal-overlay')?.remove();
+    document.body.classList.remove('ticket-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTicketModal(); });
+
+document.addEventListener('click', e => {
+    const link = e.target.closest('a[data-ticket-event-id]');
+    if (!link) return;
+    const event = (window.allRawEvents || []).find(ev => String(ev.id) === link.getAttribute('data-ticket-event-id'));
+    if (!event || !event.ticketUrl) return;
+    const info = getTicketInfo(event.ticketUrl);
+    trackTicketClick(event, info);
+    // Let ctrl/cmd-click open a new tab as normal
+    if (info.mode === 'embed' && !(e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1)) {
+        e.preventDefault();
+        e.stopPropagation();
+        openTicketModal(event, info);
+    }
+});

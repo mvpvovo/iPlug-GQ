@@ -19,7 +19,7 @@ No dependencies – plain Python 3.8+.
 """
 import argparse, csv, datetime as dt, html, json, os, re, shutil
 from collections import defaultdict
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 SITE = "https://ipluggq.com"
 BRAND = "iPlug GQ"
@@ -155,6 +155,7 @@ def load_events(path):
                 "category": g("Category") or "Other",
                 "lat": g("Latitude"),
                 "lng": g("Longitude"),
+                "ticket": ticket_url(g("Ticket URL"), g("Event Description")),
             }
             e["slug"] = event_slug(e)
             e["url"] = f"{SITE}/events/{e['slug']}.html"
@@ -272,7 +273,14 @@ def event_jsonld(e):
     }
     if e["lat"] and e["lng"]:
         ld["location"]["geo"] = {"@type": "GeoCoordinates", "latitude": e["lat"], "longitude": e["lng"]}
-    if e["free"]:
+    if e.get("ticket") and not e["free"]:
+        m = re.search(r"R\s?(\d{2,5})", e["desc"])
+        ld["offers"] = {"@type": "Offer", "url": e["ticket"], "priceCurrency": "ZAR",
+                        "availability": "https://schema.org/InStock",
+                        "seller": {"@type": "Organization", "name": ticket_provider(e["ticket"])}}
+        if m:
+            ld["offers"]["price"] = m.group(1)
+    elif e["free"]:
         ld["isAccessibleForFree"] = True
         ld["offers"] = {"@type": "Offer", "price": "0", "priceCurrency": "ZAR",
                         "availability": "https://schema.org/InStock", "url": e["url"]}
@@ -282,6 +290,25 @@ def event_jsonld(e):
             ld["offers"] = {"@type": "Offer", "price": m.group(1), "priceCurrency": "ZAR",
                             "availability": "https://schema.org/InStock", "url": e["url"]}
     return ld
+
+TICKET_RE = re.compile(r"(https?://[^\s]+(?:quicket|qkt\.io|howler|computicket|webtickets|ticketpro|itickets|ticket)[^\s]*)", re.I)
+
+def ticket_url(col, desc):
+    """Mirror of script.js: the Ticket URL column wins, else a ticket link found in the description."""
+    col = (col or "").strip()
+    if re.match(r"^https?://", col, re.I):
+        return col
+    m = TICKET_RE.search(desc or "")
+    return m.group(1) if m else ""
+
+def ticket_provider(url):
+    host = re.sub(r"^www\.", "", urlparse(url).netloc.lower())
+    for h, name in (("quicket.co.za", "Quicket"), ("qkt.io", "Quicket"), ("howler.co.za", "Howler"),
+                    ("computicket.com", "Computicket"), ("webtickets.co.za", "Webtickets"),
+                    ("ticketpro.co.za", "TicketPro"), ("itickets.co.za", "iTickets")):
+        if host == h or host.endswith("." + h):
+            return name
+    return host
 
 def render_event(e, all_events, today):
     past = e["date"] < today
@@ -297,6 +324,12 @@ def render_event(e, all_events, today):
         chips += '<span class="chip free">Free entry</span>'
     if past:
         chips += '<span class="chip">Past event</span>'
+    ticket_btn = ""
+    if e.get("ticket") and not past:
+        prov = ticket_provider(e["ticket"])
+        ticket_btn = (f'<a class="btn pri" href="{esc(e["ticket"])}" target="_blank" rel="noopener" '
+                      f'onclick="window.gtag&&gtag(\'event\',\'ticket_click\',{{event_title:{esc(json.dumps(e["title"]))},ticket_provider:{esc(json.dumps(prov))},ticket_mode:\'event_page\'}})">'
+                      f'🎟️ Get Tickets</a>\n      ')
     body = f"""
 <div class="crumbs"><a href="{SITE}/">Home</a> › <a href="{SITE}/{'areas/' + e['area'] + '.html' if e['area'] else 'this-weekend.html'}">{esc(area_name)}</a> › {esc(e['title'])}</div>
 <article class="ev">
@@ -310,7 +343,7 @@ def render_event(e, all_events, today):
     </div>
     <p>{esc(e['desc'])}</p>
     <div class="btns">
-      <a class="btn pri" href="{maps_link(e)}" target="_blank" rel="noopener">Get directions</a>
+      {ticket_btn}<a class="btn{'' if ticket_btn else ' pri'}" href="{maps_link(e)}" target="_blank" rel="noopener">Get directions</a>
       <a class="btn wa" href="https://wa.me/?text={quote(share_text)}" target="_blank" rel="noopener">Share on WhatsApp</a>
       <a class="btn" href="{SITE}/#events">All gigs in GQ</a>
     </div>
@@ -403,7 +436,7 @@ def render_social(wk, rng, events, today):
     lines.append("## 1. WhatsApp Channel / Status broadcast (post Wednesday 12:00)\n```")
     lines.append(f"🔌 *iPlug GQ Weekly Drop*: {label}\nGqeberha is outside 🌴🔥\n")
     for e in wk:
-        lines.append(f"📅 *{short_date(e['date'])}*: {e['title']}\n📍 {e['venue']}{'  🆓 FREE' if e['free'] else ''}\n🔗 {e['url']}\n")
+        lines.append(f"📅 *{short_date(e['date'])}*: {e['title']}\n📍 {e['venue']}{'  🆓 FREE' if e['free'] else ''}{'  🎟️ Tickets online' if e.get('ticket') and not e['free'] else ''}\n🔗 {e['url']}\n")
     lines.append(f"See all {len(wk)} gigs 👉 {SITE}/this-weekend.html\nForward this to your squad 🙌🏾\n```\n")
     # Instagram carousel
     lines.append("## 2. Instagram carousel (post Wednesday 18:00)\n")
@@ -435,6 +468,21 @@ def render_social(wk, rng, events, today):
                  "Feel free to share it on your status and pages, because the page includes directions and a WhatsApp share button. "
                  "We list future events for free. Just send us the flyer every week 🙌🏾")
     lines.append("```\nVenues this week: " + ", ".join(venues) + "\n")
+
+    # 6. Ticket-selling pitch: for paid events that don't have a ticket link on iPlug GQ yet
+    paid_no_link = [e for e in wk if not e["free"] and not e.get("ticket")]
+    with_link = [e for e in wk if e.get("ticket") and not e["free"]]
+    lines.append("## 6. Sell tickets with iPlug GQ (promoter network)\n")
+    if with_link:
+        lines.append("Events with a **Get Tickets** button this week: " + ", ".join(f"{e['title']} ({ticket_provider(e['ticket'])})" for e in with_link) + "\n")
+    lines.append("Send this to organisers who sell on Quicket. Once they add you, paste your unique promoter link into the *Ticket URL* column.\n```")
+    lines.append("Hi 👋🏾 iPlug GQ here. Your event is listed free on Gqeberha's gig guide 🔥\n"
+                 "Want us to sell tickets for you too? Add *iPlug GQ* to your Quicket promoter network (10% per ticket). "
+                 "We'll put a Get Tickets button on your listing and push it on our WhatsApp, IG and TikTok. "
+                 "You only pay on tickets we actually sell 🎟️🙌🏾")
+    lines.append("```")
+    if paid_no_link:
+        lines.append("Events not marked free and without a ticket link yet: " + ", ".join(f"{e['title']} @ {e['venue']}" for e in paid_no_link[:12]) + "\n")
     return "\n".join(lines)
 
 # ---------------------------------------------------------------- main
