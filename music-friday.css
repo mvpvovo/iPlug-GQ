@@ -1100,3 +1100,71 @@
         scroll-behavior: auto !important;
     }
 }
+
+/* ==========================================================================
+   30-second previews, sharing, Eastern Cape highlight
+   ========================================================================== */
+.nmf-play-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px 9px 12px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    color: #10100f;
+    font: 700 0.78rem 'DM Sans', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    transition: var(--transition);
+}
+.nmf-play-btn i { width: 14px; text-align: center; }
+.nmf-play-btn:hover { transform: scale(1.06); background: var(--primary-hover); }
+.nmf-play-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.nmf-play-btn.playing {
+    background: var(--secondary);
+    color: #fff;
+    animation: nmf-pulse 1.4s ease-in-out infinite;
+}
+@keyframes nmf-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0.55); }
+    50% { box-shadow: 0 0 0 10px rgba(255, 107, 74, 0); }
+}
+.nmf-featured-art-wrap { position: relative; }
+
+.nmf-share-btn {
+    background: var(--surface-hover);
+    border: 1px solid var(--line-light);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+}
+.nmf-share-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.nmf-ec-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 107, 74, 0.15);
+    color: var(--secondary);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+}
+.nmf-local-btn.active {
+    background: var(--secondary) !important;
+    border-color: var(--secondary) !important;
+    color: #fff !important;
+}
+.nmf-card.nmf-highlight {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow), 0 0 30px rgba(245, 255, 88, 0.35);
+}
+@media (prefers-reduced-motion: reduce) {
+    .nmf-play-btn.playing { animation: none; }
+}

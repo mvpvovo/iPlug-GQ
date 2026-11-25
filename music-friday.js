@@ -47,6 +47,10 @@ const RELEASE_TYPES = {
 // Global State
 let allReleases = [];
 let activeGenre = 'all';
+let activeLocal = false;        // "Eastern Cape" filter chip
+let latestWeek = null;          // Friday (YYYY-MM-DD) of the newest published drop
+let nmfAudio = null;            // shared audio player for 30-second previews
+let nmfPlayingId = null;
 let activeType = 'all';
 let searchQuery = '';
 
@@ -129,13 +133,24 @@ async function setupNMFPage() {
             allReleases = [...allReleases, ...localApproved];
         }
 
+        // Scheduling: releases with a future publishDate stay hidden until that day
+        const today = todayIso();
+        allReleases = allReleases.filter(r => (r.publishDate || r.releaseDate || '') <= today);
+
         // Sort descending by releaseDate
         allReleases.sort((a, b) => new Date(b.releaseDate || b.publishDate) - new Date(a.releaseDate || a.publishDate));
+
+        // "This week's drop" = releases published in the newest Friday week
+        latestWeek = allReleases
+            .map(r => getFridayOfWeek(r.publishDate || r.releaseDate))
+            .filter(Boolean).sort().pop() || null;
 
         renderFeaturedReleases();
         renderMainGrid();
         renderArchive();
         setupToolbarListeners();
+        setupPreviewAndShare();
+        openReleaseFromHash();
     } catch (err) {
         console.error('[NMF] Error loading releases:', err);
         gridEl.innerHTML = `
@@ -168,7 +183,17 @@ function setupToolbarListeners() {
     }
 
     // Genre buttons
-    const genreButtons = document.querySelectorAll('.nmf-genre-btn');
+    const localBtn = document.querySelector('.nmf-local-btn');
+    if (localBtn) {
+        localBtn.addEventListener('click', () => {
+            activeLocal = !activeLocal;
+            localBtn.classList.toggle('active', activeLocal);
+            localBtn.setAttribute('aria-pressed', String(activeLocal));
+            renderMainGrid();
+        });
+    }
+
+    const genreButtons = document.querySelectorAll('.nmf-genre-btn:not(.nmf-local-btn)');
     genreButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             genreButtons.forEach(b => b.classList.remove('active'));
@@ -196,6 +221,7 @@ function renderFeaturedReleases() {
     featuredGrid.innerHTML = featured.map(r => `
         <article class="nmf-featured-card" data-id="${escapeHtml(r.id)}">
             <div class="nmf-featured-art-wrap">
+                ${renderPlayButton(r)}
                 <img src="${escapeHtml(r.coverArt || 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-400,h-400,fo-auto')}" 
                      alt="${escapeHtml(r.title)} by ${escapeHtml(r.artistName)}" 
                      loading="lazy" 
@@ -218,6 +244,7 @@ function renderFeaturedReleases() {
                 </div>
                 <div class="nmf-card-links" style="padding: 10px 0 0; background: transparent; border-top: none;">
                     ${renderListenButtons(r.links)}
+                    ${renderShareButton(r)}
                 </div>
             </div>
         </article>
@@ -229,7 +256,15 @@ function renderMainGrid() {
     const countEl = document.getElementById('nmf-count-chip');
     if (!gridEl) return;
 
+    const isBrowsing = activeGenre === 'all' && activeType === 'all' && !searchQuery && !activeLocal;
+
     let filtered = allReleases.filter(r => {
+        // Default view: only this week's drop (older weeks live in the archive below)
+        if (isBrowsing && latestWeek && getFridayOfWeek(r.publishDate || r.releaseDate) !== latestWeek) {
+            return false;
+        }
+        // Eastern Cape filter
+        if (activeLocal && !isEasternCape(r)) return false;
         // Genre match
         if (activeGenre !== 'all' && (r.genre || '').toLowerCase() !== activeGenre.toLowerCase()) {
             return false;
@@ -247,7 +282,10 @@ function renderMainGrid() {
     });
 
     if (countEl) {
-        countEl.textContent = `${filtered.length} Release${filtered.length === 1 ? '' : 's'}`;
+        const n = `${filtered.length} Release${filtered.length === 1 ? '' : 's'}`;
+        countEl.textContent = isBrowsing && latestWeek
+            ? `${n} · Friday ${formatDisplayDate(latestWeek)}`
+            : `${n} · all weeks`;
     }
 
     if (filtered.length === 0) {
@@ -270,7 +308,7 @@ function createMusicCardHtml(r) {
     const coverArtUrl = r.coverArt || 'https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-400,h-400,fo-auto';
 
     return `
-        <article class="nmf-card" data-id="${escapeHtml(r.id)}">
+        <article class="nmf-card" id="${releaseAnchor(r)}" data-id="${escapeHtml(r.id)}">
             <div class="nmf-card-art-wrap">
                 <img class="nmf-card-art" 
                      src="${escapeHtml(coverArtUrl)}" 
@@ -279,10 +317,11 @@ function createMusicCardHtml(r) {
                      onerror="this.src='https://ik.imagekit.io/vurvay/placeholder/IMG_9774.jpg?tr=w-400,h-400,fo-auto'">
                 <span class="nmf-card-type-badge">${escapeHtml(typeLabel)}</span>
                 ${r.featured ? '<span class="nmf-card-feat-badge">⭐ PICK</span>' : ''}
+                ${renderPlayButton(r)}
             </div>
             <div class="nmf-card-body">
                 <div class="nmf-card-meta-row">
-                    <span class="nmf-card-genre">${escapeHtml(genreLabel)}</span>
+                    <span class="nmf-card-genre">${escapeHtml(genreLabel)}${isEasternCape(r) ? ' <span class="nmf-ec-badge" title="Eastern Cape talent">EC 🔥</span>' : ''}</span>
                     ${r.province ? `<span class="nmf-card-province"><i class="fas fa-location-dot"></i> ${escapeHtml(r.province)}</span>` : ''}
                 </div>
                 <h3 class="nmf-card-title">${escapeHtml(r.title)}</h3>
@@ -296,6 +335,7 @@ function createMusicCardHtml(r) {
             </div>
             <div class="nmf-card-links">
                 ${renderListenButtons(r.links)}
+                ${renderShareButton(r)}
             </div>
         </article>
     `;
@@ -394,8 +434,8 @@ function renderArchive() {
         return;
     }
 
-    // Show past weeks (skip the newest week which is displayed in the main grid)
-    const pastWeeks = sortedWeeks.slice(1);
+    // Show past weeks (the newest week is displayed in the main grid)
+    const pastWeeks = sortedWeeks.filter(w => w !== latestWeek);
 
     archiveContainer.innerHTML = pastWeeks.map((weekDate, index) => {
         const count = weekGroups[weekDate].length;
@@ -432,7 +472,7 @@ async function setupNMFTeaser() {
         if (!response.ok) throw new Error(`HTTP error ${response.status}`);
         const data = await response.json();
 
-        let releases = Array.isArray(data) ? data.filter(r => r.status === 'published') : [];
+        let releases = Array.isArray(data) ? data.filter(r => r.status === 'published' && (r.publishDate || r.releaseDate || '') <= todayIso()) : [];
         const localApproved = getLocalApprovedReleases();
         if (localApproved.length > 0) releases = [...releases, ...localApproved];
 
@@ -611,12 +651,145 @@ function getLocalApprovedReleases() {
 // UTILITY FUNCTIONS
 // ==========================================================================
 function getFridayOfWeek(dateInput) {
-    const d = new Date(dateInput);
-    if (isNaN(d.getTime())) return dateInput;
-    const day = d.getDay(); // 0 is Sunday, 5 is Friday
-    const diff = (day >= 5 ? 5 - day : -2 - day); // get nearest Friday
-    d.setDate(d.getDate() + diff);
+    // Returns the Friday on or before the given date (YYYY-MM-DD). Uses UTC so it
+    // gives the same answer in every timezone.
+    if (!dateInput) return null;
+    const m = String(dateInput).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return dateInput;
+    const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+    const day = d.getUTCDay(); // 0 = Sunday, 5 = Friday
+    const diff = day >= 5 ? 5 - day : -2 - day;
+    d.setUTCDate(d.getUTCDate() + diff);
     return d.toISOString().split('T')[0];
+}
+
+function todayIso() {
+    // Today's date in South Africa (SAST), YYYY-MM-DD
+    return new Date(Date.now() + 2 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function isEasternCape(r) {
+    return /eastern\s*cape/i.test(r.province || '');
+}
+
+function releaseAnchor(r) {
+    return 'r-' + slugify(`${r.artistName || ''} ${r.title || ''}`).slice(0, 80);
+}
+
+// ==========================================================================
+// 30-SECOND PREVIEWS & SHARING
+// ==========================================================================
+function renderPlayButton(r) {
+    if (!r.previewUrl || !isValidUrl(r.previewUrl)) return '';
+    return `
+        <button type="button" class="nmf-play-btn" data-id="${escapeHtml(r.id)}"
+                aria-label="Play 30-second preview of ${escapeHtml(r.title)} by ${escapeHtml(r.artistName)}">
+            <i class="fas fa-play" aria-hidden="true"></i>
+            <span class="nmf-play-label">Preview</span>
+        </button>`;
+}
+
+function renderShareButton(r) {
+    return `
+        <button type="button" class="nmf-listen-btn nmf-share-btn" data-id="${escapeHtml(r.id)}" aria-label="Share ${escapeHtml(r.title)}">
+            <i class="fas fa-share-nodes" aria-hidden="true"></i> Share
+        </button>`;
+}
+
+function trackEvent(name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, params);
+}
+
+function setPlayingUi(id, playing) {
+    document.querySelectorAll('.nmf-play-btn').forEach(btn => {
+        const isThis = btn.getAttribute('data-id') === id && playing;
+        btn.classList.toggle('playing', isThis);
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = isThis ? 'fas fa-pause' : 'fas fa-play';
+        const label = btn.querySelector('.nmf-play-label');
+        if (label) label.textContent = isThis ? 'Playing' : 'Preview';
+    });
+}
+
+function setupPreviewAndShare() {
+    if (document.body.dataset.nmfBound) return;
+    document.body.dataset.nmfBound = '1';
+
+    document.addEventListener('click', (e) => {
+        const playBtn = e.target.closest('.nmf-play-btn');
+        if (playBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = playBtn.getAttribute('data-id');
+            const r = allReleases.find(x => String(x.id) === id);
+            if (!r || !r.previewUrl) return;
+
+            if (!nmfAudio) {
+                nmfAudio = new Audio();
+                nmfAudio.preload = 'none';
+                nmfAudio.addEventListener('ended', () => { setPlayingUi(nmfPlayingId, false); nmfPlayingId = null; });
+                nmfAudio.addEventListener('error', () => { setPlayingUi(nmfPlayingId, false); nmfPlayingId = null; });
+            }
+            if (nmfPlayingId === id && !nmfAudio.paused) {
+                nmfAudio.pause();
+                setPlayingUi(id, false);
+                nmfPlayingId = null;
+                return;
+            }
+            nmfAudio.src = r.previewUrl;
+            nmfAudio.play().then(() => {
+                nmfPlayingId = id;
+                setPlayingUi(id, true);
+                trackEvent('nmf_preview_play', { release: `${r.artistName} – ${r.title}` });
+            }).catch(() => setPlayingUi(id, false));
+            return;
+        }
+
+        const shareBtn = e.target.closest('.nmf-share-btn');
+        if (shareBtn) {
+            e.preventDefault();
+            const r = allReleases.find(x => String(x.id) === shareBtn.getAttribute('data-id'));
+            if (!r) return;
+            const url = `https://ipluggq.com/music-friday.html#${releaseAnchor(r)}`;
+            const text = `🎧 ${r.title} by ${r.artistName}, out now on iPlug GQ New Music Friday`;
+            trackEvent('nmf_share', { release: `${r.artistName} – ${r.title}` });
+            if (navigator.share) {
+                navigator.share({ title: r.title, text, url }).catch(() => {});
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`, '_blank', 'noopener');
+            }
+        }
+    });
+
+    // Count outbound streaming clicks (Spotify / Apple / YouTube…)
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('a.nmf-listen-btn');
+        if (!a) return;
+        const platform = (a.className.match(/nmf-listen-btn--(\w+)/) || [])[1] || 'other';
+        trackEvent('nmf_listen_click', { platform });
+    });
+
+    window.addEventListener('hashchange', openReleaseFromHash);
+}
+
+function openReleaseFromHash() {
+    const hash = decodeURIComponent(window.location.hash || '');
+    if (!hash.startsWith('#r-')) return;
+    let el = document.getElementById(hash.slice(1));
+    if (!el) {
+        // Not in this week's grid – maybe in a filtered-out state; reset filters and retry
+        activeGenre = 'all'; activeType = 'all'; searchQuery = ''; activeLocal = false;
+        renderMainGrid();
+        el = document.getElementById(hash.slice(1));
+    }
+    if (!el) return;
+    const week = el.closest('.nmf-week-group');
+    if (week) week.classList.add('open');
+    setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('nmf-highlight');
+        setTimeout(() => el.classList.remove('nmf-highlight'), 3500);
+    }, 150);
 }
 
 function formatDisplayDate(dateStr) {

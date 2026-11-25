@@ -706,8 +706,9 @@
                 approvedAt: document.getElementById('form-status').value === 'published' ? new Date().toISOString() : null
             };
 
+            // Keep extra fields (e.g. previewUrl added by tools/nmf_check.py) when editing
             if (existingIndex >= 0) {
-                releasesData[existingIndex] = releaseObj;
+                releasesData[existingIndex] = { ...releasesData[existingIndex], ...releaseObj };
             } else {
                 releasesData.unshift(releaseObj);
             }
