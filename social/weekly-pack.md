@@ -156,3 +156,12 @@ Hi 👋🏾 iPlug GQ here. Your event is live on Gqeberha's gig guide 🔥
 Feel free to share it on your status and pages, because the page includes directions and a WhatsApp share button. We list future events for free. Just send us the flyer every week 🙌🏾
 ```
 Venues this week: 50 Lifestyle & Lounge, Baluka's Tavern, Castro's Night Club, City Lads grounds, Delbro Premium, Ekupholeni Cocktail Lounge, Eskwerini NU2, Klo Ginger eTrakeni, Kwa Nolithas Tavern, Marras Tavern, Monde's Lifestyle, Moonlight Place, Road House Lounge, Tanko's Place, The Gallery on Produce, The One Room, Triple K Tavern
+
+## 6. Sell tickets with iPlug GQ (promoter network)
+
+Send this to organisers who sell on Quicket. Once they add you, paste your unique promoter link into the *Ticket URL* column.
+```
+Hi 👋🏾 iPlug GQ here. Your event is listed free on Gqeberha's gig guide 🔥
+Want us to sell tickets for you too? Add *iPlug GQ* to your Quicket promoter network (10% per ticket). We'll put a Get Tickets button on your listing and push it on our WhatsApp, IG and TikTok. You only pay on tickets we actually sell 🎟️🙌🏾
+```
+Events not marked free and without a ticket link yet: DJ Freedom Live Set @ Delbro Premium, Celebration Finale / All Black @ The Gallery on Produce, Hello Summer @ City Lads grounds, Road House Lounge Party @ Road House Lounge, Roots & Rhythm Saturdays @ Castro's Night Club, Kasi Oo Festival @ Eskwerini NU2, iVaskom Comedy Show @ The One Room, DJ Mbee Birthday Celebration @ Ekupholeni Cocktail Lounge
