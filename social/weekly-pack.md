@@ -1,23 +1,11 @@
-# iPlug GQ – Weekly social pack (26–29 Nov)
+# iPlug GQ – Weekly social pack (27–29 Nov)
 
 Generated from events.csv. Copy, paste and post. Tag the venue and promoter in every post, because their reposts bring you new followers.
 
 ## 1. WhatsApp Channel / Status broadcast (post Wednesday 12:00)
 ```
-🔌 *iPlug GQ Weekly Drop*: 26–29 Nov
+🔌 *iPlug GQ Weekly Drop*: 27–29 Nov
 Gqeberha is outside 🌴🔥
-
-📅 *Thu 26 Nov*: Wine Thursday with Miller and Friends
-📍 Ekupholeni Cocktail Lounge  🆓 FREE
-🔗 https://ipluggq.com/events/124-wine-thursday-with-miller-and-friends-ekupholeni-cocktail-lounge.html
-
-📅 *Thu 26 Nov*: Culture Club Thursdays: Outdoor Edition
-📍 Monde's Lifestyle Lounge  🆓 FREE
-🔗 https://ipluggq.com/events/130-culture-club-thursdays-outdoor-edition-mondes-lifestyle-lounge.html
-
-📅 *Thu 26 Nov*: Muji All White Birthday Party
-📍 Marras Tavern  🆓 FREE
-🔗 https://ipluggq.com/events/122-muji-all-white-birthday-party-marras-tavern.html
 
 📅 *Sat 28 Nov*: DJ Freedom Live Set
 📍 Delbro Premium
@@ -91,7 +79,7 @@ Gqeberha is outside 🌴🔥
 📍 Ekupholeni Cocktail Lounge
 🔗 https://ipluggq.com/events/95-dj-mbee-birthday-celebration-ekupholeni-cocktail-lounge.html
 
-See all 21 gigs 👉 https://ipluggq.com/this-weekend.html
+See all 18 gigs 👉 https://ipluggq.com/this-weekend.html
 Forward this to your squad 🙌🏾
 ```
 
@@ -99,19 +87,19 @@ Forward this to your squad 🙌🏾
 
 Slide 1: cover graphic "THIS WEEKEND IN GQ" plus the date. Slides 2–10: one flyer per slide (start with the free events and the Sponsored pick).
 ```
-This weekend in GQ 🔌 26–29 Nov
+This weekend in GQ 🔌 27–29 Nov
 
-21 gigs, 13 free entry. Swipe and tag who you're pulling up with 👀
+18 gigs, 10 free entry. Swipe and tag who you're pulling up with 👀
 
-▪️ Thu 26 Nov: Wine Thursday with Miller and Friends @ Ekupholeni Cocktail Lounge
-▪️ Thu 26 Nov: Culture Club Thursdays: Outdoor Edition @ Monde's Lifestyle Lounge
-▪️ Thu 26 Nov: Muji All White Birthday Party @ Marras Tavern
 ▪️ Sat 28 Nov: DJ Freedom Live Set @ Delbro Premium
 ▪️ Sat 28 Nov: Celebration Finale / All Black @ The Gallery on Produce
 ▪️ Sat 28 Nov: Street All Night Bash @ Triple K Tavern
 ▪️ Sat 28 Nov: Hello Summer @ City Lads grounds
 ▪️ Sat 28 Nov: Road House Lounge Party @ Road House Lounge
 ▪️ Sat 28 Nov: Roots & Rhythm Saturdays @ Castro's Night Club
+▪️ Sat 28 Nov: Pre Summer Bang on the Decks @ Baluka's Tavern
+▪️ Sat 28 Nov: Blaqchild Tribute @ Klo Ginger eTrakeni
+▪️ Sat 28 Nov: Umdantso Night with Freedom @ Kwa Nolithas Tavern
 
 Full guide + directions: link in bio (ipluggq.com/this-weekend)
 
@@ -122,21 +110,18 @@ Full guide + directions: link in bio (ipluggq.com/this-weekend)
 ```
 HOOK (0–2s, text on screen): "POV: you live in GQ and have no plans this weekend 😩"
 BEAT DROP → quick cuts of 4–6 flyers (1.5s each) with a text overlay of day + venue
-  • Thu 26 Nov | Wine Thursday with Miller and Friends | Ekupholeni Cocktail Lounge
-  • Thu 26 Nov | Culture Club Thursdays: Outdoor Edition | Monde's Lifestyle Lounge
-  • Thu 26 Nov | Muji All White Birthday Party | Marras Tavern
   • Sat 28 Nov | DJ Freedom Live Set | Delbro Premium
   • Sat 28 Nov | Celebration Finale / All Black | The Gallery on Produce
   • Sat 28 Nov | Street All Night Bash | Triple K Tavern
+  • Sat 28 Nov | Hello Summer | City Lads grounds
+  • Sat 28 Nov | Road House Lounge Party | Road House Lounge
+  • Sat 28 Nov | Roots & Rhythm Saturdays | Castro's Night Club
 END CARD: "All the gigs → ipluggq.com 🔌 Follow for the weekly drop"
 Sound: whatever amapiano track is trending this week. Caption: "Which one are you pulling up to? 👇🏾"
 ```
 
 ## 4. X / Facebook groups (one post per event, Thu–Sat)
 ```
-Wine Thursday with Miller and Friends 📍 Ekupholeni Cocktail Lounge · Thu 26 Nov. Free entry 🆓 https://ipluggq.com/events/124-wine-thursday-with-miller-and-friends-ekupholeni-cocktail-lounge.html #Gqeberha #iPlugGQ
-Culture Club Thursdays: Outdoor Edition 📍 Monde's Lifestyle Lounge · Thu 26 Nov. Free entry 🆓 https://ipluggq.com/events/130-culture-club-thursdays-outdoor-edition-mondes-lifestyle-lounge.html #Gqeberha #iPlugGQ
-Muji All White Birthday Party 📍 Marras Tavern · Thu 26 Nov. Free entry 🆓 https://ipluggq.com/events/122-muji-all-white-birthday-party-marras-tavern.html #Gqeberha #iPlugGQ
 DJ Freedom Live Set 📍 Delbro Premium · Sat 28 Nov. https://ipluggq.com/events/116-dj-freedom-live-set-delbro-premium.html #Gqeberha #iPlugGQ
 Celebration Finale / All Black 📍 The Gallery on Produce · Sat 28 Nov. https://ipluggq.com/events/75-celebration-finale-all-black-the-gallery-on-produce.html #Gqeberha #iPlugGQ
 Street All Night Bash 📍 Triple K Tavern · Sat 28 Nov. Free entry 🆓 https://ipluggq.com/events/108-street-all-night-bash-triple-k-tavern.html #Gqeberha #iPlugGQ
@@ -165,7 +150,7 @@ Hi 👋🏾 iPlug GQ here. Your event is live on Gqeberha's gig guide 🔥
 <EVENT LINK>
 Feel free to share it on your status and pages, because the page includes directions and a WhatsApp share button. We list future events for free. Just send us the flyer every week 🙌🏾
 ```
-Venues this week: 50 Lifestyle & Lounge, Baluka's Tavern, Castro's Night Club, Chief Ngqoko's Place, City Lads grounds, Delbro Premium, Ekupholeni Cocktail Lounge, Eskwerini NU2, Klo Ginger eTrakeni, Kwa Nolithas Tavern, Marras Tavern, Monde's Lifestyle, Monde's Lifestyle Lounge, Moonlight Place, Road House Lounge, Tanko's Place, The Gallery on Produce, The One Room, Triple K Tavern
+Venues this week: 50 Lifestyle & Lounge, Baluka's Tavern, Castro's Night Club, Chief Ngqoko's Place, City Lads grounds, Delbro Premium, Ekupholeni Cocktail Lounge, Eskwerini NU2, Klo Ginger eTrakeni, Kwa Nolithas Tavern, Monde's Lifestyle, Moonlight Place, Road House Lounge, Tanko's Place, The Gallery on Produce, The One Room, Triple K Tavern
 
 ## 6. Sell tickets with iPlug GQ (promoter network)
 
