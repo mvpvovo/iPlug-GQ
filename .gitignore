@@ -1,0 +1,10 @@
+# Local tooling / runtime artifacts
+agent_config.ini
+run_scout.sh
+scout.log
+scout_stderr.log
+scout_stdout.log
+scout_results.html
+social_media_drafts.html
+scout.log
+*.log
